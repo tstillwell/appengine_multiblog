@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>Editing post {{post.subject}}</p>
+
+  <form method="post" action="/delete/{{post.key().id()}}">
+    {{post.render() | safe}}
+      <br>
+    <p>WARNING: NO WAY TO UNDO - THIS IS PERMANENT</p>
+    <input type="submit" value="DELETE This Post" >
+    <p>WARNING: NO WAY TO UNDO - THIS IS PERMANENT</p>
+  </form>
+
+  <form method="get" action="/manage">
+    <input type="submit" value="Cancel">
+  </form>
+{% endblock %}

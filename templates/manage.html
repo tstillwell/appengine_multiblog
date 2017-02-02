@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1> Manage User Posts - {{user}}</h1>
+{% for post in post_roll %}
+{{post.render() | safe}}
+<br>
+<form method ="get" action="/edit/{{post.key().id()}}">
+  <input type = "submit" value="Edit Post" ></input>
+</form>
+
+<form method ="get" action="/delete/{{post.key().id()}}">
+  <input type ="submit" value="Delete Post"></input>
+</form>
+<br>
+{% endfor %}
+
+<h1> Manage User Comments - {{user}}</h1>
+<div class="my_comments">
+{% for comment in comment_roll %}
+  {{comment.render() | safe}}
+  <br>
+{% endfor %}
+</div>
+
+{% endblock %}

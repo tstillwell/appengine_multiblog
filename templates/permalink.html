@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{post.render() | safe}}
+  <br>
+  <h4>Comments</h4>
+  {{error}}
+  <hr>
+  {% for c in comment_roll %}
+    {{ c.render() | safe }}
+    <br>
+  {% endfor %}
+  <form name ="comment-form" method ="post">
+    <textarea name="comment_text" placeholder="Type a comment here"></textarea>
+    <br>
+    <input type="submit">
+  <form>
+
+{% endblock %}

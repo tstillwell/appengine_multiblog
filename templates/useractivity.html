@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <br>
+<h3> Recent Activity for {{view_user.username}} </h3>
+{% for post in post_roll %}
+  {{post.render() | safe}}
+{% endfor %}
+
+{% endblock %}
