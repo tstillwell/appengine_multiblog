@@ -2,21 +2,18 @@ import os
 import jinja2
 import webapp2
 import re
-
-#Encryption/Security
 import hmac
 import hashlib
 import binascii
 import uuid
-
 from pbkdf2 import PBKDF2
-
 import time
 from google.appengine.ext import db
 
+# point to jinja template dir
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir),
-                               autoescape=True)
+                               autoescape=True) # always autoescape
 
 def render_str(template, **params): # Pass data to templates
     t = jinja_env.get_template(template)
@@ -25,7 +22,7 @@ def render_str(template, **params): # Pass data to templates
 class Handler(webapp2.RequestHandler):
     """ Base Handler Class """
     def write(self, *a, **kw):
-        """ writes the HTTP response with supplied args"""
+        """write data to HTTP response used for render and testing"""
         self.response.out.write(*a, **kw)
 
     def render_str(self, template, **params):
@@ -34,17 +31,18 @@ class Handler(webapp2.RequestHandler):
         return t.render(params)
 
     def render(self, template, **kw):
-        """ Fills data into the template and writes the response"""
+        """ Fills data into the template and writes as response"""
         self.write(self.render_str(template, **kw))
 
     def cookie(self):
+        """Used by child classes to get the current Session cookie"""
         my_cookie = self.request.cookies.get('Session')
         return my_cookie
 
 class MainPage(Handler): # Main site index Handler
     """Defines behavior of get and post requests for main app page"""
     def get(self):
-        self.write(dir(self.cookie))
+        self.write("Testblog up and running!")
 
 def blog_key(name = 'default'):
     """ Generate a blog id from the db row """
@@ -155,7 +153,11 @@ class PermaLink(Handler):
         self.render("permalink.html", post = post, comment_roll = comment_roll, user = posting_user )
 
 """ USER RELATED classes """
+
+""" WARNING THIS SECRET NEEDS TO BE CHANGED AND HIDDEN FOR PRODUCTION """
 secret = 'TY&N*O7@0h*BNHiGy!&h9yhu8mF$#cf$!#fcCEFWXEF2c5C1c()*&890my2xX1'
+""" WARNING THIS SECRET NEEDS TO BE CHANGED AND HIDDEN FOR PRODUCTION """
+
 class User(db.Model):
     """ Adds Users DB Table """
     username = db.StringProperty(required = True)
@@ -169,6 +171,7 @@ def user_key(name = 'default'):
     return db.Key.from_path('users', name)
 
 def cookie_hash(value):
+    """Use the secret value with HMAC to prevent cookie tampering"""
     hash = hmac.new(secret, str(value)).hexdigest()
     hash = str(hash)
     return hash
@@ -196,7 +199,7 @@ def valid_user(cookie_str):
         return None
 
 def is_logged_in(cookie):
-    """Returns True only if the person is logged in with valid cookie"""
+    """ Returns True only if user is logged in with valid cookie"""
     if cookie:
         user = valid_user(cookie)
         if user != None:
@@ -207,21 +210,24 @@ def is_logged_in(cookie):
         return False
 
 def new_salt():
-	""" Generates a 32-bit hex salt for user security"""
+	""" Generates a 32-bit hex salt for user pw salting"""
 	salt = binascii.hexlify(os.urandom(32))
 	return salt
 
 def hash_password(password, salt):
+    """ Hash user pw with PBKDF2 alg with iterations as work factor"""
     hashed_pw_bin = PBKDF2(password,salt,iterations=20000)
     hashed_pw = hashed_pw_bin.hexread(32)
     return hashed_pw
 
 def session_uuid():
+    """ Make a new UUID for logged-in session tokens """
     new_uuid = uuid.uuid4()
     new_uuid = str(new_uuid)
     return new_uuid
 
 def load_comments(post_id):
+    """ Returns all comments associated with specific post """
     comments = db.GqlQuery("""SELECT * from Comment
                                WHERE parent_post_id = '%s'
                                ORDER BY created DESC""" % post_id)
@@ -293,7 +299,7 @@ class Signup(Handler):
                 self.redirect('/welcome')
 
 class Welcome(Handler):
-    """ Welcome new users after registering """
+    """ Redirect new users here after registering """
     def get(self):
         if is_logged_in(self.cookie()) == True:
             user = valid_user(self.cookie())
@@ -304,7 +310,7 @@ class Welcome(Handler):
 class Login(Handler):
     """ Login page """
     def get(self):
-        """ Draw the login form """
+        """ Draw the login form ONLY with HTTP GET """
         self.render("login.html")
     def post(self):
         """ Takes login credentials that were input by user """
@@ -343,6 +349,7 @@ class Login(Handler):
                     self.redirect('/welcome')
 
 class UserPage(Handler):
+    """ User summary page shows their recent activity, publicly viewable """
     def get(self, username):
         view_user = db.GqlQuery("select * from User where username = '%s'" % username)
         profileUser = view_user.get()
@@ -357,6 +364,7 @@ class UserPage(Handler):
             self.render("useractivity.html" , view_user=profileUser, post_roll = post_roll)
 
 class Manage(Handler):
+    """Allows user to edit/delete their own comments & posts"""
     def get(self):
         if is_logged_in(self.cookie()) == True:
             user = valid_user(self.cookie())
@@ -367,6 +375,7 @@ class Manage(Handler):
             self.error(404) # TODO: Change this to error showing must be logged in to manage
 
 class EditPost(Handler):
+    """ Edit page user gets here from clicking edit on posts from manage"""
     def get(self, post_id):
         if is_logged_in(self.cookie()) == True:
             user = valid_user(self.cookie())
