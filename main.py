@@ -153,10 +153,22 @@ class PermaLink(Handler):
         self.render("permalink.html", post = post, comment_roll = comment_roll, user = posting_user )
 
 """ USER RELATED classes """
+class Secret(db.Model):
+    """HMAC Secret Key stored in datastore"""
+    key_string = db.StringProperty(required = True)
 
-""" WARNING THIS SECRET NEEDS TO BE CHANGED AND HIDDEN FOR PRODUCTION """
-secret = 'TY&N*O7@0h*BNHiGy!&h9yhu8mF$#cf$!#fcCEFWXEF2c5C1c()*&890my2xX1'
-""" WARNING THIS SECRET NEEDS TO BE CHANGED AND HIDDEN FOR PRODUCTION """
+def secret_key():
+    secret_check = db.GqlQuery("SELECT * FROM Secret") # Check datastore for key
+    key = secret_check.get()
+    if key: # if key is present return it
+        return key.key_string
+    else:
+        new_key = binascii.b2a_hqx(os.urandom(64)) # 64-bits converted to Ascii
+        k = Secret(key_string = new_key)
+        k.put()
+        return new_key
+
+secret = secret_key()
 
 class User(db.Model):
     """ Adds Users DB Table """
