@@ -441,12 +441,11 @@ class Logout(Handler):
     def get(self):
         if self.cookie():
             user = valid_user(self.cookie())
-            userstack = db.GqlQuery("select * from User")
-            for person in userstack: # TODO modify above query and get rid of this for loop
-                if person.username == user:
-                    # remove session token from DB, invalidating it server side
-                    person.current_session = ''
-                    person.put()
+            user_query = db.GqlQuery("SELECT * FROM User WHERE username = '%s'" % user)
+            person = user_query.get()
+            # remove session token from DB, invalidating it server side
+            person.current_session = ''
+            person.put()
         # Reset the cookie value
         self.response.headers.add_header('Set-Cookie', 'Session=')
         self.redirect("/blog")
