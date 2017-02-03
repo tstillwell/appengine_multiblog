@@ -19,7 +19,9 @@
 <div class="my_comments">
 {% for comment in comment_roll %}
   {{comment.render() | safe}}
-  <br>
+  <form method ="get" action="">
+    <input type ="submit" value="Edit Comment"></input>
+  <br><br>  
 {% endfor %}
 </div>
 

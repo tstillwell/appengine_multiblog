@@ -158,6 +158,7 @@ class Secret(db.Model):
     key_string = db.StringProperty(required = True)
 
 def secret_key():
+    """ Get secret key from datastore. If one does not exist it makes one"""
     secret_check = db.GqlQuery("SELECT * FROM Secret") # Check datastore for key
     key = secret_check.get()
     if key: # if key is present return it
