@@ -193,21 +193,16 @@ def valid_user(cookie_str):
     """Returns username after validating the cookie"""
     if cookie_str == None:
         return None
-    cookie_parts= cookie_str.split("|")
+    cookie_parts = cookie_str.split("|")
     if len(cookie_parts) != 2:
         return None
     if cookie_parts[1] == cookie_hash(cookie_parts[0]):
-        userstack = db.GqlQuery("""SELECT * from User
-                                    WHERE current_session ='%s'"""
-                                    %cookie_parts[0])
-        userValid = False
-        for person in userstack:
-            if person.current_session == cookie_parts[0]:
-                userName = person.username
-                userValid = True
-                if userValid == True:
-                    return userName
-                    break
+        user_query = db.GqlQuery("""SELECT * FROM User
+                                     WHERE current_session ='%s'"""
+                                     %cookie_parts[0])
+        current_user = user_query.get()
+        if current_user:
+            return current_user.username
     else:
         return None
 
