@@ -325,13 +325,8 @@ class Login(Handler):
         input_username = self.request.get("username")
         input_password = self.request.get("password")
         have_error = False
-        if not valid_username(input_username):
+        if not valid_username(input_username) and valid_password(input_password):
             have_error = True
-
-        if not valid_password(input_password):
-            have_error = True
-
-        if have_error == True:
             error = "Invalid Login"
             self.render("login.html", error = error)
 
