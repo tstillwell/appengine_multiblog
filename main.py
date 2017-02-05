@@ -324,9 +324,8 @@ class Login(Handler):
         """ Takes login credentials that were input by user """
         input_username = self.request.get("username")
         input_password = self.request.get("password")
-        have_error = False
+
         if not valid_username(input_username) and valid_password(input_password):
-            have_error = True
             error = "Invalid Login"
             self.render("login.html", error = error)
 
