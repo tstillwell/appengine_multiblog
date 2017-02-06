@@ -349,6 +349,9 @@ class Login(Handler):
                     self.response.headers.add_header('Set-Cookie', 'Session= %s|%s Path=/' % (target_user.current_session, (cookie_hash(target_user.current_session))))
                     time.sleep(0.5)# Give the DB a moment to catch up before redirecting
                     self.redirect('/welcome')
+                else: # if passwords don't match
+                    error = "Invalid Login"
+                    self.render("login.html", error = error)
 
 class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
