@@ -326,15 +326,13 @@ class Login(Handler):
         input_password = self.request.get("password")
 
         if not valid_username(input_username) and valid_password(input_password):
-            error = "Invalid Login"
-            self.render("login.html", error = error)
+            self.render("login.html", error = "Invalid Login")
 
         else:
             userquery = db.GqlQuery("SELECT * FROM User WHERE username = '%s'" % input_username)
             target_user = userquery.get()
             if target_user == None:
-                error = "Invalid Login"
-                self.render("login.html", error = error)
+                self.render("login.html", error = "Invalid Login")
             else:
                 hash_input = hash_password(input_password, target_user.salt)
                 if hash_input == target_user.user_hash: # if password match
@@ -344,8 +342,7 @@ class Login(Handler):
                     time.sleep(0.5)# Give the DB a moment to catch up before redirecting
                     self.redirect('/welcome')
                 else: # if passwords don't match
-                    error = "Invalid Login"
-                    self.render("login.html", error = error)
+                    self.render("login.html", error = "Invalid Login")
 
 class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
