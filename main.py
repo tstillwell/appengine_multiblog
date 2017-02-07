@@ -330,20 +330,14 @@ class Login(Handler):
             self.render("login.html", error = error)
 
         else:
-            userstack = db.GqlQuery("select * from User")
-            userexists = False
-            for person in userstack:
-                if str(person.username) == str(input_username):
-                    userexists = True
-                    target_user = person
-            if userexists == False:
+            userquery = db.GqlQuery("SELECT * FROM User WHERE username = '%s'" % input_username)
+            target_user = userquery.get()
+            if target_user == None:
                 error = "Invalid Login"
                 self.render("login.html", error = error)
             else:
-                salt = target_user.salt
-                hash = target_user.user_hash
-                hash_to_compare = hash_password(input_password, salt)
-                if hash_to_compare == hash: # if password match log them in
+                hash_input = hash_password(input_password, target_user.salt)
+                if hash_input == target_user.user_hash: # if password match
                     target_user.current_session = session_uuid()
                     target_user.put()
                     self.response.headers.add_header('Set-Cookie', 'Session= %s|%s Path=/' % (target_user.current_session, (cookie_hash(target_user.current_session))))
