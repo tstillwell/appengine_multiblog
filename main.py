@@ -325,24 +325,23 @@ class Login(Handler):
         input_username = self.request.get("username")
         input_password = self.request.get("password")
 
-        if not valid_username(input_username) and valid_password(input_password):
-            self.render("login.html", error = "Invalid Login")
-
-        else:
+        if valid_username(input_username) and valid_password(input_password):
             userquery = db.GqlQuery("SELECT * FROM User WHERE username = '%s'" % input_username)
             target_user = userquery.get()
-            if target_user == None:
-                self.render("login.html", error = "Invalid Login")
-            else:
+            if target_user:
                 hash_input = hash_password(input_password, target_user.salt)
                 if hash_input == target_user.user_hash: # if password match
                     target_user.current_session = session_uuid()
                     target_user.put()
                     self.response.headers.add_header('Set-Cookie', 'Session= %s|%s Path=/' % (target_user.current_session, (cookie_hash(target_user.current_session))))
-                    time.sleep(0.5)# Give the DB a moment to catch up before redirecting
+                    time.sleep(0.5)# Give the client a moment to set cookie
                     self.redirect('/welcome')
                 else: # if passwords don't match
                     self.render("login.html", error = "Invalid Login")
+            else: # if user does not exist
+                self.render("login.html", error = "Invalid Login")
+        else: # if username typed in is invalid
+            self.render("login.html", error = "Invalid Login")
 
 class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
