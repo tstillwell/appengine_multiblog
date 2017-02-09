@@ -323,17 +323,28 @@ class Login(Handler):
         input_username = self.request.get("username")
         input_password = self.request.get("password")
 
-        if valid_username(input_username) and valid_password(input_password):
-            userquery = db.GqlQuery("SELECT * FROM User WHERE username = '%s'" % input_username)
+        while valid_username(input_username) and valid_password(input_password):
+            userquery = db.GqlQuery("""
+              SELECT * FROM User
+              WHERE username =
+              '%s'""" % input_username)
+
             target_user = userquery.get()
-            if target_user:
-                hash_input = hash_password(input_password, target_user.salt)
-                if hash_input == target_user.user_hash: # if password match
-                    target_user.current_session = session_uuid()
-                    target_user.put()
-                    self.response.headers.add_header('Set-Cookie', 'Session= %s|%s Path=/' % (target_user.current_session, (cookie_hash(target_user.current_session))))
-                    time.sleep(0.5)# Give the client a moment to set cookie
-                    return self.redirect('/welcome')
+            if target_user == None: break
+            hash_input = hash_password(input_password, target_user.salt)
+            if hash_input != target_user.user_hash: break # password mismatch
+            target_user.current_session = session_uuid()
+            target_user.put()
+
+            self.response.headers.add_header(
+              'Set-Cookie',
+              'Session= %s|%s Path=/'
+              % (target_user.current_session,
+              (cookie_hash(
+              target_user.current_session))))
+
+            time.sleep(0.5)# Give the client a moment to set cookie
+            return self.redirect('/welcome')
 
         self.render("login.html", error = "Invalid Login")
 
