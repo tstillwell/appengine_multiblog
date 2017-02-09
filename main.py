@@ -287,9 +287,11 @@ class Signup(Handler):
         if have_error:
             self.render('registration.html', **params)
         else: # check if user exists, if they do prompt a new username
-            userquery = db.GqlQuery("select * from User where username = '%s'" % username)
-            user = userquery.get()
+            userquery = db.GqlQuery("""
+             SELECT * FROM User
+             WHERE username = '%s'""" % username)
 
+            user = userquery.get()
             if user:
                 params['error_taken'] = "Username unavailable."
                 self.render('registration.html', **params)
@@ -298,9 +300,15 @@ class Signup(Handler):
                 salt = new_salt()
                 user_hash = hash_password(password, salt)
                 current_session = session_uuid()
-                u = User(parent = user_key(), username = username, email = email, user_hash = user_hash, salt = salt, current_session = current_session)
+                u = User(parent = user_key(), username = username,
+                          email = email, user_hash = user_hash,
+                          salt = salt, current_session = current_session)
                 u.put() # Put this person into the db
-                self.response.headers.add_header('Set-Cookie', 'Session= %s|%s Path=/' % (u.current_session, (cookie_hash(u.current_session))))
+                self.response.headers.add_header(
+                  'Set-Cookie', 'Session= %s|%s Path=/'
+                   % (u.current_session, (cookie_hash
+                   (u.current_session))))
+
                 time.sleep(0.1)
                 self.redirect('/welcome')
 
