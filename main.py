@@ -287,13 +287,11 @@ class Signup(Handler):
         if have_error:
             self.render('registration.html', **params)
         else: # check if user exists, if they do prompt a new username
-            userstack = db.GqlQuery("select * from User")
-            userexists = False
-            for person in userstack:
-                if str(person.username) == str(username):
-                    params['error_taken'] = "Username unavailable. Please choose another"
-                    userexists = True
-            if userexists == True:
+            userquery = db.GqlQuery("select * from User where username = '%s'" % username)
+            user = userquery.get()
+
+            if user:
+                params['error_taken'] = "Username unavailable."
                 self.render('registration.html', **params)
 
             else: # if that user does not exist, add the account to the DB
