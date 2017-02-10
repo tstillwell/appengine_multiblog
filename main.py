@@ -163,7 +163,7 @@ def secret_key():
     key = secret_check.get()
     if key: # if key is present return it
         return key.key_string
-    else:
+    else: # if not make one and return/store it
         new_key = binascii.b2a_hqx(os.urandom(64)) # 64-bits converted to Ascii
         k = Secret(key_string = new_key)
         k.put()
@@ -260,7 +260,6 @@ class Signup(Handler):
         self.render("registration.html")
     def post(self):
         """takes new user info from forms"""
-        have_error = False
         username = self.request.get("username")
         password = self.request.get("password")
         verify = self.request.get("verify")
@@ -271,21 +270,20 @@ class Signup(Handler):
 
         if not valid_username(username):
             params['error_username'] = "That's not a valid username."
-            have_error = True
 
         if not valid_password(password):
             params['error_password'] = "That wasn't a valid password."
-            have_error = True
+
         elif password != verify:
             params['error_verify'] = "Your passwords didn't match."
-            have_error = True
 
         if not valid_email(email):
             params['error_email'] = "That's not a valid email."
-            have_error = True
 
-        if have_error:
+        if ('error_username' or 'error_password'
+             or 'error_verify' or 'error_email' in params):
             self.render('registration.html', **params)
+
         else: # check if user exists, if they do prompt a new username
             userquery = db.GqlQuery("""
              SELECT * FROM User
