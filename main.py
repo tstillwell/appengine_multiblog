@@ -9,6 +9,7 @@ import uuid
 from pbkdf2 import PBKDF2
 import time
 from google.appengine.ext import db
+from google.appengine.ext import ndb
 
 # point to jinja template dir
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
@@ -61,13 +62,13 @@ class Post(db.Model):
         self._render_text = self.content.replace('\n', '<br>')
         return render_str("post.html", p = self)
 
-class Comment(db.Model):
+class Comment(ndb.Model):
     """ Comments DB Table """
-    comment_text = db.TextProperty(required = True)
-    parent_post_id = db.StringProperty(required = True)
-    created = db.DateTimeProperty(auto_now_add = True)
-    last_modified = db.DateTimeProperty(auto_now = True)
-    posting_user = db.StringProperty(required = True)
+    comment_text = ndb.TextProperty(required = True)
+    parent_post_id = ndb.StringProperty(required = True)
+    created = ndb.DateTimeProperty(auto_now_add = True)
+    last_modified = ndb.DateTimeProperty(auto_now = True)
+    posting_user = ndb.StringProperty(required = True)
 
     def render(self):
         """ Draws comments """
@@ -236,7 +237,7 @@ def session_uuid():
 
 def load_comments(post_id):
     """ Returns all comments associated with specific post """
-    comments = db.GqlQuery("""SELECT * from Comment
+    comments = ndb.gql("""SELECT * from Comment
                                WHERE parent_post_id = '%s'
                                ORDER BY created DESC""" % post_id)
     return comments
@@ -270,7 +271,6 @@ class Signup(Handler):
                       email = email)
 
         have_error = False
-
         if not valid_username(username):
             params['error_username'] = "That's not a valid username."
             have_error = True
@@ -283,7 +283,6 @@ class Signup(Handler):
         if not valid_email(email):
             params['error_email'] = "That's not a valid email."
             have_error = True
-
         if have_error:
             self.render('registration.html', **params)
 
