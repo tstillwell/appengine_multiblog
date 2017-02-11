@@ -6,6 +6,11 @@
   <h4>Comments</h4>
   {{error}}
   <hr>
+  {% if new_comment %}
+    {{new_comment.render() | safe}}
+    <br>
+  {% endif %}
+
   {% for c in comment_roll %}
     {{ c.render() | safe }}
     <br>

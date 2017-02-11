@@ -129,9 +129,11 @@ class PermaLink(Handler):
 
         if is_logged_in(self.cookie()):
             user = valid_user(self.cookie())
-            self.render("permalink.html", post = post, comment_roll = comment_roll, user = user )
+            self.render("permalink.html", post = post,
+                          comment_roll = comment_roll, user = user )
         else:
-            self.render("permalink.html", post = post, comment_roll = comment_roll)
+            self.render("permalink.html", post = post,
+                          comment_roll = comment_roll)
 
     def post(self, post_id): # For adding comments
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
@@ -143,15 +145,16 @@ class PermaLink(Handler):
         if posting_user == None: # If user is not logged in or invalid cookie
             error = "Sorry, you need to be logged in to comment"
             comment_roll = load_comments(post_id)
-            self.render("permalink.html", post = post, comment_roll = comment_roll, error = error)
+            self.render("permalink.html", post = post,
+                          comment_roll = comment_roll, error = error)
             return
         c = Comment(comment_text = comment_text,
                      posting_user = posting_user,
                      parent_post_id = parent_post_id)
         c.put()
-        time.sleep(0.1) # Sleep required to allow datastore to update
         comment_roll = load_comments(post_id)
-        self.render("permalink.html", post = post, comment_roll = comment_roll, user = posting_user )
+        self.render("permalink.html", post = post, new_comment = c,
+                      comment_roll = comment_roll, user = posting_user )
 
 """ USER RELATED classes """
 class Secret(db.Model):
