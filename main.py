@@ -176,7 +176,7 @@ class User(db.Model):
     username = db.StringProperty(required = True)
     user_hash = db.StringProperty(required = True)
     salt = db.StringProperty(required = True)
-    #email = db.StringProperty(required = True)
+    email = db.StringProperty(required = True)
     current_session = db.StringProperty(required = False)
 
 def user_key(name = 'default'):
@@ -251,7 +251,8 @@ def valid_password(password):
 
 EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 def valid_email(email):
-    return not email or EMAIL_RE.match(email)
+    if EMAIL_RE.match(email):
+        return email
 
 class Signup(Handler):
     """ Registering new user accounts """
@@ -268,20 +269,22 @@ class Signup(Handler):
         params = dict(username = username,
                       email = email)
 
+        have_error = False
+
         if not valid_username(username):
             params['error_username'] = "That's not a valid username."
-
+            have_error = True
         if not valid_password(password):
             params['error_password'] = "That wasn't a valid password."
-
-        elif password != verify:
+            have_error = True
+        if password != verify:
             params['error_verify'] = "Your passwords didn't match."
-
+            have_error = True
         if not valid_email(email):
             params['error_email'] = "That's not a valid email."
+            have_error = True
 
-        if ('error_username' or 'error_password'
-             or 'error_verify' or 'error_email' in params):
+        if have_error:
             self.render('registration.html', **params)
 
         else: # check if user exists, if they do prompt a new username
