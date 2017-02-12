@@ -157,13 +157,13 @@ class PermaLink(Handler):
                       comment_roll = comment_roll, user = posting_user )
 
 """ USER RELATED classes """
-class Secret(db.Model):
+class Secret(ndb.Model):
     """HMAC Secret Key stored in datastore"""
-    key_string = db.StringProperty(required = True)
+    key_string = ndb.StringProperty(required = True)
 
 def secret_key():
     """ Get secret key from datastore. If one does not exist it makes one"""
-    secret_check = db.GqlQuery("SELECT * FROM Secret") # Check datastore for key
+    secret_check = ndb.gql("SELECT * FROM Secret") # Check datastore for key
     key = secret_check.get()
     if key: # if key is present return it
         return key.key_string
