@@ -8,7 +8,6 @@ import binascii
 import uuid
 from pbkdf2 import PBKDF2
 import time
-from google.appengine.ext import db
 from google.appengine.ext import ndb
 
 # point to jinja template dir
