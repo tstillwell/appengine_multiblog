@@ -175,17 +175,17 @@ def secret_key():
 
 secret = secret_key()
 
-class User(db.Model):
+class User(ndb.Model):
     """ Adds Users DB Table """
-    username = db.StringProperty(required = True)
-    user_hash = db.StringProperty(required = True)
-    salt = db.StringProperty(required = True)
-    email = db.StringProperty(required = True)
-    current_session = db.StringProperty(required = False)
+    username = ndb.StringProperty(required = True)
+    user_hash = ndb.StringProperty(required = True)
+    salt = ndb.StringProperty(required = True)
+    email = ndb.StringProperty(required = True)
+    current_session = ndb.StringProperty(required = False)
 
 def user_key(name = 'default'):
     """ Generate a blog id from the db row """
-    return db.Key.from_path('users', name)
+    return ndb.Key('users', name)
 
 def cookie_hash(value):
     """Use the secret value with HMAC to prevent cookie tampering"""
@@ -201,7 +201,7 @@ def valid_user(cookie_str):
     if len(cookie_parts) != 2:
         return None
     if cookie_parts[1] == cookie_hash(cookie_parts[0]):
-        user_query = db.GqlQuery("""SELECT * FROM User
+        user_query = ndb.gql("""SELECT * FROM User
                                      WHERE current_session ='%s'"""
                                      %cookie_parts[0])
         current_user = user_query.get()
@@ -290,7 +290,7 @@ class Signup(Handler):
             self.render('registration.html', **params)
 
         else: # check if user exists, if they do prompt a new username
-            userquery = db.GqlQuery("""
+            userquery = ndb.gql("""
              SELECT * FROM User
              WHERE username = '%s'""" % username)
 
@@ -309,7 +309,7 @@ class Signup(Handler):
                 u.put() # Put this person into the db
                 self.response.headers.add_header(
                   'Set-Cookie', 'Session= %s|%s Path=/'
-                   % (u.current_session, (cookie_hash
+                   % (str(u.current_session), (cookie_hash
                    (u.current_session))))
 
                 time.sleep(0.1)
@@ -335,7 +335,7 @@ class Login(Handler):
         input_password = self.request.get("password")
 
         while valid_username(input_username) and valid_password(input_password):
-            userquery = db.GqlQuery("""
+            userquery = ndb.gql("""
               SELECT * FROM User
               WHERE username =
               '%s'""" % input_username)
@@ -350,7 +350,7 @@ class Login(Handler):
             self.response.headers.add_header(
               'Set-Cookie',
               'Session= %s|%s Path=/'
-              % (target_user.current_session,
+              % (str(target_user.current_session),
               (cookie_hash(
               target_user.current_session))))
 
@@ -362,7 +362,7 @@ class Login(Handler):
 class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
     def get(self, username):
-        view_user = db.GqlQuery("select * from User where username = '%s'" % username)
+        view_user = ndb.gql("select * from User where username = '%s'" % username)
         profileUser = view_user.get()
         if not profileUser:
             self.error(404)
@@ -439,7 +439,7 @@ class Logout(Handler):
     def get(self):
         if self.cookie():
             user = valid_user(self.cookie())
-            user_query = db.GqlQuery("SELECT * FROM User WHERE username = '%s'" % user)
+            user_query = ndb.gql("SELECT * FROM User WHERE username = '%s'" % user)
             person = user_query.get()
             # remove session token from DB, invalidating it server side
             person.current_session = ''
