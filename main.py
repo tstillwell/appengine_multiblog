@@ -47,15 +47,15 @@ class MainPage(Handler): # Main site index Handler
 
 def blog_key(name = 'default'):
     """ Generate a blog id from the db row """
-    return db.Key.from_path('blogs', name)
+    return ndb.Key('blogs', name)
 
-class Post(db.Model):
+class Post(ndb.Model):
     """ Adds the Post DB table"""
-    subject = db.StringProperty(required = True)
-    content = db.TextProperty(required = True)
-    created = db.DateTimeProperty(auto_now_add = True)
-    last_modified = db.DateTimeProperty(auto_now = True)
-    posting_user = db.StringProperty(required = True)
+    subject = ndb.StringProperty(required = True)
+    content = ndb.TextProperty(required = True)
+    created = ndb.DateTimeProperty(auto_now_add = True)
+    last_modified = ndb.DateTimeProperty(auto_now = True)
+    posting_user = ndb.StringProperty(required = True)
 
     def render(self):
         """ Draws all blog post data """
@@ -78,7 +78,7 @@ class Comment(ndb.Model):
 class FrontPage(Handler):
     """ Shows the front page/ blogroll """
     def get(self):
-        blogroll = db.GqlQuery("select * from Post order by created desc limit 10")
+        blogroll = ndb.gql("select * from Post order by created desc limit 10")
 
         if is_logged_in(self.cookie()) == True:
             user = valid_user(self.cookie())
@@ -109,7 +109,7 @@ class NewPost(Handler):
             else:
                 p = Post(parent = blog_key(), subject = subject, content = content, posting_user = posting_user)
                 p.put()
-                self.redirect('/blog/%s' % str(p.key().id())) # Redirect to permalink
+                self.redirect('/blog/%s' % str(p.key.id())) # Redirect to permalink
         else:
             """ If all data fields are not present, report an error and ask for fields again """
             error = "subject and content, please!"
@@ -118,8 +118,8 @@ class NewPost(Handler):
 class PermaLink(Handler):
     """ For getting existing posts.. """
     def get(self, post_id):
-        key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-        post = db.get(key)
+        key = ndb.Key('Post', int(post_id), parent=blog_key())
+        post = key.get()
         # gets the comments whose post_id matches the post_id of the page
         comment_roll = load_comments(post_id)
 
@@ -136,11 +136,11 @@ class PermaLink(Handler):
                           comment_roll = comment_roll)
 
     def post(self, post_id): # For adding comments
-        key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-        post = db.get(key)
+        key = ndb.Key('Post', int(post_id), parent=blog_key())
+        post = key.get()
 
         comment_text = self.request.get("comment_text")
-        parent_post_id = str(post.key().id()) # file the comment under this post
+        parent_post_id = str(post.key.id()) # file the comment under this post
         posting_user = valid_user(self.cookie()) # Read the userid out of cookie
         if posting_user == None: # If user is not logged in or invalid cookie
             error = "Sorry, you need to be logged in to comment"
@@ -367,7 +367,7 @@ class UserPage(Handler):
         if not profileUser:
             self.error(404)
             return
-        post_roll = db.GqlQuery("select * from Post where posting_user = '%s' Order By created DESC" % username)
+        post_roll = ndb.gql("select * from Post where posting_user = '%s' Order By created DESC" % username)
         if is_logged_in(self.cookie()) == True:
             user = valid_user(self.cookie())
             self.render("useractivity.html" , view_user=profileUser, post_roll = post_roll, user = user)
@@ -379,7 +379,7 @@ class Manage(Handler):
     def get(self):
         if is_logged_in(self.cookie()) == True:
             user = valid_user(self.cookie())
-            post_roll = db.GqlQuery("SELECT * FROM Post WHERE posting_user = '%s' ORDER BY created DESC" % user)
+            post_roll = ndb.gql("SELECT * FROM Post WHERE posting_user = '%s' ORDER BY created DESC" % user)
             comment_roll = ndb.gql("SELECT * FROM Comment WHERE posting_user = '%s' ORDER BY created DESC" % user)
             self.render("manage.html", user = user, post_roll = post_roll, comment_roll = comment_roll)
         else: # If user is not logged in, show an error
@@ -390,8 +390,8 @@ class EditPost(Handler):
     def get(self, post_id):
         if is_logged_in(self.cookie()) == True:
             user = valid_user(self.cookie())
-            key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-            post = db.get(key)
+            key = ndb.Key('Post', int(post_id), parent=blog_key())
+            post = key.get()
             if post.posting_user == user:
                 self.render("edit.html", post = post, user = user)
         else:
@@ -401,12 +401,12 @@ class EditPost(Handler):
         content = self.request.get("content")
         if is_logged_in(self.cookie()) == True:
             user = valid_user(self.cookie())
-            key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-            post = db.get(key)
+            key = ndb.Key('Post', int(post_id), parent=blog_key())
+            post = key.get()
             if post.posting_user == user:
                 post.content = content
                 post.put()
-                self.redirect('/blog/%s' % str(post.key().id()))
+                self.redirect('/blog/%s' % str(post.key.id()))
         else:
             self.error(404)
 
@@ -415,8 +415,8 @@ class DeletePost(Handler):
     def get(self, post_id):
         if is_logged_in(self.cookie()) == True:
             user = valid_user(self.cookie())
-            key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-            post = db.get(key)
+            key = ndb.Key('Post', int(post_id), parent=blog_key())
+            post = key.get()
             if post.posting_user == user:
                 self.render("delete.html", post = post, user = user)
         else:
@@ -425,10 +425,10 @@ class DeletePost(Handler):
     def post(self, post_id):
         if is_logged_in(self.cookie()) == True:
             user = valid_user(self.cookie())
-            key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-            post = db.get(key)
+            key = ndb.Key('Post', int(post_id), parent=blog_key())
+            post = key.get()
             if post.posting_user == user:
-                db.delete(key)
+                key.delete()
                 time.sleep(0.1)
                 self.redirect('/manage')
         else:

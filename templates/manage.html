@@ -5,11 +5,11 @@
 {% for post in post_roll %}
 {{post.render() | safe}}
 <br>
-<form method ="get" action="/edit/{{post.key().id()}}">
+<form method ="get" action="/edit/{{post.key.id()}}">
   <input type = "submit" value="Edit Post" ></input>
 </form>
 
-<form method ="get" action="/delete/{{post.key().id()}}">
+<form method ="get" action="/delete/{{post.key.id()}}">
   <input type ="submit" value="Delete Post"></input>
 </form>
 <br>
@@ -21,7 +21,7 @@
   {{comment.render() | safe}}
   <form method ="get" action="">
     <input type ="submit" value="Edit Comment"></input>
-  <br><br>  
+  <br><br>
 {% endfor %}
 </div>
 

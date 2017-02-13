@@ -3,7 +3,7 @@
 {% block content %}
 <p>Editing post {{post.subject}}</p>
 
-  <form method="post" action="/delete/{{post.key().id()}}">
+  <form method="post" action="/delete/{{post.key.id()}}">
     {{post.render() | safe}}
       <br>
     <p>WARNING: NO WAY TO UNDO - THIS IS PERMANENT</p>

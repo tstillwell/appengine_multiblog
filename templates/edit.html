@@ -3,7 +3,7 @@
 {% block content %}
 <p>Editing post {{post.subject}}</p>
 
-  <form method="post" action="/edit/{{post.key().id()}}">
+  <form method="post" action="/edit/{{post.key.id()}}">
     <textarea name="content">{{post.content}}</textarea>
       <br>
     <input type="submit" value="Update This Post" >
