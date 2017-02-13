@@ -78,9 +78,8 @@ class FrontPage(Handler):
     """ Shows the front page/ blogroll """
     def get(self):
         blogroll = ndb.gql("select * from Post order by created desc limit 10")
-
-        if is_logged_in(self.cookie()) == True:
-            user = valid_user(self.cookie())
+        user = valid_user(self.cookie())
+        if user:
             self.render('front.html', blogroll = blogroll, user = user)
         else:
             self.render('front.html', blogroll = blogroll)
@@ -88,8 +87,8 @@ class FrontPage(Handler):
 class NewPost(Handler):
     """ Page for adding new blog posts """
     def get(self):
-        if is_logged_in(self.cookie()) == True:
-            user = valid_user(self.cookie())
+        user = valid_user(self.cookie())
+        if user:
             self.render("newpost.html", user=user)
         else:
             error = "You must be logged in to post"
@@ -125,9 +124,8 @@ class PermaLink(Handler):
         if not post:
             self.error(404)
             return
-
-        if is_logged_in(self.cookie()):
-            user = valid_user(self.cookie())
+        user = valid_user(self.cookie())
+        if user:
             self.render("permalink.html", post = post,
                           comment_roll = comment_roll, user = user )
         else:
@@ -208,17 +206,6 @@ def valid_user(cookie_str):
             return current_user.username
     else:
         return None
-
-def is_logged_in(cookie):
-    """ Returns True only if user is logged in with valid cookie"""
-    if cookie:
-        user = valid_user(cookie)
-        if user != None:
-            return True
-        else:
-            return False
-    else:
-        return False
 
 def new_salt():
 	""" Generates a 32-bit hex salt for user pw salting"""
@@ -317,8 +304,8 @@ class Signup(Handler):
 class Welcome(Handler):
     """ Redirect new users here after registering """
     def get(self):
-        if is_logged_in(self.cookie()) == True:
-            user = valid_user(self.cookie())
+        user = valid_user(self.cookie())
+        if user:
             self.render('welcome.html', user=user)
         else:
             self.redirect('/login')
@@ -367,8 +354,8 @@ class UserPage(Handler):
             self.error(404)
             return
         post_roll = ndb.gql("select * from Post where posting_user = '%s' Order By created DESC" % username)
-        if is_logged_in(self.cookie()) == True:
-            user = valid_user(self.cookie())
+        user = valid_user(self.cookie())
+        if user:
             self.render("useractivity.html" , view_user=profileUser, post_roll = post_roll, user = user)
         else:
             self.render("useractivity.html" , view_user=profileUser, post_roll = post_roll)
@@ -376,8 +363,8 @@ class UserPage(Handler):
 class Manage(Handler):
     """Allows user to edit/delete their own comments & posts"""
     def get(self):
-        if is_logged_in(self.cookie()) == True:
-            user = valid_user(self.cookie())
+        user = valid_user(self.cookie())
+        if user:
             post_roll = ndb.gql("SELECT * FROM Post WHERE posting_user = '%s' ORDER BY created DESC" % user)
             comment_roll = ndb.gql("SELECT * FROM Comment WHERE posting_user = '%s' ORDER BY created DESC" % user)
             self.render("manage.html", user = user, post_roll = post_roll, comment_roll = comment_roll)
@@ -387,8 +374,8 @@ class Manage(Handler):
 class EditPost(Handler):
     """ Edit page user gets here from clicking edit on posts from manage"""
     def get(self, post_id):
-        if is_logged_in(self.cookie()) == True:
-            user = valid_user(self.cookie())
+        user = valid_user(self.cookie())
+        if user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
             if post.posting_user == user:
@@ -398,8 +385,8 @@ class EditPost(Handler):
 
     def post(self, post_id): # TODO: code is duplicated here. Can we do better?
         content = self.request.get("content")
-        if is_logged_in(self.cookie()) == True:
-            user = valid_user(self.cookie())
+        user = valid_user(self.cookie())
+        if user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
             if post.posting_user == user:
@@ -412,8 +399,8 @@ class EditPost(Handler):
 class DeletePost(Handler):
     """Allows a User to permanently and completely delete a post"""
     def get(self, post_id):
-        if is_logged_in(self.cookie()) == True:
-            user = valid_user(self.cookie())
+        user = valid_user(self.cookie())
+        if user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
             if post.posting_user == user:
@@ -422,8 +409,8 @@ class DeletePost(Handler):
             self.error(404)
 
     def post(self, post_id):
-        if is_logged_in(self.cookie()) == True:
-            user = valid_user(self.cookie())
+        user = valid_user(self.cookie())
+        if user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
             if post.posting_user == user:
