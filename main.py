@@ -380,7 +380,7 @@ class Manage(Handler):
         if is_logged_in(self.cookie()) == True:
             user = valid_user(self.cookie())
             post_roll = db.GqlQuery("SELECT * FROM Post WHERE posting_user = '%s' ORDER BY created DESC" % user)
-            comment_roll = db.GqlQuery("SELECT * FROM Comment WHERE posting_user = '%s' ORDER BY created DESC" % user)
+            comment_roll = ndb.gql("SELECT * FROM Comment WHERE posting_user = '%s' ORDER BY created DESC" % user)
             self.render("manage.html", user = user, post_roll = post_roll, comment_roll = comment_roll)
         else: # If user is not logged in, show an error
             self.error(404) # TODO: Change this to error showing must be logged in to manage
