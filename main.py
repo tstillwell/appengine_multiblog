@@ -39,6 +39,10 @@ class Handler(webapp2.RequestHandler):
         my_cookie = self.request.cookies.get('Session')
         return my_cookie
 
+    def user(self):
+        """Returns logged-in username or None"""
+        return valid_user(self.cookie())
+
 class MainPage(Handler): # Main site index Handler
     """Defines behavior of get and post requests for main app page"""
     def get(self):
@@ -78,18 +82,16 @@ class FrontPage(Handler):
     """ Shows the front page/ blogroll """
     def get(self):
         blogroll = ndb.gql("select * from Post order by created desc limit 10")
-        user = valid_user(self.cookie())
-        if user:
-            self.render('front.html', blogroll = blogroll, user = user)
+        if self.user():
+            self.render('front.html', blogroll = blogroll, user = self.user())
         else:
             self.render('front.html', blogroll = blogroll)
 
 class NewPost(Handler):
     """ Page for adding new blog posts """
     def get(self):
-        user = valid_user(self.cookie())
-        if user:
-            self.render("newpost.html", user=user)
+        if self.user():
+            self.render("newpost.html", user = self.user())
         else:
             error = "You must be logged in to post"
             self.render("newpost.html", error = error)
@@ -98,20 +100,19 @@ class NewPost(Handler):
         """ takes info from forms """
         subject = self.request.get("subject")
         content = self.request.get("content")
-        posting_user = valid_user(self.cookie())
         if subject and content:
             """ If data fields present, make new Post and add it to the db """
-            if posting_user == None:
+            if not self.user():
                 error = "You must be logged in to post"
                 self.render("newpost.html",subject = subject, content = content, error = error)
             else:
-                p = Post(parent = blog_key(), subject = subject, content = content, posting_user = posting_user)
+                p = Post(parent = blog_key(), subject = subject, content = content, posting_user = self.user())
                 p.put()
                 self.redirect('/blog/%s' % str(p.key.id())) # Redirect to permalink
         else:
             """ If all data fields are not present, report an error and ask for fields again """
             error = "subject and content, please!"
-            self.render("newpost.html", subject = subject, content = content, error = error, user = posting_user)
+            self.render("newpost.html", subject = subject, content = content, error = error, user = self.user())
 
 class PermaLink(Handler):
     """ For getting existing posts.. """
@@ -124,10 +125,9 @@ class PermaLink(Handler):
         if not post:
             self.error(404)
             return
-        user = valid_user(self.cookie())
-        if user:
+        if self.user():
             self.render("permalink.html", post = post,
-                          comment_roll = comment_roll, user = user )
+                          comment_roll = comment_roll, user = self.user() )
         else:
             self.render("permalink.html", post = post,
                           comment_roll = comment_roll)
@@ -138,20 +138,19 @@ class PermaLink(Handler):
 
         comment_text = self.request.get("comment_text")
         parent_post_id = str(post.key.id()) # file the comment under this post
-        posting_user = valid_user(self.cookie()) # Read the userid out of cookie
-        if posting_user == None: # If user is not logged in or invalid cookie
+        if self.user() == None: # If user is not logged in or invalid cookie
             error = "Sorry, you need to be logged in to comment"
             comment_roll = load_comments(post_id)
             self.render("permalink.html", post = post,
                           comment_roll = comment_roll, error = error)
             return
         c = Comment(comment_text = comment_text,
-                     posting_user = posting_user,
+                     posting_user = self.user(),
                      parent_post_id = parent_post_id)
         c.put()
         comment_roll = load_comments(post_id)
         self.render("permalink.html", post = post, new_comment = c,
-                      comment_roll = comment_roll, user = posting_user )
+                      comment_roll = comment_roll, user = self.user() )
 
 """ USER RELATED classes """
 class Secret(ndb.Model):
@@ -191,7 +190,7 @@ def cookie_hash(value):
     return hash
 
 def valid_user(cookie_str):
-    """Returns username after validating the cookie"""
+    """Returns username after validating the cookie session data"""
     if cookie_str == None:
         return None
     cookie_parts = cookie_str.split("|")
@@ -304,9 +303,8 @@ class Signup(Handler):
 class Welcome(Handler):
     """ Redirect new users here after registering """
     def get(self):
-        user = valid_user(self.cookie())
-        if user:
-            self.render('welcome.html', user=user)
+        if self.user():
+            self.render('welcome.html', user = self.user())
         else:
             self.redirect('/login')
 
@@ -354,42 +352,38 @@ class UserPage(Handler):
             self.error(404)
             return
         post_roll = ndb.gql("select * from Post where posting_user = '%s' Order By created DESC" % username)
-        user = valid_user(self.cookie())
-        if user:
-            self.render("useractivity.html" , view_user=profileUser, post_roll = post_roll, user = user)
+        if self.user():
+            self.render("useractivity.html" , view_user=profileUser, post_roll = post_roll, user = self.user())
         else:
             self.render("useractivity.html" , view_user=profileUser, post_roll = post_roll)
 
 class Manage(Handler):
     """Allows user to edit/delete their own comments & posts"""
     def get(self):
-        user = valid_user(self.cookie())
-        if user:
-            post_roll = ndb.gql("SELECT * FROM Post WHERE posting_user = '%s' ORDER BY created DESC" % user)
-            comment_roll = ndb.gql("SELECT * FROM Comment WHERE posting_user = '%s' ORDER BY created DESC" % user)
-            self.render("manage.html", user = user, post_roll = post_roll, comment_roll = comment_roll)
+        if self.user():
+            post_roll = ndb.gql("SELECT * FROM Post WHERE posting_user = '%s' ORDER BY created DESC" % self.user())
+            comment_roll = ndb.gql("SELECT * FROM Comment WHERE posting_user = '%s' ORDER BY created DESC" % self.user())
+            self.render("manage.html", user = self.user(), post_roll = post_roll, comment_roll = comment_roll)
         else: # If user is not logged in, show an error
             self.error(404) # TODO: Change this to error showing must be logged in to manage
 
 class EditPost(Handler):
     """ Edit page user gets here from clicking edit on posts from manage"""
     def get(self, post_id):
-        user = valid_user(self.cookie())
-        if user:
+        if self.user():
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            if post.posting_user == user:
-                self.render("edit.html", post = post, user = user)
+            if post.posting_user == self.user():
+                self.render("edit.html", post = post, user = self.user())
         else:
             self.error(404)
 
     def post(self, post_id): # TODO: code is duplicated here. Can we do better?
         content = self.request.get("content")
-        user = valid_user(self.cookie())
-        if user:
+        if self.user():
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            if post.posting_user == user:
+            if post.posting_user == self.user():
                 post.content = content
                 post.put()
                 self.redirect('/blog/%s' % str(post.key.id()))
@@ -399,21 +393,19 @@ class EditPost(Handler):
 class DeletePost(Handler):
     """Allows a User to permanently and completely delete a post"""
     def get(self, post_id):
-        user = valid_user(self.cookie())
-        if user:
+        if self.user():
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            if post.posting_user == user:
-                self.render("delete.html", post = post, user = user)
+            if post.posting_user == self.user():
+                self.render("delete.html", post = post, user = self.user())
         else:
             self.error(404)
 
     def post(self, post_id):
-        user = valid_user(self.cookie())
-        if user:
+        if self.user():
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            if post.posting_user == user:
+            if post.posting_user == self.user():
                 key.delete()
                 time.sleep(0.1)
                 self.redirect('/manage')
@@ -424,8 +416,7 @@ class Logout(Handler):
     """Logout Behavior"""
     def get(self):
         if self.cookie():
-            user = valid_user(self.cookie())
-            user_query = ndb.gql("SELECT * FROM User WHERE username = '%s'" % user)
+            user_query = ndb.gql("SELECT * FROM User WHERE username = '%s'" % self.user())
             person = user_query.get()
             # remove session token from DB, invalidating it server side
             person.current_session = ''
