@@ -8,6 +8,7 @@ import binascii
 import uuid
 from pbkdf2 import PBKDF2
 import time
+import datetime
 from google.appengine.ext import ndb
 
 # point to jinja template dir
@@ -178,6 +179,7 @@ class User(ndb.Model):
     salt = ndb.StringProperty(required = True)
     email = ndb.StringProperty(required = True)
     current_session = ndb.StringProperty(required = False)
+    session_expires = ndb.DateTimeProperty(required = False)
 
 def user_key(name = 'default'):
     """ Generate a blog id from the db row """
@@ -201,7 +203,10 @@ def valid_user(cookie_str):
                                      WHERE current_session ='%s'"""
                                      %cookie_parts[0])
         current_user = user_query.get()
-        if current_user:
+        if current_user and datetime.datetime.now() < current_user.session_expires:
+            current_user.session_expires = (datetime.datetime.now() +
+                                             datetime.timedelta(hours=1))
+            current_user.put()
             return current_user.username
     else:
         return None
@@ -329,6 +334,8 @@ class Login(Handler):
             hash_input = hash_password(input_password, target_user.salt)
             if hash_input != target_user.user_hash: break # password mismatch
             target_user.current_session = session_uuid()
+            target_user.session_expires = (datetime.datetime.now() +
+                                             datetime.timedelta(hours=1))
             target_user.put()
 
             self.response.headers.add_header(
