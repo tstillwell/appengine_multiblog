@@ -105,15 +105,19 @@ class NewPost(Handler):
             """ If data fields present, make new Post and add it to the db """
             if not self.user():
                 error = "You must be logged in to post"
-                self.render("newpost.html",subject = subject, content = content, error = error)
+                self.render("newpost.html",subject = subject,
+                              content = content, error = error)
             else:
-                p = Post(parent = blog_key(), subject = subject, content = content, posting_user = self.user())
+                p = Post(parent = blog_key(), subject = subject,
+                          content = content, posting_user = self.user())
                 p.put()
-                self.redirect('/blog/%s' % str(p.key.id())) # Redirect to permalink
+                self.redirect('/blog/%s' % str(p.key.id())) # Permalink
         else:
-            """ If all data fields are not present, report an error and ask for fields again """
+            """ If all data fields are not present,
+                 report an error and ask for fields again """
             error = "subject and content, please!"
-            self.render("newpost.html", subject = subject, content = content, error = error, user = self.user())
+            self.render("newpost.html", subject = subject, content = content,
+                          error = error, user = self.user())
 
 class PermaLink(Handler):
     """ For getting existing posts.. """
