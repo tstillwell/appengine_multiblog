@@ -203,7 +203,8 @@ def valid_user(cookie_str):
                                      WHERE current_session ='%s'"""
                                      %cookie_parts[0])
         current_user = user_query.get()
-        if current_user and datetime.datetime.now() < current_user.session_expires:
+        if (current_user and
+             datetime.datetime.now() < current_user.session_expires):
             current_user.session_expires = (datetime.datetime.now() +
                                              datetime.timedelta(hours=1))
             current_user.put()
