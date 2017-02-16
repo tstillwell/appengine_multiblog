@@ -358,7 +358,8 @@ class Login(Handler):
 class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
     def get(self, username):
-        view_user = ndb.gql("select * from User where username = '%s'" % username)
+        view_user = ndb.gql("""SELECT * FROM User
+                                WHERE username = '%s'""" % username)
         profileUser = view_user.get()
         if not profileUser:
             self.error(404)
