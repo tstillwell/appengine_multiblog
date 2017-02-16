@@ -373,11 +373,15 @@ class Manage(Handler):
     """Allows user to edit/delete their own comments & posts"""
     def get(self):
         if self.user():
-            post_roll = ndb.gql("SELECT * FROM Post WHERE posting_user = '%s' ORDER BY created DESC" % self.user())
-            comment_roll = ndb.gql("SELECT * FROM Comment WHERE posting_user = '%s' ORDER BY created DESC" % self.user())
-            self.render("manage.html", user = self.user(), post_roll = post_roll, comment_roll = comment_roll)
+            post_roll = ndb.gql("""SELECT * FROM Post WHERE posting_user = '%s'
+                                    ORDER BY created DESC""" % self.user())
+            comment_roll = ndb.gql("""SELECT * FROM Comment WHERE
+                                       posting_user = '%s' ORDER BY created
+                                       DESC""" % self.user())
+            self.render("manage.html", user = self.user(),
+                          post_roll = post_roll, comment_roll = comment_roll)
         else: # If user is not logged in, show an error
-            self.error(404) # TODO: Change this to error showing must be logged in to manage
+            self.error(404)
 
 class EditPost(Handler):
     """ Edit page user gets here from clicking edit on posts from manage"""
