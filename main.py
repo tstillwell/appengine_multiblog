@@ -363,11 +363,14 @@ class UserPage(Handler):
         if not profileUser:
             self.error(404)
             return
-        post_roll = ndb.gql("select * from Post where posting_user = '%s' Order By created DESC" % username)
+        post_roll = ndb.gql("""SELECT * FROM Post WHERE posting_user = '%s'
+                                ORDER BY created DESC""" % username)
         if self.user():
-            self.render("useractivity.html" , view_user=profileUser, post_roll = post_roll, user = self.user())
+            self.render("useractivity.html" , view_user=profileUser,
+                          post_roll = post_roll, user = self.user())
         else:
-            self.render("useractivity.html" , view_user=profileUser, post_roll = post_roll)
+            self.render("useractivity.html" , view_user=profileUser,
+                          post_roll = post_roll)
 
 class Manage(Handler):
     """Allows user to edit/delete their own comments & posts"""
