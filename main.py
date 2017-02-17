@@ -298,9 +298,12 @@ class Signup(Handler):
                 salt = new_salt()
                 user_hash = hash_password(password, salt)
                 current_session = session_uuid()
+                session_expires = (datetime.datetime.now() +
+                                    datetime.timedelta(hours=1))
                 u = User(parent = user_key(), username = username,
                           email = email, user_hash = user_hash,
-                          salt = salt, current_session = current_session)
+                          salt = salt, current_session = current_session,
+                          session_expires = session_expires)
                 u.put() # Put this person into the db
                 self.response.headers.add_header(
                   'Set-Cookie', 'Session= %s|%s Path=/'
