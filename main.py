@@ -439,10 +439,12 @@ class Logout(Handler):
     """Logout Behavior"""
     def get(self):
         if self.cookie():
-            user_query = ndb.gql("SELECT * FROM User WHERE username = '%s'" % self.user())
+            user_query = ndb.gql("""SELECT * FROM User WHERE
+                                     username = '%s'""" % self.user())
             person = user_query.get()
             # remove session token from DB, invalidating it server side
             person.current_session = ''
+            person.session_expires = None
             person.put()
         # Reset the cookie value
         self.response.headers.add_header('Set-Cookie', 'Session=')
