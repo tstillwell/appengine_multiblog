@@ -12,8 +12,8 @@ import datetime
 from google.appengine.ext import ndb
 
 # point to jinja template dir
-template_dir = os.path.join(os.path.dirname(__file__), 'templates')
-jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir),
+TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
+jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR),
                                autoescape=True) # always autoescape
 
 def render_str(template, **params): # Pass data to templates
