@@ -174,7 +174,7 @@ def secret_key():
         k.put()
         return new_key
 
-secret = secret_key()
+SECRET = secret_key()
 
 class User(ndb.Model):
     """ Adds Users DB Table """
@@ -191,7 +191,7 @@ def user_key(name = 'default'):
 
 def cookie_hash(value):
     """Use the secret value with HMAC to prevent cookie tampering"""
-    hash = hmac.new(secret, str(value)).hexdigest()
+    hash = hmac.new(SECRET, str(value)).hexdigest()
     hash = str(hash)
     return hash
 
