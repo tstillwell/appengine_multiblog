@@ -13,11 +13,11 @@ from google.appengine.ext import ndb
 
 # point to jinja template dir
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
-jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR),
+JINJA_ENV = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR),
                                autoescape=True) # always autoescape
 
 def render_str(template, **params): # Pass data to templates
-    t = jinja_env.get_template(template)
+    t = JINJA_ENV.get_template(template)
     return t.render(params)
 
 class Handler(webapp2.RequestHandler):
@@ -28,7 +28,7 @@ class Handler(webapp2.RequestHandler):
 
     def render_str(self, template, **params):
         """ Used to inject the info into the templates """
-        t = jinja_env.get_template(template)
+        t = JINJA_ENV.get_template(template)
         return t.render(params)
 
     def render(self, template, **kw):
