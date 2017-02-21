@@ -113,8 +113,7 @@ class NewPost(Handler):
                 p.put()
                 self.redirect('/blog/%s' % str(p.key.id())) # Permalink
         else:
-            """ If all data fields are not present,
-                 report an error and ask for fields again """
+            """ If fields are not populated show error and ask again """
             error = "subject and content, please!"
             self.render("newpost.html", subject = subject, content = content,
                           error = error, user = self.user())
