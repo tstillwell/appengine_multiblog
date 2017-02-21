@@ -120,11 +120,10 @@ class NewPost(Handler):
                           error = error, user = self.user())
 
 class PermaLink(Handler):
-    """ For getting existing posts.. """
+    """ For getting existing posts and associated comments """
     def get(self, post_id):
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
-        # gets the comments whose post_id matches the post_id of the page
         comment_roll = load_comments(post_id)
 
         if not post:
@@ -138,7 +137,7 @@ class PermaLink(Handler):
                           comment_roll = comment_roll)
 
     def post(self, post_id):
-        """When a user adds comments to the post """
+        """ When a user adds comments to the post """
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
 
