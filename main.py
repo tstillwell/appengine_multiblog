@@ -137,7 +137,8 @@ class PermaLink(Handler):
             self.render("permalink.html", post = post,
                           comment_roll = comment_roll)
 
-    def post(self, post_id): # For adding comments
+    def post(self, post_id):
+        """When a user adds comments to the post """
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
 
