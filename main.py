@@ -113,16 +113,18 @@ class NewPost(Handler):
                 p.put()
                 self.redirect('/blog/%s' % str(p.key.id())) # Permalink
         else:
-            """ If fields are not populated show error and ask again """
+            """ If all data fields are not present,
+                 report an error and ask for fields again """
             error = "subject and content, please!"
             self.render("newpost.html", subject = subject, content = content,
                           error = error, user = self.user())
 
 class PermaLink(Handler):
-    """ For getting existing posts and associated comments """
+    """ For getting existing posts.. """
     def get(self, post_id):
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
+        # gets the comments whose post_id matches the post_id of the page
         comment_roll = load_comments(post_id)
 
         if not post:
@@ -135,8 +137,7 @@ class PermaLink(Handler):
             self.render("permalink.html", post = post,
                           comment_roll = comment_roll)
 
-    def post(self, post_id):
-        """ When a user adds comments to the post """
+    def post(self, post_id): # For adding comments
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
 
@@ -163,7 +164,7 @@ class Secret(ndb.Model):
 
 def secret_key():
     """ Get secret key from datastore. If one does not exist it makes one"""
-    secret_check = ndb.gql("SELECT * FROM Secret") # Check datastore for key
+    secret_check = ndb.gql("SELECT key_string FROM Secret")
     key = secret_check.get()
     if key: # if key is present return it
         return key.key_string
