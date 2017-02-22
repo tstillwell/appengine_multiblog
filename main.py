@@ -82,7 +82,7 @@ class Comment(ndb.Model):
 class FrontPage(Handler):
     """ Shows the front page/ blogroll """
     def get(self):
-        blogroll = ndb.gql("select * from Post order by created desc limit 10")
+        blogroll = ndb.gql("SELECT * FROM Post ORDER BY created DESC LIMIT 10")
         if self.user():
             self.render('front.html', blogroll = blogroll, user = self.user())
         else:
