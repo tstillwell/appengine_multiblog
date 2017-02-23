@@ -393,6 +393,7 @@ class Manage(Handler):
 class EditPost(Handler):
     """ Edit page user gets here from clicking edit on posts from manage"""
     def get(self, post_id):
+        """ IF user is the post owner, they can edit the post """
         if self.user():
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
@@ -401,7 +402,8 @@ class EditPost(Handler):
         else:
             self.error(404)
 
-    def post(self, post_id): # TODO: code is duplicated here. Can we do better?
+    def post(self, post_id):
+        """ If users match and they entered new content, change the post """
         content = self.request.get("content")
         if self.user():
             key = ndb.Key('Post', int(post_id), parent=blog_key())
@@ -416,6 +418,7 @@ class EditPost(Handler):
 class DeletePost(Handler):
     """Allows a User to permanently and completely delete a post"""
     def get(self, post_id):
+        """ If user is the post owner, they can delete the post """
         if self.user():
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
@@ -425,6 +428,7 @@ class DeletePost(Handler):
             self.error(404)
 
     def post(self, post_id):
+        """ If user match and they click delete form, remove the post """
         if self.user():
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
