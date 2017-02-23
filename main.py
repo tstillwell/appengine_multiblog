@@ -137,10 +137,10 @@ class PermaLink(Handler):
             self.render("permalink.html", post = post,
                           comment_roll = comment_roll)
 
-    def post(self, post_id): # For adding comments
+    def post(self, post_id):
+        """ For adding comments """
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
-
         comment_text = self.request.get("comment_text")
         parent_post_id = str(post.key.id()) # file the comment under this post
         if self.user() == None: # If user is not logged in or invalid cookie
