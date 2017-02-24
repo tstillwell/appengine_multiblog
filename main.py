@@ -316,8 +316,9 @@ class Welcome(Handler):
     """ Redirect new users here after registering """
     def get(self):
         time.sleep(0.1)
-        if self.user():
-            self.render('welcome.html', user = self.user())
+        user = self.user()
+        if user:
+            self.render('welcome.html', user = user)
         else:
             self.redirect('/login')
 
