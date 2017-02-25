@@ -310,12 +310,11 @@ class Signup(Handler):
                    % (str(u.current_session), (cookie_hash
                    (u.current_session))))
 
-                self.redirect('/welcome')
+                self.render('welcome.html', user = u.username)
 
 class Welcome(Handler):
     """ Redirect new users here after registering """
     def get(self):
-        time.sleep(0.1)
         user = self.user()
         if user:
             self.render('welcome.html', user = user)
@@ -354,7 +353,7 @@ class Login(Handler):
               (cookie_hash(
               target_user.current_session))))
 
-            return self.redirect('/welcome')
+            return self.render('welcome.html', user=target_user.username)
 
         self.render("login.html", error = "Invalid Login")
 
