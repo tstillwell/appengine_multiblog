@@ -7,7 +7,6 @@ import hashlib
 import binascii
 import uuid
 from pbkdf2 import PBKDF2
-import time
 import datetime
 from google.appengine.ext import ndb
 
