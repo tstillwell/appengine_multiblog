@@ -433,7 +433,6 @@ class DeletePost(Handler):
             post = key.get()
             if post.posting_user == self.user():
                 key.delete()
-                time.sleep(0.1)
                 self.redirect('/manage')
         else:
             self.error(404)
