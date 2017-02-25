@@ -50,7 +50,7 @@ class MainPage(Handler): # Main site index Handler
         self.write("Testblog up and running!")
 
 def blog_key(name = 'default'):
-    """ Generate a blog id from the db row """
+    """ Generate a blog key used as parent for posts """
     return ndb.Key('blogs', name)
 
 class Post(ndb.Model):
