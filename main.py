@@ -8,6 +8,7 @@ import binascii
 import uuid
 from pbkdf2 import PBKDF2
 import datetime
+import logging
 from google.appengine.ext import ndb
 
 # point to jinja template dir
@@ -308,7 +309,7 @@ class Signup(Handler):
                   'Set-Cookie', 'Session= %s|%s Path=/'
                    % (str(u.current_session), (cookie_hash
                    (u.current_session))))
-
+                logging.info("New user account created: %s" % username)
                 self.render('welcome.html', user = u.username)
 
 class Welcome(Handler):
