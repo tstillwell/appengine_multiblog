@@ -293,7 +293,7 @@ class Signup(Handler):
             if user:
                 params['error_taken'] = "Username unavailable."
                 self.render('registration.html', **params)
-
+                logging.info("Attempted re-registration for: [%s]" % username)
             else: # if that user does not exist, add the account to the DB
                 salt = new_salt()
                 user_hash = hash_password(password, salt)
