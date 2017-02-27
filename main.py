@@ -356,6 +356,7 @@ class Login(Handler):
             return self.render('welcome.html', user=target_user.username)
 
         self.render("login.html", error = "Invalid Login")
+        logging.info("Login falure: %s" % input_username)
 
 class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
