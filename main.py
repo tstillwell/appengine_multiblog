@@ -174,6 +174,7 @@ def secret_key():
         new_key = binascii.b2a_hqx(os.urandom(64)) # 64-bits converted to Ascii
         k = Secret(key_string = new_key)
         k.put()
+        logging.critical("A NEW SECRET KEY HAS BEEN CREATED FOR HMAC")
         return new_key
 
 SECRET = secret_key()
