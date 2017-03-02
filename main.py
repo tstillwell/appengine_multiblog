@@ -438,6 +438,7 @@ class DeletePost(Handler):
             if post.posting_user == self.user():
                 key.delete()
                 self.redirect('/manage')
+                logging.info("Post Deleted: %s" % post_id)
         else:
             self.error(404)
 
