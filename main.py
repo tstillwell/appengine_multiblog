@@ -455,6 +455,7 @@ class Logout(Handler):
         # Reset the cookie value
         self.response.headers.add_header('Set-Cookie', 'Session=')
         self.redirect("/blog")
+        logging.info("User logged out: %s" % person.username)
 
 
 # Router - Bind these URLs to above Request Handler instances
