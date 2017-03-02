@@ -66,6 +66,12 @@ class Post(ndb.Model):
         self._render_text = self.content.replace('\n', '<br>')
         return render_str("post.html", p = self)
 
+def post_count():
+    """ Returns the total number of posts """
+    all_posts = ndb.gql("SELECT * FROM Post").fetch(keys_only=True)
+    count = len(all_posts)
+    return count
+
 class Comment(ndb.Model):
     """ Comments DB Table """
     comment_text = ndb.TextProperty(required = True)
@@ -82,21 +88,23 @@ class Comment(ndb.Model):
 class FrontPage(Handler):
     """ Shows the front page/ blogroll """
     def get(self):
+        pagecount = ((post_count() / 10) + 1)
         blogroll = ndb.gql("SELECT * FROM Post ORDER BY created DESC LIMIT 10")
         if self.user():
-            self.render('front.html', blogroll = blogroll, user = self.user())
+            self.render('front.html', blogroll = blogroll, user = self.user(), pagecount = pagecount, page_id = 1)
         else:
-            self.render('front.html', blogroll = blogroll)
+            self.render('front.html', blogroll = blogroll, pagecount = pagecount, page_id = 1)
 
 class FrontPaginate(Handler):
     """ next page/numbered page links containing additonal posts """
     def get(self, page_id):
         page_offset = ((int(page_id) * 10) - 10)
+        pagecount = ((post_count() / 10) + 1)
         nextroll = ndb.gql("SELECT * FROM Post ORDER BY created DESC LIMIT 10 OFFSET %s" % page_offset)
         if self.user():
-            self.render('front.html', blogroll = nextroll, user = self.user())
+            self.render('front.html', blogroll = nextroll, user = self.user(), pagecount = pagecount, page_id = int(page_id))
         else:
-            self.render('front.html', blogroll = nextroll)
+            self.render('front.html', blogroll = nextroll, pagecount = pagecount,  page_id = int(page_id))
 
 class NewPost(Handler):
     """ Page for adding new blog posts """

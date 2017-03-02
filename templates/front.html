@@ -6,5 +6,12 @@
     {{ p.render() | safe }}
     <br><br>
   {% endfor %}
-
+  {% for page in range(pagecount) %}
+    {% if page_id != page+1 %}
+    <a href ="/blog/page/{{page+1}}">[{{page+1}}]</a>
+    {% endif %}
+    {% if page_id == page+1 %}
+    [{{page+1}}]
+    {% endif %}
+  {% endfor %}
 {% endblock %}
