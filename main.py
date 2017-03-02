@@ -88,6 +88,16 @@ class FrontPage(Handler):
         else:
             self.render('front.html', blogroll = blogroll)
 
+class FrontPaginate(Handler):
+    """ next page/numbered page links containing additonal posts """
+    def get(self, page_id):
+        page_offset = ((int(page_id) * 10) - 10)
+        nextroll = ndb.gql("SELECT * FROM Post ORDER BY created DESC LIMIT 10 OFFSET %s" % page_offset)
+        if self.user():
+            self.render('front.html', blogroll = nextroll, user = self.user())
+        else:
+            self.render('front.html', blogroll = nextroll)
+
 class NewPost(Handler):
     """ Page for adding new blog posts """
     def get(self):
@@ -462,6 +472,7 @@ class Logout(Handler):
 # Router - Bind these URLs to above Request Handler instances
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/?', FrontPage),
+                               ('/blog/page/([0-9]+)', FrontPaginate),
                                ('/blog/newpost', NewPost),
                                ('/blog/([0-9]+)', PermaLink),
                                ('/signup', Signup),
