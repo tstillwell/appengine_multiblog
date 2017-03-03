@@ -91,20 +91,25 @@ class FrontPage(Handler):
         pagecount = ((post_count() / 10) + 1)
         blogroll = ndb.gql("SELECT * FROM Post ORDER BY created DESC LIMIT 10")
         if self.user():
-            self.render('front.html', blogroll = blogroll, user = self.user(), pagecount = pagecount, page_id = 1)
+            self.render('front.html', blogroll = blogroll, user = self.user(),
+                          pagecount = pagecount, page_id = 1)
         else:
-            self.render('front.html', blogroll = blogroll, pagecount = pagecount, page_id = 1)
+            self.render('front.html', blogroll = blogroll,
+                          pagecount = pagecount, page_id = 1)
 
 class FrontPaginate(Handler):
     """ next page/numbered page links containing additonal posts """
     def get(self, page_id):
         page_offset = ((int(page_id) * 10) - 10)
         pagecount = ((post_count() / 10) + 1)
-        nextroll = ndb.gql("SELECT * FROM Post ORDER BY created DESC LIMIT 10 OFFSET %s" % page_offset)
+        nextroll = ndb.gql("""SELECT * FROM Post ORDER BY created
+                               DESC LIMIT 10 OFFSET %s""" % page_offset)
         if self.user():
-            self.render('front.html', blogroll = nextroll, user = self.user(), pagecount = pagecount, page_id = int(page_id))
+            self.render('front.html', blogroll = nextroll, user = self.user(),
+                          pagecount = pagecount, page_id = int(page_id))
         else:
-            self.render('front.html', blogroll = nextroll, pagecount = pagecount,  page_id = int(page_id))
+            self.render('front.html', blogroll = nextroll,
+                          pagecount = pagecount,  page_id = int(page_id))
 
 class NewPost(Handler):
     """ Page for adding new blog posts """
