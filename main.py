@@ -480,7 +480,7 @@ class Logout(Handler):
 # Router - Bind these URLs to above Request Handler instances
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/?', FrontPage),
-                               ('/blog/page/([0-9]+)', FrontPaginate),
+                               ('/blog/page/([1-9][0-9]*)', FrontPaginate),
                                ('/blog/newpost', NewPost),
                                ('/blog/([0-9]+)', PermaLink),
                                ('/signup', Signup),
