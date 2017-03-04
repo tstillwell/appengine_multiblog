@@ -13,6 +13,11 @@
 
   {% for c in comment_roll %}
     {{ c.render() | safe }}
+    {% if c.posting_user == user %}
+      <form name ="edit-comment" method ="get" action="/edit/c/{{c.key.id()}}">
+        <input type="submit" value="edit comment">
+      </form>
+    {% endif %}
     <br>
   {% endfor %}
   <form name ="comment-form" method ="post">

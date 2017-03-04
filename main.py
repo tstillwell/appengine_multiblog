@@ -49,10 +49,6 @@ class MainPage(Handler): # Main site index Handler
     def get(self):
         self.write("Testblog up and running!")
 
-def blog_key(name = 'default'):
-    """ Generate a blog key used as parent for posts """
-    return ndb.Key('blogs', name)
-
 class Post(ndb.Model):
     """ Adds the Post DB table"""
     subject = ndb.StringProperty(required = True)
@@ -65,6 +61,10 @@ class Post(ndb.Model):
         """ Draws all blog post data """
         self._render_text = self.content.replace('\n', '<br>')
         return render_str("post.html", p = self)
+
+def blog_key(name = 'default'):
+    """ Generate a blog key used as parent for posts """
+    return ndb.Key('blogs', name)
 
 def post_count():
     """ Returns the total number of posts """
@@ -84,6 +84,10 @@ class Comment(ndb.Model):
         """ Draws comments """
         self._render_text = self.comment_text.replace('\n', '<br>')
         return render_str("comment.html", c = self)
+
+def comment_key(name = 'default'):
+    """ Parent key for comments """
+    return ndb.Key('comments', name)
 
 class FrontPage(Handler):
     """ Shows the front page/ blogroll """
@@ -180,7 +184,7 @@ class PermaLink(Handler):
             self.render("permalink.html", post = post, user = self.user(),
                           comment_roll = comment_roll, error = error)
             return
-        c = Comment(comment_text = comment_text,
+        c = Comment(parent = comment_key(), comment_text = comment_text,
                      posting_user = self.user(),
                      parent_post_id = parent_post_id)
         c.put()
@@ -448,6 +452,28 @@ class EditPost(Handler):
         else:
             self.error(404)
 
+class EditComment(Handler):
+    def get(self, comment_id):
+        """ If user owns comment, they can edit it """
+        if self.user():
+            key = ndb.Key('Comment', int(comment_id), parent=comment_key())
+            comment = key.get()
+            if comment.posting_user == self.user():
+                self.render("editc.html", comment = comment, user = self.user())
+        else:
+            self.error(404)
+
+    def post(self, comment_id):
+        if self.user():
+            content = self.request.get("content")
+            key = ndb.Key('Comment', int(comment_id), parent=comment_key())
+            comment = key.get()
+            if comment.posting_user == self.user():
+                comment.comment_text = content
+                comment.put()
+                self.redirect('/blog/%s' % str(comment.parent_post_id))
+        else:
+            self.error(404)
 class DeletePost(Handler):
     """Allows a User to permanently and completely delete a post"""
     def get(self, post_id):
@@ -502,6 +528,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/users/([a-zA-Z0-9-]+)', UserPage),
                                ('/manage', Manage),
                                ('/edit/([0-9]+)', EditPost),
+                               ('/edit/c/([0-9]+)', EditComment),
                                ('/delete/([0-9]+)', DeletePost),
                                ],
                               debug=True,)
