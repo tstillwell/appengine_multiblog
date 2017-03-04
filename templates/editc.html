@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>Editing comment</p>
+
+  <form method="post" action="/edit/c/{{comment.key.id()}}">
+    <textarea name="content">{{comment.comment_text}}</textarea>
+      <br>
+    <input type="submit" value="Update This Comment" >
+  </form>
+
+  <form method="get" action="/blog/{{comment.parent_post_id}}">
+    <input type="submit" value="Cancel">
+  </form>
+{% endblock %}
