@@ -158,7 +158,8 @@ class PermaLink(Handler):
             self.render("permalink.html", post = post,
                           comment_roll = comment_roll, user = self.user() )
         else:
-            self.render("permalink.html", post = post,
+            error = "You must be logged in to comment"
+            self.render("permalink.html", post = post, error = error,
                           comment_roll = comment_roll)
 
     def post(self, post_id):
@@ -171,6 +172,12 @@ class PermaLink(Handler):
             error = "Sorry, you need to be logged in to comment"
             comment_roll = load_comments(post_id)
             self.render("permalink.html", post = post,
+                          comment_roll = comment_roll, error = error)
+            return
+        if comment_text == '':
+            error = "Your comment cannot be blank"
+            comment_roll = load_comments(post_id)
+            self.render("permalink.html", post = post, user = self.user(),
                           comment_roll = comment_roll, error = error)
             return
         c = Comment(comment_text = comment_text,
