@@ -454,7 +454,7 @@ class EditPost(Handler):
 
 class EditComment(Handler):
     def get(self, comment_id):
-        """ If comment owner matches current user draw comment form """
+        """ If comment owner matches current user draw comment edit form """
         if self.user():
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
@@ -464,6 +464,7 @@ class EditComment(Handler):
             self.error(404)
 
     def post(self, comment_id):
+        """ If user matches comment owner, update comment in the datastore """
         if self.user():
             content = self.request.get("content")
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
