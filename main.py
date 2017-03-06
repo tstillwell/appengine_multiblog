@@ -454,7 +454,7 @@ class EditPost(Handler):
 
 class EditComment(Handler):
     def get(self, comment_id):
-        """ If user owns comment, they can edit it """
+        """ If comment owner matches current user draw comment form """
         if self.user():
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
