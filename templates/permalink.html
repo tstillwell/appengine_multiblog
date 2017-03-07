@@ -56,10 +56,10 @@
         data: JSON.stringify({"comment_id": comment_id,
                               "new_text": new_comment_text(comment_id)})
       })
-      .done(function( data ) {
+      .done(function( response ) {
         var comment_class = 'comment-content-' + comment_id;
         var newdiv = '<div class=' + '"' + comment_class + '"' + '>';
-        $('.' + comment_class).replaceWith(newdiv + data['new_text'] + '</div>');
+        $('.' + comment_class).replaceWith(newdiv + response['new_text'] + '</div>');
         $(".edit_area").remove();
         $('form[name=comment-form]').show();
       });

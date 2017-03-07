@@ -478,6 +478,7 @@ class EditComment(Handler):
             self.error(404)
 
 class CommentAjax(Handler):
+    """ Read client JSON request, validates it, updates client with response """
     def post(self):
         request_data = json.loads(self.request.body)
         target_comment = int(request_data['comment_id'])
