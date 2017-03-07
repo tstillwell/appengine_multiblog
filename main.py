@@ -9,6 +9,7 @@ import uuid
 from pbkdf2 import PBKDF2
 import datetime
 import logging
+import json
 from google.appengine.ext import ndb
 
 # point to jinja template dir
@@ -475,6 +476,18 @@ class EditComment(Handler):
                 self.redirect('/blog/%s' % str(comment.parent_post_id))
         else:
             self.error(404)
+
+class CommentAjax(Handler):
+    def post(self):
+        request_data = json.loads(self.request.body)
+        target_comment = int(request_data['comment_id'])
+        comment_to_update = Comment.get_by_id(target_comment, parent=comment_key())
+        if comment_to_update.posting_user == self.user():
+            new_comment_text = (request_data['new_text'])
+            comment_to_update.comment_text = new_comment_text
+            comment_to_update.put()
+            self.response.out.write(json.dumps(({'new_text': new_comment_text})))
+
 class DeletePost(Handler):
     """Allows a User to permanently and completely delete a post"""
     def get(self, post_id):
@@ -531,5 +544,6 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/edit/([0-9]+)', EditPost),
                                ('/edit/c/([0-9]+)', EditComment),
                                ('/delete/([0-9]+)', DeletePost),
+                               ('/commentajax/', CommentAjax),
                                ],
                               debug=True,)
