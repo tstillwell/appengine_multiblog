@@ -482,12 +482,14 @@ class CommentAjax(Handler):
     def post(self):
         request_data = json.loads(self.request.body)
         target_comment = int(request_data['comment_id'])
-        comment_to_update = Comment.get_by_id(target_comment, parent=comment_key())
+        comment_to_update = Comment.get_by_id(target_comment,
+                                               parent=comment_key())
         if comment_to_update.posting_user == self.user():
             new_comment_text = (request_data['new_text'])
             comment_to_update.comment_text = new_comment_text
             comment_to_update.put()
-            self.response.out.write(json.dumps(({'new_text': new_comment_text})))
+            self.response.out.write(json.dumps((
+                                    {'new_text': new_comment_text})))
 
 class DeletePost(Handler):
     """Allows a User to permanently and completely delete a post"""
