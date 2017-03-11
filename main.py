@@ -16,6 +16,7 @@ from google.appengine.ext import ndb
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 JINJA_ENV = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR),
                                autoescape=True) # always autoescape
+HOST_NAME = os.environ['HTTP_HOST']
 
 def render_str(template, **params): # Pass data to templates
     t = JINJA_ENV.get_template(template)
@@ -414,6 +415,19 @@ class UserPage(Handler):
             self.render("useractivity.html" , view_user=profileUser,
                           post_roll = post_roll)
 
+class UserRSS(Handler):
+    def get(self, username):
+        view_user = ndb.gql("""SELECT * FROM User
+                                WHERE username = '%s'""" % username)
+        profileUser = view_user.get()
+        if not profileUser:
+            self.error(404)
+            return
+        post_roll = ndb.gql("""SELECT * FROM Post WHERE posting_user = '%s'
+                                ORDER BY created DESC LIMIT 10""" % username)
+        self.render("userrss.xml", requested_user = profileUser,
+                     blog_roll = post_roll, host = HOST_NAME)
+
 class Manage(Handler):
     """Allows user to edit/delete their own comments & posts"""
     def get(self):
@@ -543,6 +557,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/login', Login),
                                ('/logout', Logout),
                                ('/users/([a-zA-Z0-9-]+)', UserPage),
+                               ('/users/([a-zA-Z0-9-]+)/rss', UserRSS),
                                ('/manage', Manage),
                                ('/edit/([0-9]+)', EditPost),
                                ('/edit/c/([0-9]+)', EditComment),

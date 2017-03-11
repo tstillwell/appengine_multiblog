@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+  <title>{{requested_user.username}}'s Recent Posts</title>
+  <link>http://{{host}}/users/{{requested_user.username}}</link>
+  <description>{{requested_user.username}}'s Blog</description>
+  {% for post in blog_roll %}
+    <item>
+      <title>{{post.subject}}</title>
+      <link>http://{{host}}/blog/{{post.key.id()}}</link>
+      <description>{{post.subject}}
+                   {{post.created.strftime("%b %d, %Y")}}
+      </description>
+    </item>
+  {% endfor %}
+</channel>
+
+</rss>
