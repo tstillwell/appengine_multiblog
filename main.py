@@ -16,7 +16,7 @@ from google.appengine.ext import ndb
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 JINJA_ENV = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR),
                                autoescape=True) # always autoescape
-HOST_NAME = os.environ['HTTP_HOST']
+HOST_NAME = os.environ['HTTP_HOST'] # The current host name of the app
 
 def render_str(template, **params): # Pass data to templates
     t = JINJA_ENV.get_template(template)
@@ -416,6 +416,7 @@ class UserPage(Handler):
                           post_roll = post_roll)
 
 class UserRSS(Handler):
+    """ Renders RSS feed for each user """
     def get(self, username):
         view_user = ndb.gql("""SELECT * FROM User
                                 WHERE username = '%s'""" % username)
