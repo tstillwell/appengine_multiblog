@@ -228,6 +228,12 @@ def user_key(name = 'default'):
     """ Generate a blog id from the db row """
     return ndb.Key('users', name)
 
+class Login_attempt(ndb.Model):
+    """ Keeps track of login attempts for rate limiting """
+    ip_addr = ndb.StringProperty(required = True)
+    last_attempt = ndb.DateTimeProperty(required = True)
+    attempt_count = ndb.IntegerProperty(required = True)
+
 def cookie_hash(value):
     """Use the secret value with HMAC to prevent cookie tampering"""
     hash = hmac.new(SECRET, str(value)).hexdigest()
@@ -366,6 +372,27 @@ class Login(Handler):
         """ Draw the login form ONLY with HTTP GET """
         self.render("login.html")
     def post(self):
+        """ When user submits the login form """
+        # Begin Login Rate Limiting Code #
+        user_ip = self.request.remote_addr
+        check_attempt_query = ndb.gql("""SELECT * FROM Login_attempt
+                                          WHERE ip_addr = '%s'""" % user_ip)
+        attempted_prev_login = check_attempt_query.get()
+        if attempted_prev_login:
+            attempts_so_far = attempted_prev_login.attempt_count
+            if (attempts_so_far >= 10 and (datetime.datetime.now() <= attempted_prev_login.last_attempt + datetime.timedelta(minutes=1))):
+                logging.info("IP: %s is limited for login attempts" % user_ip)
+                self.error(403) # Too many attempts.
+                return
+            attempted_prev_login.attempt_count += 1
+            attempted_prev_login.last_attempt = datetime.datetime.now()
+            attempted_prev_login.put()
+        else: # if user has not attempted to login prevoiusly
+            attempt = Login_attempt(ip_addr = user_ip,
+                                    last_attempt = datetime.datetime.now(),
+                                    attempt_count = 1)
+            attempt.put()
+        # End Login Rate Limiting Code #
         """ Takes login credentials that were input by user """
         input_username = self.request.get("username")
         input_password = self.request.get("password")
