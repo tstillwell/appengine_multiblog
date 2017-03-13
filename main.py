@@ -15,12 +15,14 @@ from google.appengine.ext import ndb
 # point to jinja template dir
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 JINJA_ENV = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR),
-                               autoescape=True) # always autoescape
-HOST_NAME = os.environ['HTTP_HOST'] # The current host name of the app
+                               autoescape=True)  # always autoescape
+HOST_NAME = os.environ['HTTP_HOST']  # The current host name of the app
 
-def render_str(template, **params): # Pass data to templates
+
+def render_str(template, **params):  # Pass data to templates
     t = JINJA_ENV.get_template(template)
     return t.render(params)
+
 
 class Handler(webapp2.RequestHandler):
     """ Base Handler Class """
@@ -46,18 +48,20 @@ class Handler(webapp2.RequestHandler):
         """Returns logged-in username or None"""
         return valid_user(self.cookie())
 
-class MainPage(Handler): # Main site index Handler
+
+class MainPage(Handler):
     """Defines behavior of get and post requests for main app page"""
     def get(self):
         self.write("Testblog up and running!")
 
+
 class Post(ndb.Model):
     """ Adds the Post DB table"""
-    subject = ndb.StringProperty(required = True)
-    content = ndb.TextProperty(required = True)
-    created = ndb.DateTimeProperty(auto_now_add = True)
-    last_modified = ndb.DateTimeProperty(auto_now = True)
-    posting_user = ndb.StringProperty(required = True)
+    subject = ndb.StringProperty(required=True)
+    content = ndb.TextProperty(required=True)
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    last_modified = ndb.DateTimeProperty(auto_now=True)
+    posting_user = ndb.StringProperty(required=True)
 
     def render(self):
         """ Draws all blog post data """
