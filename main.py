@@ -66,11 +66,13 @@ class Post(ndb.Model):
     def render(self):
         """ Draws all blog post data """
         self._render_text = self.content.replace('\n', '<br>')
-        return render_str("post.html", p = self)
+        return render_str("post.html", p=self)
 
-def blog_key(name = 'default'):
+
+def blog_key(name='default'):
     """ Generate a blog key used as parent for posts """
     return ndb.Key('blogs', name)
+
 
 def post_count():
     """ Returns the total number of posts """
@@ -78,22 +80,25 @@ def post_count():
     count = len(all_posts)
     return count
 
+
 class Comment(ndb.Model):
     """ Comments DB Table """
-    comment_text = ndb.TextProperty(required = True)
-    parent_post_id = ndb.StringProperty(required = True)
-    created = ndb.DateTimeProperty(auto_now_add = True)
-    last_modified = ndb.DateTimeProperty(auto_now = True)
-    posting_user = ndb.StringProperty(required = True)
+    comment_text = ndb.TextProperty(required=True)
+    parent_post_id = ndb.StringProperty(required=True)
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    last_modified = ndb.DateTimeProperty(auto_now=True)
+    posting_user = ndb.StringProperty(required=True)
 
     def render(self):
         """ Draws comments """
         self._render_text = self.comment_text.replace('\n', '<br>')
-        return render_str("comment.html", c = self)
+        return render_str("comment.html", c=self)
 
-def comment_key(name = 'default'):
+
+def comment_key(name='default'):
     """ Parent key for comments """
     return ndb.Key('comments', name)
+
 
 class FrontPage(Handler):
     """ Shows the front page/ blogroll """
