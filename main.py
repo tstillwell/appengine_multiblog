@@ -106,11 +106,12 @@ class FrontPage(Handler):
         pagecount = ((post_count() / 10) + 1)
         blogroll = ndb.gql("SELECT * FROM Post ORDER BY created DESC LIMIT 10")
         if self.user():
-            self.render('front.html', blogroll = blogroll, user = self.user(),
-                          pagecount = pagecount, page_id = 1)
+            self.render('front.html', blogroll=blogroll, user=self.user(),
+                        pagecount=pagecount, page_id=1)
         else:
-            self.render('front.html', blogroll = blogroll,
-                          pagecount = pagecount, page_id = 1)
+            self.render('front.html', blogroll=blogroll,
+                        pagecount=pagecount, page_id=1)
+
 
 class FrontPaginate(Handler):
     """ next page/numbered page links containing additonal posts """
@@ -120,20 +121,21 @@ class FrontPaginate(Handler):
         nextroll = ndb.gql("""SELECT * FROM Post ORDER BY created
                                DESC LIMIT 10 OFFSET %s""" % page_offset)
         if self.user():
-            self.render('front.html', blogroll = nextroll, user = self.user(),
-                          pagecount = pagecount, page_id = int(page_id))
+            self.render('front.html', blogroll=nextroll, user=self.user(),
+                        pagecount=pagecount, page_id=int(page_id))
         else:
-            self.render('front.html', blogroll = nextroll,
-                          pagecount = pagecount,  page_id = int(page_id))
+            self.render('front.html', blogroll=nextroll,
+                        pagecount=pagecount,  page_id=int(page_id))
+
 
 class NewPost(Handler):
     """ Page for adding new blog posts """
     def get(self):
         if self.user():
-            self.render("newpost.html", user = self.user())
+            self.render("newpost.html", user=self.user())
         else:
             error = "You must be logged in to post"
-            self.render("newpost.html", error = error)
+            self.render("newpost.html", error=error)
 
     def post(self):
         """ takes info from forms """
@@ -143,20 +145,21 @@ class NewPost(Handler):
             """ If data fields present, make new Post and add it to the db """
             if not self.user():
                 error = "You must be logged in to post"
-                self.render("newpost.html",subject = subject,
-                              content = content, error = error)
+                self.render("newpost.html", subject=subject,
+                            content=content, error=error)
             else:
-                p = Post(parent = blog_key(), subject = subject,
-                          content = content, posting_user = self.user())
+                p = Post(parent=blog_key(), subject=subject,
+                         content=content, posting_user=self.user())
                 p.put()
-                self.redirect('/blog/%s' % str(p.key.id())) # Permalink
+                self.redirect('/blog/%s' % str(p.key.id()))  # Permalink
                 logging.info("New post created : %s" % p.key.id())
         else:
             """ If all data fields are not present,
                  report an error and ask for fields again """
             error = "subject and content, please!"
-            self.render("newpost.html", subject = subject, content = content,
-                          error = error, user = self.user())
+            self.render("newpost.html", subject=subject, content=content,
+                        error=error, user=self.user())
+
 
 class PermaLink(Handler):
     """ For getting existing posts.. """
@@ -170,30 +173,30 @@ class PermaLink(Handler):
             self.error(404)
             return
         if self.user():
-            self.render("permalink.html", post = post,
-                          comment_roll = comment_roll, user = self.user() )
+            self.render("permalink.html", post=post,
+                        comment_roll=comment_roll, user=self.user())
         else:
             error = "You must be logged in to comment"
-            self.render("permalink.html", post = post, error = error,
-                          comment_roll = comment_roll)
+            self.render("permalink.html", post=post, error=error,
+                        comment_roll=comment_roll)
 
     def post(self, post_id):
         """ For adding comments """
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
         comment_text = self.request.get("comment_text")
-        parent_post_id = str(post.key.id()) # file the comment under this post
-        if self.user() == None: # If user is not logged in or invalid cookie
+        parent_post_id = str(post.key.id())  # file the comment under this post
+        if self.user() is None:  # If user is not logged in or invalid cookie
             error = "Sorry, you need to be logged in to comment"
             comment_roll = load_comments(post_id)
-            self.render("permalink.html", post = post,
-                          comment_roll = comment_roll, error = error)
+            self.render("permalink.html", post=post,
+                        comment_roll=comment_roll, error=error)
             return
         if comment_text == '':
             error = "Your comment cannot be blank"
             comment_roll = load_comments(post_id)
-            self.render("permalink.html", post = post, user = self.user(),
-                          comment_roll = comment_roll, error = error)
+            self.render("permalink.html", post=post, user=self.user(),
+                        comment_roll=comment_roll, error=error)
             return
         c = Comment(parent = comment_key(), comment_text = comment_text,
                      posting_user = self.user(),
