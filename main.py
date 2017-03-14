@@ -302,12 +302,14 @@ def session_uuid():
     new_uuid = str(new_uuid)
     return new_uuid
 
+
 def load_comments(post_id):
     """ Returns all comments associated with specific post """
     comments = ndb.gql("""SELECT * from Comment
                                WHERE parent_post_id = '%s'
                                ORDER BY created DESC""" % post_id)
     return comments
+
 
 def login_rate_limit(ip_address):
     check_attempt_query = ndb.gql("""SELECT * FROM Login_attempt
@@ -316,36 +318,43 @@ def login_rate_limit(ip_address):
     if attempted_prev_login:
         attempts_so_far = attempted_prev_login.attempt_count
         if (attempts_so_far >= 10 and (datetime.datetime.now() <=
-            attempted_prev_login.last_attempt + datetime.timedelta(minutes=1))):
-            logging.info("IP: %s is limited for login attempts" % ip_address)
-            return 403 # Too many attempts.
+           attempted_prev_login.last_attempt + datetime.timedelta(minutes=1))):
+                logging.info("IP %s is limited on login attempts" % ip_address)
+                return 403  # Too many attempts.
         attempted_prev_login.attempt_count += 1
         attempted_prev_login.last_attempt = datetime.datetime.now()
         attempted_prev_login.put()
-    else: # if user has not attempted to login prevoiusly
-        attempt = Login_attempt(ip_addr = ip_address,
-                                last_attempt = datetime.datetime.now(),
-                                attempt_count = 1)
+    else:  # if user has not attempted to login prevoiusly
+        attempt = Login_attempt(ip_addr=ip_address,
+                                last_attempt=datetime.datetime.now(),
+                                attempt_count=1)
         attempt.put()
 
+
 USER_RE = re.compile(r"^[a-zA-Z0-9-]{3,20}$")
+PASS_RE = re.compile(r"^.{3,20}$")
+EMAIL_RE = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
+
+
 def valid_username(username):
     return username and USER_RE.match(username)
 
-PASS_RE = re.compile(r"^.{3,20}$")
+
 def valid_password(password):
     return password and PASS_RE.match(password)
 
-EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
+
 def valid_email(email):
     if EMAIL_RE.match(email):
         return email
+
 
 class Signup(Handler):
     """ Registering new user accounts """
     def get(self):
         """Draws registration page"""
         self.render("registration.html")
+
     def post(self):
         """takes new user info from forms"""
         username = self.request.get("username")
@@ -353,8 +362,8 @@ class Signup(Handler):
         verify = self.request.get("verify")
         email = self.request.get("email")
 
-        params = dict(username = username,
-                      email = email)
+        params = dict(username=username,
+                      email=email)
 
         have_error = False
         if not valid_username(username):
@@ -372,7 +381,7 @@ class Signup(Handler):
         if have_error:
             self.render('registration.html', **params)
 
-        else: # check if user exists, if they do prompt a new username
+        else:  # check if user exists, if they do prompt a new username
             userquery = ndb.gql("""
              SELECT * FROM User
              WHERE username = '%s'""" % username)
@@ -382,16 +391,16 @@ class Signup(Handler):
                 params['error_taken'] = "Username unavailable."
                 self.render('registration.html', **params)
                 logging.info("Attempted re-registration for: [%s]" % username)
-            else: # if that user does not exist, add the account to the DB
+            else:  # if that user does not exist, add the account to the DB
                 salt = new_salt()
                 user_hash = hash_password(password, salt)
                 current_session = session_uuid()
                 session_expires = (datetime.datetime.now() +
-                                    datetime.timedelta(hours=1))
-                u = User(parent = user_key(), username = username,
-                          email = email, user_hash = user_hash,
-                          salt = salt, current_session = current_session,
-                          session_expires = session_expires)
+                                   datetime.timedelta(hours=1))
+                u = User(parent=user_key(), username=username,
+                         email=email, user_hash=user_hash,
+                         salt=salt, current_session=current_session,
+                         session_expires=session_expires)
                 u.put() # Put this person into the db
                 self.response.headers.add_header(
                   'Set-Cookie', 'Session= %s|%s Path=/'
