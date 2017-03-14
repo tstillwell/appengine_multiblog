@@ -198,53 +198,61 @@ class PermaLink(Handler):
             self.render("permalink.html", post=post, user=self.user(),
                         comment_roll=comment_roll, error=error)
             return
-        c = Comment(parent = comment_key(), comment_text = comment_text,
-                     posting_user = self.user(),
-                     parent_post_id = parent_post_id)
+        c = Comment(parent=comment_key(), comment_text=comment_text,
+                    posting_user=self.user(),
+                    parent_post_id=parent_post_id)
         c.put()
         comment_roll = load_comments(post_id)
-        self.render("permalink.html", post = post, new_comment = c,
-                      comment_roll = comment_roll, user = self.user() )
+        self.render("permalink.html", post=post, new_comment=c,
+                    comment_roll=comment_roll, user=self.user())
         logging.info("New comment added to post [%s] by user: %s"
-                       % (c.parent_post_id, c.posting_user))
+                     % (c.parent_post_id, c.posting_user))
+
 """ USER RELATED classes """
+
+
 class Secret(ndb.Model):
     """HMAC Secret Key stored in datastore"""
-    key_string = ndb.StringProperty(required = True)
+    key_string = ndb.StringProperty(required=True)
+
 
 def secret_key():
     """ Get secret key from datastore. If one does not exist it makes one"""
     secret_check = ndb.gql("SELECT key_string FROM Secret")
     key = secret_check.get()
-    if key: # if key is present return it
+    if key:  # if key is present return it
         return key.key_string
-    else: # if not make one and return/store it
-        new_key = binascii.b2a_hqx(os.urandom(64)) # 64-bits converted to Ascii
-        k = Secret(key_string = new_key)
+    else:  # if not make one and return/store it
+        new_key = binascii.b2a_hqx(os.urandom(64))  # 64-bits of ASCII
+        k = Secret(key_string=new_key)
         k.put()
         logging.critical("A NEW SECRET KEY HAS BEEN CREATED FOR HMAC")
         return new_key
 
 SECRET = secret_key()
 
+
 class User(ndb.Model):
     """ Adds Users DB Table """
-    username = ndb.StringProperty(required = True)
-    user_hash = ndb.StringProperty(required = True)
-    salt = ndb.StringProperty(required = True)
-    email = ndb.StringProperty(required = True)
-    current_session = ndb.StringProperty(required = False)
-    session_expires = ndb.DateTimeProperty(required = False)
+    username = ndb.StringProperty(required=True)
+    user_hash = ndb.StringProperty(required=True)
+    salt = ndb.StringProperty(required=True)
+    email = ndb.StringProperty(required=True)
+    current_session = ndb.StringProperty(required=False)
+    session_expires = ndb.DateTimeProperty(required=False)
 
-def user_key(name = 'default'):
+
+def user_key(name='default'):
     """ Generate a blog id from the db row """
     return ndb.Key('users', name)
 
+
 class Login_attempt(ndb.Model):
     """ Keeps track of login attempts for rate limiting """
-    ip_addr = ndb.StringProperty(required = True)
-    last_attempt = ndb.DateTimeProperty(required = True)
-    attempt_count = ndb.IntegerProperty(required = True)
+    ip_addr = ndb.StringProperty(required=True)
+    last_attempt = ndb.DateTimeProperty(required=True)
+    attempt_count = ndb.IntegerProperty(required=True)
+
 
 def cookie_hash(value):
     """Use the secret value with HMAC to prevent cookie tampering"""
@@ -252,37 +260,41 @@ def cookie_hash(value):
     hash = str(hash)
     return hash
 
+
 def valid_user(cookie_str):
     """Returns username after validating the cookie session data"""
-    if cookie_str == None:
+    if cookie_str is None:
         return None
     cookie_parts = cookie_str.split("|")
     if len(cookie_parts) != 2:
         return None
     if cookie_parts[1] == cookie_hash(cookie_parts[0]):
         user_query = ndb.gql("""SELECT * FROM User
-                                     WHERE current_session ='%s'"""
-                                     %cookie_parts[0])
+                             WHERE current_session ='%s'"""
+                             % cookie_parts[0])
         current_user = user_query.get()
         if (current_user and
-             datetime.datetime.now() < current_user.session_expires):
+           datetime.datetime.now() < current_user.session_expires):
             current_user.session_expires = (datetime.datetime.now() +
-                                             datetime.timedelta(hours=1))
+                                            datetime.timedelta(hours=1))
             current_user.put()
             return current_user.username
     else:
         return None
 
+
 def new_salt():
-	""" Generates a 32-bit hex salt for user pw salting"""
-	salt = binascii.hexlify(os.urandom(32))
-	return salt
+    """ Generates a 32-bit hex salt for user pw salting """
+    salt = binascii.hexlify(os.urandom(32))
+    return salt
+
 
 def hash_password(password, salt):
     """ Hash user pw with PBKDF2 alg with iterations as work factor"""
-    hashed_pw_bin = PBKDF2(password,salt,iterations=20000)
+    hashed_pw_bin = PBKDF2(password, salt, iterations=20000)
     hashed_pw = hashed_pw_bin.hexread(32)
     return hashed_pw
+
 
 def session_uuid():
     """ Make a new UUID for logged-in session tokens """
