@@ -401,28 +401,31 @@ class Signup(Handler):
                          email=email, user_hash=user_hash,
                          salt=salt, current_session=current_session,
                          session_expires=session_expires)
-                u.put() # Put this person into the db
+                u.put()  # Put this person into the db
                 self.response.headers.add_header(
                   'Set-Cookie', 'Session= %s|%s Path=/'
-                   % (str(u.current_session), (cookie_hash
-                   (u.current_session))))
+                  % (str(u.current_session), (cookie_hash
+                     (u.current_session))))
                 logging.info("New user account created: %s" % username)
-                self.render('welcome.html', user = u.username)
+                self.render('welcome.html', user=u.username)
+
 
 class Welcome(Handler):
     """ Redirect new users here after registering """
     def get(self):
         user = self.user()
         if user:
-            self.render('welcome.html', user = user)
+            self.render('welcome.html', user=user)
         else:
             self.redirect('/login')
+
 
 class Login(Handler):
     """ Login page """
     def get(self):
         """ Draw the login form ONLY with HTTP GET """
         self.render("login.html")
+
     def post(self):
         """ When user submits the login form """
         user_ip = self.request.remote_addr
@@ -432,32 +435,35 @@ class Login(Handler):
         input_username = self.request.get("username")
         input_password = self.request.get("password")
 
-        while valid_username(input_username) and valid_password(input_password):
+        while (valid_username(input_username) and
+               valid_password(input_password)):
             userquery = ndb.gql("""
               SELECT * FROM User
               WHERE username =
               '%s'""" % input_username)
 
             target_user = userquery.get()
-            if target_user == None: break
+            if target_user is None:
+                break
             hash_input = hash_password(input_password, target_user.salt)
-            if hash_input != target_user.user_hash: break # password mismatch
+            if hash_input != target_user.user_hash:  # password mismatch
+                break
             target_user.current_session = session_uuid()
             target_user.session_expires = (datetime.datetime.now() +
-                                             datetime.timedelta(hours=1))
+                                           datetime.timedelta(hours=1))
             target_user.put()
 
             self.response.headers.add_header(
               'Set-Cookie',
               'Session= %s|%s Path=/'
               % (str(target_user.current_session),
-              (cookie_hash(
-              target_user.current_session))))
+                 (cookie_hash(target_user.current_session))))
             logging.info("Login successful: %s" % input_username)
             return self.render('welcome.html', user=target_user.username)
 
-        self.render("login.html", error = "Invalid Login")
+        self.render("login.html", error="Invalid Login")
         logging.info("Login falure: %s" % input_username)
+
 
 class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
@@ -471,11 +477,12 @@ class UserPage(Handler):
         post_roll = ndb.gql("""SELECT * FROM Post WHERE posting_user = '%s'
                                 ORDER BY created DESC""" % username)
         if self.user():
-            self.render("useractivity.html" , view_user=profileUser,
-                          post_roll = post_roll, user = self.user())
+            self.render("useractivity.html", view_user=profileUser,
+                        post_roll=post_roll, user=self.user())
         else:
-            self.render("useractivity.html" , view_user=profileUser,
-                          post_roll = post_roll)
+            self.render("useractivity.html", view_user=profileUser,
+                        post_roll=post_roll)
+
 
 class UserRSS(Handler):
     """ Renders RSS feed for each user """
@@ -488,8 +495,9 @@ class UserRSS(Handler):
             return
         post_roll = ndb.gql("""SELECT * FROM Post WHERE posting_user = '%s'
                                 ORDER BY created DESC LIMIT 10""" % username)
-        self.render("userrss.xml", requested_user = profileUser,
-                     blog_roll = post_roll, host = HOST_NAME)
+        self.render("userrss.xml", requested_user=profileUser,
+                    blog_roll=post_roll, host=HOST_NAME)
+
 
 class Manage(Handler):
     """Allows user to edit/delete their own comments & posts"""
