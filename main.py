@@ -508,10 +508,11 @@ class Manage(Handler):
             comment_roll = ndb.gql("""SELECT * FROM Comment WHERE
                                        posting_user = '%s' ORDER BY created
                                        DESC""" % self.user())
-            self.render("manage.html", user = self.user(),
-                          post_roll = post_roll, comment_roll = comment_roll)
-        else: # If user is not logged in, show an error
+            self.render("manage.html", user=self.user(),
+                        post_roll=post_roll, comment_roll=comment_roll)
+        else:  # If user is not logged in, show an error
             self.error(404)
+
 
 class EditPost(Handler):
     """ Edit page user gets here from clicking edit on posts from manage"""
@@ -521,7 +522,7 @@ class EditPost(Handler):
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
             if post.posting_user == self.user():
-                self.render("edit.html", post = post, user = self.user())
+                self.render("edit.html", post=post, user=self.user())
         else:
             self.error(404)
 
@@ -538,6 +539,7 @@ class EditPost(Handler):
         else:
             self.error(404)
 
+
 class EditComment(Handler):
     def get(self, comment_id):
         """ If comment owner matches current user draw comment edit form """
@@ -545,7 +547,7 @@ class EditComment(Handler):
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
             if comment.posting_user == self.user():
-                self.render("editc.html", comment = comment, user = self.user())
+                self.render("editc.html", comment=comment, user=self.user())
         else:
             self.error(404)
 
@@ -562,19 +564,21 @@ class EditComment(Handler):
         else:
             self.error(404)
 
+
 class CommentAjax(Handler):
-    """ Read client JSON request, validates it, updates client with response """
+    """ Read JSON request, validates it, updates client with response """
     def post(self):
         request_data = json.loads(self.request.body)
         target_comment = int(request_data['comment_id'])
         comment_to_update = Comment.get_by_id(target_comment,
-                                               parent=comment_key())
+                                              parent=comment_key())
         if comment_to_update.posting_user == self.user():
             new_comment_text = (request_data['new_text'])
             comment_to_update.comment_text = new_comment_text
             comment_to_update.put()
             self.response.out.write(json.dumps((
                                     {'new_text': new_comment_text})))
+
 
 class DeletePost(Handler):
     """Allows a User to permanently and completely delete a post"""
@@ -584,7 +588,7 @@ class DeletePost(Handler):
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
             if post.posting_user == self.user():
-                self.render("delete.html", post = post, user = self.user())
+                self.render("delete.html", post=post, user=self.user())
         else:
             self.error(404)
 
@@ -599,6 +603,7 @@ class DeletePost(Handler):
                 logging.info("Post Deleted: %s" % post_id)
         else:
             self.error(404)
+
 
 class Logout(Handler):
     """Logout Behavior"""
