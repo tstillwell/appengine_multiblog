@@ -3,7 +3,6 @@ import jinja2
 import webapp2
 import re
 import hmac
-import hashlib
 import binascii
 import uuid
 from pbkdf2 import PBKDF2
