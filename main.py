@@ -204,8 +204,8 @@ class PermaLink(Handler):
         comment_roll = load_comments(post_id)
         self.render("permalink.html", post=post, new_comment=c,
                     comment_roll=comment_roll, user=self.user())
-        logging.info("New comment added to post [%s] by user: %s"
-                     % (c.parent_post_id, c.posting_user))
+        logging.info("New comment added to post [%s] by user: %s",
+                     c.parent_post_id, c.posting_user)
 
 """ USER RELATED classes """
 
