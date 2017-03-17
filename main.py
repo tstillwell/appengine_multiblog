@@ -384,12 +384,19 @@ class Signup(Handler):
             userquery = ndb.gql("""
              SELECT * FROM User
              WHERE username = '%s'""" % username)
-
-            user = userquery.get()
-            if user:
+            emailquery = ndb.gql("""
+             SELECT * FROM User
+             WHERE email = '%s'""" % email)
+            user_exists = userquery.get()
+            email_exists = emailquery.get()
+            if user_exists:
                 params['error_taken'] = "Username unavailable."
                 self.render('registration.html', **params)
                 logging.info("Attempted re-registration for: [%s]" % username)
+            elif email_exists:
+                params['error_taken'] = "Email address in use."
+                self.render('registration.html', **params)
+                logging.info("Attempted re-registration for: [%s]" % email)
             else:  # if that user does not exist, add the account to the DB
                 salt = new_salt()
                 user_hash = hash_password(password, salt)
