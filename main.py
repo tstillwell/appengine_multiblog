@@ -151,7 +151,7 @@ class NewPost(Handler):
                          content=content, posting_user=self.user())
                 p.put()
                 self.redirect('/blog/%s' % str(p.key.id()))  # Permalink
-                logging.info("New post created : %s" % p.key.id())
+                logging.info("New post created : %s", p.key.id())
         else:
             """ If all data fields are not present,
                  report an error and ask for fields again """
