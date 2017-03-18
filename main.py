@@ -464,11 +464,11 @@ class Login(Handler):
               'Session= %s|%s Path=/'
               % (str(target_user.current_session),
                  (cookie_hash(target_user.current_session))))
-            logging.info("Login successful: %s" % input_username)
+            logging.info("Login successful: %s", input_username)
             return self.render('welcome.html', user=target_user.username)
 
         self.render("login.html", error="Invalid Login")
-        logging.info("Login falure: %s" % input_username)
+        logging.info("Login falure: %s", input_username)
 
 
 class UserPage(Handler):
