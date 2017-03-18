@@ -318,7 +318,7 @@ def login_rate_limit(ip_address):
         attempts_so_far = attempted_prev_login.attempt_count
         if (attempts_so_far >= 10 and (datetime.datetime.now() <=
            attempted_prev_login.last_attempt + datetime.timedelta(minutes=1))):
-                logging.info("IP %s is limited on login attempts" % ip_address)
+                logging.info("IP %s is limited on login attempts", ip_address)
                 return 403  # Too many attempts.
         attempted_prev_login.attempt_count += 1
         attempted_prev_login.last_attempt = datetime.datetime.now()
