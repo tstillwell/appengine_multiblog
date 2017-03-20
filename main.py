@@ -622,7 +622,7 @@ class Logout(Handler):
             person.current_session = ''
             person.session_expires = None
             person.put()
-            logging.info("User logged out: %s" % person.username)
+            logging.info("User logged out: %s", person.username)
         # Reset the cookie value
         self.response.headers.add_header('Set-Cookie', 'Session=')
         self.redirect("/blog")
