@@ -332,7 +332,7 @@ def login_rate_limit(ip_address):
 
 
 USER_RE = re.compile(r"^[a-zA-Z0-9-]{3,20}$")
-PASS_RE = re.compile(r"^.{3,20}$")
+PASS_RE = re.compile(r"^.{3,200}$")
 EMAIL_RE = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 
 
