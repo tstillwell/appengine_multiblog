@@ -412,7 +412,7 @@ class Signup(Handler):
                   'Set-Cookie', 'Session= %s|%s Path=/'
                   % (str(u.current_session), (cookie_hash
                      (u.current_session))))
-                logging.info("New user account created: %s" % username)
+                logging.info("New user account created: %s", username)
                 self.render('welcome.html', user=u.username)
 
 
