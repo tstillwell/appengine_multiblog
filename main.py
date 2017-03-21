@@ -311,6 +311,7 @@ def load_comments(post_id):
 
 
 def login_rate_limit(ip_address):
+    """ Prevents repetitive login attacks by limiting logins from one ip """
     check_attempt_query = ndb.gql("""SELECT * FROM Login_attempt
                                       WHERE ip_addr = '%s'""" % ip_address)
     attempted_prev_login = check_attempt_query.get()
