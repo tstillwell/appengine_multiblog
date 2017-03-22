@@ -472,6 +472,12 @@ class Login(Handler):
         logging.info("Login falure: %s", input_username)
 
 
+class ForgotPassword(Handler):
+    """ User uses this form to reset their password via email """
+    def get(self):
+        self.render('forgotpassword.html')
+
+
 class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
     def get(self, username):
@@ -638,6 +644,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/signup', Signup),
                                ('/welcome', Welcome),
                                ('/login', Login),
+                               ('/forgot-password', ForgotPassword),
                                ('/logout', Logout),
                                ('/users/([a-zA-Z0-9-]+)', UserPage),
                                ('/users/([a-zA-Z0-9-]+)/rss', UserRSS),
