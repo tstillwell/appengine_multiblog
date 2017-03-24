@@ -246,6 +246,12 @@ def user_key(name='default'):
     return ndb.Key('users', name)
 
 
+class Reset_token(ndb.Model):
+    associated_acct_email = ndb.StringProperty(required=True)
+    token_guid = ndb.StringProperty(required=True)
+    expires = ndb.DateTimeProperty(required=True)
+
+
 class Login_attempt(ndb.Model):
     """ Keeps track of login attempts for rate limiting """
     ip_addr = ndb.StringProperty(required=True)
