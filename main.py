@@ -483,9 +483,15 @@ class ForgotPassword(Handler):
                                   WHERE email = '%s'""" % email)
         target_user = forgot_user.get()
         if target_user is None:
-            logging.info("Invalid password recovery attempt for %s", email)
+            logging.info("Invalid password reset attempt for %s", email)
             error = "No account with that email found"
             self.render('forgotpassword.html', error=error)
+            return
+        if target_user:
+            logging.info("Initiating password reset for %s", email)
+            # Generate reset token valid for ~15 min
+            # Create email with reset link and token
+            # Send email
 
 
 class UserPage(Handler):
