@@ -477,6 +477,16 @@ class ForgotPassword(Handler):
     def get(self):
         self.render('forgotpassword.html')
 
+    def post(self):
+        email = self.request.get("email")
+        forgot_user = ndb.gql("""SELECT * FROM User
+                                  WHERE email = '%s'""" % email)
+        target_user = forgot_user.get()
+        if target_user is None:
+            logging.info("Invalid password recovery attempt for %s", email)
+            error = "No account with that email found"
+            self.render('forgotpassword.html', error=error)
+
 
 class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
