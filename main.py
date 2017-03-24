@@ -495,7 +495,14 @@ class ForgotPassword(Handler):
             return
         if target_user:
             logging.info("Initiating password reset for %s", email)
-            # Generate reset token valid for ~15 min
+            reset_token_uuid = str(uuid.uuid4())
+            token_expires = (datetime.datetime.now() +
+                             datetime.timedelta(minutes=15))
+            acct_email = target_user.email
+            token_for_db = Reset_token(associated_acct_email=acct_email,
+                                       token_guid=reset_token_uuid,
+                                       expires=token_expires)
+            token_for_db.put()
             # Create email with reset link and token
             # Send email
 
