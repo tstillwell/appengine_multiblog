@@ -10,6 +10,8 @@ import jinja2
 import webapp2
 from pbkdf2 import PBKDF2
 from google.appengine.ext import ndb
+from google.appengine.api import app_identity
+from google.appengine.api import mail
 
 # point to jinja template dir
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
@@ -250,6 +252,20 @@ class Reset_token(ndb.Model):
     associated_acct_email = ndb.StringProperty(required=True)
     token_guid = ndb.StringProperty(required=True)
     expires = ndb.DateTimeProperty(required=True)
+
+
+def reset_email(recipient, token):
+    app_name = app_identity.get_application_id()
+    from_address = ("noreply@%s.appspotmail.com" % app_name)
+    body = """
+              A password reset request was created for your blog account.
+              If you wish to reset your password, please use this link
+
+              https://%s/resetpassword/%s
+
+              This link is only valid for 15 minutes.""" % (HOST_NAME, token)
+    mail.send_mail(sender=from_address, to=recipient,
+                   subject="Blog password reset requested", body=body)
 
 
 class Login_attempt(ndb.Model):
@@ -503,8 +519,7 @@ class ForgotPassword(Handler):
                                        token_guid=reset_token_uuid,
                                        expires=token_expires)
             token_for_db.put()
-            # Create email with reset link and token
-            # Send email
+            reset_email(acct_email, reset_token_uuid)
 
 
 class UserPage(Handler):
