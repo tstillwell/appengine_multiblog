@@ -533,6 +533,25 @@ class ResetPassword(Handler):
         else:
             self.render("resetpassword.html")
 
+    def post(self, reset_token):
+        new_pass = self.request.get("password")
+        new_pass_verify = self.request.get("verify")
+        token_query = ndb.gql("""SELECT * FROM Reset_token
+                                 WHERE token_guid = '%s'""" % reset_token)
+        token = token_query.get()
+        if not token or token.expires < datetime.datetime.now():
+            self.write("Sorry, the form is expired. Please try again")
+            return
+        if new_pass != new_pass_verify:
+            error = "Passwords did not match. Please try again"
+            self.render("resetpassword.html", error=error)
+        if not valid_password(new_pass):
+            error = "The password you entered is invalid. Please try another"
+            self.render("resetpassword.html", error=error)
+        if new_pass == new_pass_verify and valid_password(new_pass):
+            pass
+            # Add new salt and hash to datastore
+
 
 class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
