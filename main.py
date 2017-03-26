@@ -523,6 +523,7 @@ class ForgotPassword(Handler):
 
 
 class ResetPassword(Handler):
+    """ Form to enter new password user gets link in email from forgot form """
     def get(self, reset_token):
         token_query = ndb.gql("""SELECT * FROM Reset_token
                                  WHERE token_guid = '%s'""" % reset_token)
@@ -549,7 +550,7 @@ class ResetPassword(Handler):
             error = "The password you entered is invalid. Please try another"
             self.render("resetpassword.html", error=error)
         if (new_pass == new_pass_verify and valid_password(new_pass) and
-           token.expires > datetime.datetime.now()):
+           token.expires > datetime.datetime.now()):  # valid token and pass
             userquery = ndb.gql("""SELECT * FROM User WHERE email =
             '%s'""" % token.associated_acct_email)
             user = userquery.get()
@@ -557,7 +558,7 @@ class ResetPassword(Handler):
             user_hash = hash_password(new_pass, salt)
             user.salt = salt
             user.user_hash = user_hash
-            user.put()
+            user.put()  # add new salt and hash to datastore
             logging.info("New password created for %s", user.username)
 
 
