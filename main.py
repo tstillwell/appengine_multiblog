@@ -548,9 +548,17 @@ class ResetPassword(Handler):
         if not valid_password(new_pass):
             error = "The password you entered is invalid. Please try another"
             self.render("resetpassword.html", error=error)
-        if new_pass == new_pass_verify and valid_password(new_pass):
-            pass
-            # Add new salt and hash to datastore
+        if (new_pass == new_pass_verify and valid_password(new_pass) and
+           token.expires > datetime.datetime.now()):
+            userquery = ndb.gql("""SELECT * FROM User WHERE email =
+            '%s'""" % token.associated_acct_email)
+            user = userquery.get()
+            salt = new_salt()
+            user_hash = hash_password(new_pass, salt)
+            user.salt = salt
+            user.user_hash = user_hash
+            user.put()
+            logging.info("New password created for %s", user.username)
 
 
 class UserPage(Handler):
