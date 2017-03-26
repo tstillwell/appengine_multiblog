@@ -521,10 +521,11 @@ class ForgotPassword(Handler):
             token_for_db.put()
             reset_email(acct_email, reset_token_uuid)
 
+
 class ResetPassword(Handler):
     def get(self, reset_token):
         token_query = ndb.gql("""SELECT * FROM Reset_token
-                                 WHERE token_guid = '%s'""" %reset_token)
+                                 WHERE token_guid = '%s'""" % reset_token)
         token = token_query.get()
         if not token or token.expires < datetime.datetime.now():
             self.write("Invalid or expired reset request")
