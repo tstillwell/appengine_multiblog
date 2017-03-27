@@ -520,6 +520,8 @@ class ForgotPassword(Handler):
                                        expires=token_expires)
             token_for_db.put()
             reset_email(acct_email, reset_token_uuid)
+            sent_email = True
+            self.render("forgotpassword.html", sent_email=sent_email)
 
 
 class ResetPassword(Handler):
