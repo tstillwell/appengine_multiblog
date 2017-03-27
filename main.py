@@ -510,7 +510,7 @@ class ForgotPassword(Handler):
             self.render('forgotpassword.html', error=error)
             return
         if target_user:
-            logging.info("Initiating password reset for %s", email)
+            logging.info("Sending password reset email to %s", email)
             reset_token_uuid = str(uuid.uuid4())
             token_expires = (datetime.datetime.now() +
                              datetime.timedelta(minutes=15))
