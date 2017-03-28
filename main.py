@@ -317,6 +317,16 @@ def hash_password(password, salt):
     return hashed_pw
 
 
+def new_hash(user_entity, new_password):
+    """ Updates user entity with new salt and hash for new_password """
+    salt = new_salt()
+    user_hash = hash_password(new_password, salt)
+    user_entity.salt = salt
+    user_entity.user_hash = user_hash
+    user_entity.put()  # add new salt and hash to datastore
+    return True
+
+
 def session_uuid():
     """ Make a new UUID for logged-in session tokens """
     new_uuid = uuid.uuid4()
@@ -556,11 +566,7 @@ class ResetPassword(Handler):
             userquery = ndb.gql("""SELECT * FROM User WHERE email =
             '%s'""" % token.associated_acct_email)
             user = userquery.get()
-            salt = new_salt()
-            user_hash = hash_password(new_pass, salt)
-            user.salt = salt
-            user.user_hash = user_hash
-            user.put()  # add new salt and hash to datastore
+            new_hash(user, new_pass)
             logging.info("New password created for %s", user.username)
 
 
