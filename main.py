@@ -568,6 +568,7 @@ class ResetPassword(Handler):
             user = userquery.get()
             new_hash(user, new_pass)
             logging.info("New password created for %s", user.username)
+            self.render("resetpassword.html", password_udpated=True)
 
 
 class UserPage(Handler):
