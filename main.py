@@ -209,6 +209,7 @@ class PermaLink(Handler):
         logging.info("New comment added to post [%s] by user: %s",
                      c.parent_post_id, c.posting_user)
 
+
 """ USER RELATED classes """
 
 
@@ -229,6 +230,7 @@ def secret_key():
         k.put()
         logging.critical("A NEW SECRET KEY HAS BEEN CREATED FOR HMAC")
         return new_key
+
 
 SECRET = secret_key()
 
