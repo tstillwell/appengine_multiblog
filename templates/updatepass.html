@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+{%if not updated %}
+<div class="updatepw-form">
+  <form method="post">
+    Current Password:<input type="password" name="currentpassword">
+    <br>
+    New Password:<input type="password" name="newpassword">
+    <br>
+    Confirm New Password:<input type="password" name="newpassword-confirm">
+    <br>
+    {{error}}<br>
+    {{error_mismatch}}<br>
+    {{error_invalid}}<br>
+    <input type="submit" value="Update Password">
+  </form>
+</div>
+{%endif %}
+{%if updated %}
+<div class="password_updated_success">
+<p>
+Your password has been updated.
+</p>
+</div>
+{%endif %}
+{% endblock %}

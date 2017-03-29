@@ -573,6 +573,48 @@ class ResetPassword(Handler):
             self.render("resetpassword.html", password_udpated=True)
 
 
+class UpdatePassword(Handler):
+    """ Lets logged in users change their password """
+    def get(self):
+        if self.user():
+            self.render("updatepass.html", user=self.user())
+        else:
+            self.redirect('/login')
+
+    def post(self):
+        current_pass = self.request.get("currentpassword")
+        new_pass = self.request.get("newpassword")
+        verify_new = self.request.get("newpassword-confirm")
+        params = dict()
+        if self.user() is None:
+            return self.redirect("/login")
+        if self.user() and valid_password(new_pass) and verify_new == new_pass:
+            username = self.user()
+            userquery = ndb.gql("""SELECT * FROM User
+                                    WHERE username = '%s'""" % username)
+            user = userquery.get()
+            if user.user_hash != hash_password(current_pass, user.salt):
+                wrong_pw = "You did not enter your correct current password"
+                self.render("updatepass.html", user=username, error=wrong_pw)
+                return
+            new_hash(user, new_pass)  # update this users password
+            new_session = session_uuid()
+            session_expires = (datetime.datetime.now() +
+                               datetime.timedelta(hours=1))
+            user.current_session = new_session  # give user a new session
+            user.session_expires = session_expires
+            user.put()
+            self.response.set_cookie(
+                  'Session', ('%s|%s' % (str(new_session),
+                              cookie_hash(new_session))), overwrite=True)
+            return self.render("updatepass.html", user=username, updated=True)
+        if new_pass != verify_new:
+            params['error_mismatch'] = "Passwords did not match."
+        if not valid_password(new_pass):
+            params['error_invalid'] = "Password is not valid."
+        self.render("updatepass.html", user=self.user(), **params)
+
+
 class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
     def get(self, username):
@@ -716,7 +758,7 @@ class DeletePost(Handler):
 class Logout(Handler):
     """Logout Behavior"""
     def get(self):
-        if self.cookie():
+        if self.user():
             user_query = ndb.gql("""SELECT * FROM User WHERE
                                      username = '%s'""" % self.user())
             person = user_query.get()
@@ -745,6 +787,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/users/([a-zA-Z0-9-]+)', UserPage),
                                ('/users/([a-zA-Z0-9-]+)/rss', UserRSS),
                                ('/manage', Manage),
+                               ('/manage/updatepass', UpdatePassword),
                                ('/edit/([0-9]+)', EditPost),
                                ('/edit/c/([0-9]+)', EditComment),
                                ('/delete/([0-9]+)', DeletePost),
