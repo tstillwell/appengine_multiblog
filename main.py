@@ -570,6 +570,8 @@ class ResetPassword(Handler):
             user = userquery.get()
             new_hash(user, new_pass)
             logging.info("New password created for %s", user.username)
+            token.expires = datetime.datetime.now()
+            token.put()  # expire reset token so it can't be re-used
             self.render("resetpassword.html", password_udpated=True)
 
 
