@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<div class="posts scroll">
   {% for p in blogroll %}
     {{ p.render() | safe }}
     <br><br>
   {% endfor %}
+  <script>document.write('<div class="jscroll-next"><a href="/blog/nextpage/{{page_id+1}}">Next Page</a></div>')</script>
+</div>
+<noscript>
   {% for page in range(pagecount) %}
     {% if page_id != page+1 %}
     <a href ="/blog/page/{{page+1}}">[{{page+1}}]</a>
@@ -14,4 +17,7 @@
     [{{page+1}}]
     {% endif %}
   {% endfor %}
+</noscript>
+<script type="text/javascript" src="/static/jquery.jscroll.js"></script>
+<script>$('.scroll').jscroll()</script>
 {% endblock %}

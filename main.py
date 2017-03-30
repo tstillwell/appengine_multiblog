@@ -115,7 +115,7 @@ class FrontPage(Handler):
 
 
 class FrontPaginate(Handler):
-    """ next page/numbered page links containing additonal posts """
+    """ next page/numbered page links containing additonal posts for no js """
     def get(self, page_id):
         page_offset = ((int(page_id) * 10) - 10)
         pagecount = ((post_count() / 10) + 1)
@@ -127,6 +127,19 @@ class FrontPaginate(Handler):
         else:
             self.render('front.html', blogroll=nextroll,
                         pagecount=pagecount,  page_id=int(page_id))
+
+
+class AutoPager(Handler):
+    """ Gets next page of posts with only bare html for use with jscroll """
+    def get(self, page_id):
+        pagecount = ((post_count() / 10) + 1)
+        if int(page_id) > pagecount:
+            self.render("nextpage.html", no_more_posts=True)
+            return
+        page_offset = ((int(page_id) * 10) - 10)
+        nextroll = ndb.gql("""SELECT * FROM Post ORDER BY created
+                               DESC LIMIT 10 OFFSET %s""" % page_offset)
+        self.render("nextpage.html", blogroll=nextroll, page_id=int(page_id))
 
 
 class NewPost(Handler):
@@ -778,6 +791,7 @@ class Logout(Handler):
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/?', FrontPage),
                                ('/blog/page/([1-9][0-9]*)', FrontPaginate),
+                               ('/blog/nextpage/([1-9][0-9]*)', AutoPager),
                                ('/blog/newpost', NewPost),
                                ('/blog/([0-9]+)', PermaLink),
                                ('/signup', Signup),
