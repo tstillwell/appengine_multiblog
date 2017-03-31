@@ -502,7 +502,11 @@ class Login(Handler):
             hash_input = hash_password(input_password, target_user.salt)
             if hash_input != target_user.user_hash:  # password mismatch
                 break
-            target_user.current_session = session_uuid()
+
+            """ If user session expired create a new one, otherwise reuse """
+            if target_user.session_expires < datetime.datetime.now():
+                target_user.current_session = session_uuid()
+
             target_user.session_expires = (datetime.datetime.now() +
                                            datetime.timedelta(hours=1))
             target_user.put()
