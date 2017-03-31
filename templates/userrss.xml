@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0">
-<channel>
-  <title>{{requested_user.username}}'s Recent Posts</title>
-  <link>http://{{host}}/users/{{requested_user.username}}</link>
-  <description>{{requested_user.username}}'s Blog</description>
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <link href="http://{{host}}/users/{{requested_user.username}}/rss" rel="self" type="application/atom+xml" />
+  <link href="http://{{host}}/users/{{requested_user.username}}" rel="alternate" type="text/html" hreflang="en" />
+  <updated>{{blog_roll.get().last_modified.strftime("%Y-%m-%dT%H:%M:%S+00:00")}}}}</updated>
+  <id>http://{{host}}/users/{{requested_user.username}}</id>
+  <title>{{requested_user.username}} - Recent Posts</title>
+  <subtitle>{{requested_user.username}}'s Blog</subtitle>
   {% for post in blog_roll %}
-    <item>
+    <entry>
       <title>{{post.subject}}</title>
-      <link>http://{{host}}/blog/{{post.key.id()}}</link>
-      <description>{{post.subject}}
-                   {{post.created.strftime("%b %d, %Y")}}
-      </description>
-    </item>
+      <link href="http://{{host}}/blog/{{post.key.id()}}" />
+      <published>{{post.created.strftime("%Y-%m-%dT%H:%M:%S+00:00")}}</published>
+      <updated>{{post.last_modified.strftime("%Y-%m-%dT%H:%M:%S+00:00")}}</updated>
+      <content>{{post.content}}</content>
+    </entry>
   {% endfor %}
-</channel>
-
-</rss>
+</feed>
