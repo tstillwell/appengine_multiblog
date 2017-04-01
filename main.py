@@ -504,7 +504,8 @@ class Login(Handler):
                 break
 
             """ If user session expired create a new one, otherwise reuse """
-            if target_user.session_expires < datetime.datetime.now():
+            if (target_user.session_expires is None or
+               target_user.session_expires < datetime.datetime.now()):
                 target_user.current_session = session_uuid()
 
             target_user.session_expires = (datetime.datetime.now() +
