@@ -351,10 +351,12 @@ def session_uuid():
 
 def load_comments(post_id):
     """ Returns all comments associated with specific post """
-    comments = ndb.gql("""SELECT * from Comment
-                               WHERE parent_post_id = '%s'
-                               ORDER BY created DESC""" % post_id)
-    return comments
+    comment_query = ndb.gql("""SELECT * from Comment
+                               WHERE parent_post_id = '%s'""" % post_id)
+    comments = comment_query.fetch()
+    sorted_comments = sorted(comments, key=lambda comment: comment.created,
+                             reverse=True)
+    return sorted_comments
 
 
 def login_rate_limit(ip_address):
