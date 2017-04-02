@@ -626,6 +626,7 @@ class UpdatePassword(Handler):
             user.current_session = new_session  # give user a new session
             user.session_expires = session_expires
             user.put()
+            logging.info("Password updated for user: %s", user.username)
             self.response.set_cookie(
                   'Session', ('%s|%s' % (str(new_session),
                               cookie_hash(new_session))), overwrite=True)
