@@ -217,7 +217,7 @@ class PermaLink(Handler):
                     parent_post_id=parent_post_id)
         c.put()
         comment_roll = load_comments(post_id)
-        self.render("permalink.html", post=post, new_comment=c,
+        self.render("permalink.html", post=post,
                     comment_roll=comment_roll, user=self.user())
         logging.info("New comment added to post [%s] by user: %s",
                      c.parent_post_id, c.posting_user)
@@ -351,8 +351,8 @@ def session_uuid():
 
 def load_comments(post_id):
     """ Returns all comments associated with specific post """
-    comment_query = ndb.gql("""SELECT * from Comment
-                               WHERE parent_post_id = '%s'""" % post_id)
+    comment_query = Comment.query(ancestor=comment_key()).filter(
+                                  Comment.parent_post_id == post_id)
     comments = comment_query.fetch()
     sorted_comments = sorted(comments, key=lambda comment: comment.created,
                              reverse=True)

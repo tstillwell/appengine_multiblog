@@ -6,12 +6,6 @@
   <h4>Comments</h4>
   {{error}}
   <hr>
-  {% if new_comment %}
-    {{new_comment.render() | safe}}
-    <script> document.write('<button class="edit_button" onclick="show_edit({{new_comment.key.id()}})">Edit Comment</button>');</script>
-    <br>
-  {% endif %}
-
   {% for c in comment_roll %}
     {{ c.render() | safe }}
     {% if c.posting_user == user %}
