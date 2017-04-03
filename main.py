@@ -256,6 +256,7 @@ class User(ndb.Model):
     email = ndb.StringProperty(required=True)
     current_session = ndb.StringProperty(required=False)
     session_expires = ndb.DateTimeProperty(required=False)
+    csrf_sync_token = ndb.StringProperty(required=False)
 
 
 def user_key(name='default'):
@@ -347,6 +348,13 @@ def session_uuid():
     new_uuid = uuid.uuid4()
     new_uuid = str(new_uuid)
     return new_uuid
+
+
+def new_csrf_token():
+    """ Make a synchronizer token for forms to prevent CSRF attacks """
+    base_64_string = binascii.b2a_base64(os.urandom(64))
+    csrf_token = base_64_string[:-1]  # strip newline character
+    return csrf_token
 
 
 def load_comments(post_id):
@@ -456,7 +464,8 @@ class Signup(Handler):
                 u = User(parent=user_key(), username=username,
                          email=email, user_hash=user_hash,
                          salt=salt, current_session=current_session,
-                         session_expires=session_expires)
+                         session_expires=session_expires,
+                         csrf_sync_token=new_csrf_token())
                 u.put()  # Put this person into the db
                 self.response.headers.add_header(
                   'Set-Cookie', 'Session= %s|%s Path=/'
@@ -509,7 +518,7 @@ class Login(Handler):
             if (target_user.session_expires is None or
                target_user.session_expires < datetime.datetime.now()):
                 target_user.current_session = session_uuid()
-
+                target_user.csrf_sync_token = new_csrf_token()
             target_user.session_expires = (datetime.datetime.now() +
                                            datetime.timedelta(hours=1))
             target_user.put()
