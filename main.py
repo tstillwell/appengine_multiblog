@@ -256,12 +256,16 @@ class User(ndb.Model):
     email = ndb.StringProperty(required=True)
     current_session = ndb.StringProperty(required=False)
     session_expires = ndb.DateTimeProperty(required=False)
-    csrf_sync_token = ndb.StringProperty(required=False)
 
 
 def user_key(name='default'):
     """ Generate a blog id from the db row """
     return ndb.Key('users', name)
+
+
+class Anti_CSRF_token(ndb.Model):
+    csrf_sync_token = ndb.StringProperty(required=True)
+    associated_user = ndb.StringProperty(required=True)
 
 
 class Reset_token(ndb.Model):
@@ -355,6 +359,14 @@ def new_csrf_token():
     base_64_string = binascii.b2a_base64(os.urandom(64))
     csrf_token = base_64_string[:-1]  # strip newline character
     return csrf_token
+
+
+def csrf_token_for(username):
+    """ Return the users anti CSRF token to embed in html forms """
+    query = ndb.gql("""SELECT * FROM Anti_CSRF_token
+                       WHERE associated_user = '%s'""" % username)
+    csrf_token = query.get()
+    return csrf_token.csrf_sync_token
 
 
 def load_comments(post_id):
@@ -464,9 +476,12 @@ class Signup(Handler):
                 u = User(parent=user_key(), username=username,
                          email=email, user_hash=user_hash,
                          salt=salt, current_session=current_session,
-                         session_expires=session_expires,
-                         csrf_sync_token=new_csrf_token())
+                         session_expires=session_expires)
                 u.put()  # Put this person into the db
+                anti_forgery_token = Anti_CSRF_token(
+                    associated_user=username,
+                    csrf_sync_token=new_csrf_token())
+                anti_forgery_token.put()
                 self.response.headers.add_header(
                   'Set-Cookie', 'Session= %s|%s Path=/'
                   % (str(u.current_session), (cookie_hash
@@ -518,7 +533,12 @@ class Login(Handler):
             if (target_user.session_expires is None or
                target_user.session_expires < datetime.datetime.now()):
                 target_user.current_session = session_uuid()
-                target_user.csrf_sync_token = new_csrf_token()
+                csrf_token_query = ndb.gql("""
+                           SELECT * FROM Anti_CSRF_token WHERE
+                           associated_user = '%s'""" % target_user.username)
+                users_token = csrf_token_query.get()
+                users_token.csrf_sync_token = new_csrf_token()
+                users_token.put()  # new csrf token to replace expired one
             target_user.session_expires = (datetime.datetime.now() +
                                            datetime.timedelta(hours=1))
             target_user.put()
@@ -769,8 +789,10 @@ class DeletePost(Handler):
         if self.user():
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
+            user = self.user()
             if post.posting_user == self.user():
-                self.render("delete.html", post=post, user=self.user())
+                self.render("delete.html", post=post,
+                            user=user, token=csrf_token_for(user))
         else:
             self.error(404)
 
@@ -779,7 +801,10 @@ class DeletePost(Handler):
         if self.user():
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            if post.posting_user == self.user():
+            user = self.user()
+            csrf_token = self.request.get("csrf-token")
+            actual_csrf_token = csrf_token_for(user)
+            if post.posting_user == user and csrf_token == actual_csrf_token:
                 key.delete()
                 self.redirect('/manage')
                 logging.info("Post Deleted: %s", post_id)
