@@ -6,6 +6,7 @@
   <form method="post" action="/edit/c/{{comment.key.id()}}">
     <textarea name="content">{{comment.comment_text}}</textarea>
       <br>
+    <input type="hidden" name="csrf-token" value="{{token}}"></input>
     <input type="submit" value="Update This Comment" >
   </form>
 

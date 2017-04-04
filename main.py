@@ -753,21 +753,26 @@ class EditPost(Handler):
 class EditComment(Handler):
     def get(self, comment_id):
         """ If comment owner matches current user draw comment edit form """
-        if self.user():
+        user = self.user()
+        if user:
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
-            if comment.posting_user == self.user():
-                self.render("editc.html", comment=comment, user=self.user())
+            if comment.posting_user == user:
+                self.render("editc.html", comment=comment,
+                            token=csrf_token_for(user), user=user)
         else:
             self.error(404)
 
     def post(self, comment_id):
         """ If user matches comment owner, update comment in the datastore """
-        if self.user():
+        user = self.user()
+        if user:
             content = self.request.get("content")
+            csrf_token = self.request.get("csrf-token")
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
-            if comment.posting_user == self.user():
+            if (comment.posting_user == user and
+               csrf_token == csrf_token_for(user)):
                 comment.comment_text = content
                 comment.put()
                 self.redirect('/blog/%s' % str(comment.parent_post_id))

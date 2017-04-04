@@ -4,7 +4,7 @@
 <h3><a href="/manage/updatepass">Update your password</a></h3>
 <h1> Manage User Posts - {{user}}</h1>
 {% for post in post_roll %}
-{{post.render()}
+{{post.render() | safe}}
 <br>
 <form method ="get" action="/edit/{{post.key.id()}}">
   <input type = "submit" value="Edit Post" ></input>
@@ -19,7 +19,7 @@
 <h1> Manage User Comments - {{user}}</h1>
 <div class="my_comments">
 {% for comment in comment_roll %}
-  {{comment.render()}
+  {{comment.render() | safe}}
   <form method ="get" action="/edit/c/{{comment.key.id()}}">
     <input type ="submit" value="Edit Comment"></input>
   <br><br>
