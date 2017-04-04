@@ -14,7 +14,7 @@
         <div>Post Content</div>
         <textarea name="content">{{content}}</textarea>
       </label>
-
+      <input type="hidden" name="csrf-token" value="{{token}}"></input>
       <input type="submit">
     </form>
     {%endif %}

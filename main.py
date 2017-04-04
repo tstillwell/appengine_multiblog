@@ -145,8 +145,10 @@ class AutoPager(Handler):
 class NewPost(Handler):
     """ Page for adding new blog posts """
     def get(self):
-        if self.user():
-            self.render("newpost.html", user=self.user())
+        user = self.user()
+        if user:
+            self.render("newpost.html", user=user,
+                        token=csrf_token_for(user))
         else:
             error = "You must be logged in to post"
             self.render("newpost.html", error=error)
@@ -155,15 +157,17 @@ class NewPost(Handler):
         """ takes info from forms """
         subject = self.request.get("subject")
         content = self.request.get("content")
+        csrf_token = self.request.get("csrf-token")
+        user = self.user()
         if subject and content:
             """ If data fields present, make new Post and add it to the db """
-            if not self.user():
+            if not user:
                 error = "You must be logged in to post"
                 self.render("newpost.html", subject=subject,
                             content=content, error=error)
-            else:
+            if user and csrf_token == csrf_token_for(user):
                 p = Post(parent=blog_key(), subject=subject,
-                         content=content, posting_user=self.user())
+                         content=content, posting_user=user)
                 p.put()
                 self.redirect('/blog/%s' % str(p.key.id()))  # Permalink
                 logging.info("New post created : %s", p.key.id())
@@ -172,7 +176,7 @@ class NewPost(Handler):
                  report an error and ask for fields again """
             error = "subject and content, please!"
             self.render("newpost.html", subject=subject, content=content,
-                        error=error, user=self.user())
+                        error=error, user=user, token=csrf_token_for(user))
 
 
 class PermaLink(Handler):
@@ -180,15 +184,16 @@ class PermaLink(Handler):
     def get(self, post_id):
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
+        user = self.user()
         # gets the comments whose post_id matches the post_id of the page
         comment_roll = load_comments(post_id)
 
         if not post:
             self.error(404)
             return
-        if self.user():
-            self.render("permalink.html", post=post,
-                        comment_roll=comment_roll, user=self.user())
+        if user:
+            self.render("permalink.html", post=post, user=user,
+                        comment_roll=comment_roll, token=csrf_token_for(user))
         else:
             error = "You must be logged in to comment"
             self.render("permalink.html", post=post, error=error,
@@ -198,9 +203,11 @@ class PermaLink(Handler):
         """ For adding comments """
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
+        user = self.user()
         comment_text = self.request.get("comment_text")
+        csrf_token = self.request.get("csrf-token")
         parent_post_id = str(post.key.id())  # file the comment under this post
-        if self.user() is None:  # If user is not logged in or invalid cookie
+        if user is None:  # If user is not logged in or invalid cookie
             error = "Sorry, you need to be logged in to comment"
             comment_roll = load_comments(post_id)
             self.render("permalink.html", post=post,
@@ -209,18 +216,19 @@ class PermaLink(Handler):
         if comment_text == '':
             error = "Your comment cannot be blank"
             comment_roll = load_comments(post_id)
-            self.render("permalink.html", post=post, user=self.user(),
+            self.render("permalink.html", post=post, user=user,
                         comment_roll=comment_roll, error=error)
             return
-        c = Comment(parent=comment_key(), comment_text=comment_text,
-                    posting_user=self.user(),
-                    parent_post_id=parent_post_id)
-        c.put()
-        comment_roll = load_comments(post_id)
-        self.render("permalink.html", post=post,
-                    comment_roll=comment_roll, user=self.user())
-        logging.info("New comment added to post [%s] by user: %s",
-                     c.parent_post_id, c.posting_user)
+        if user and csrf_token == csrf_token_for(user):
+            c = Comment(parent=comment_key(), comment_text=comment_text,
+                        posting_user=user,
+                        parent_post_id=parent_post_id)
+            c.put()
+            comment_roll = load_comments(post_id)
+            self.render("permalink.html", post=post, user=user,
+                        comment_roll=comment_roll, token=csrf_token_for(user))
+            logging.info("New comment added to post [%s] by user: %s",
+                         c.parent_post_id, c.posting_user)
 
 
 """ USER RELATED classes """
