@@ -717,14 +717,22 @@ class UserRSS(Handler):
 class Manage(Handler):
     """Allows user to edit/delete their own comments & posts"""
     def get(self):
-        if self.user():
-            post_roll = ndb.gql("""SELECT * FROM Post WHERE posting_user = '%s'
-                                    ORDER BY created DESC""" % self.user())
-            comment_roll = ndb.gql("""SELECT * FROM Comment WHERE
-                                       posting_user = '%s' ORDER BY created
-                                       DESC""" % self.user())
-            self.render("manage.html", user=self.user(),
-                        post_roll=post_roll, comment_roll=comment_roll)
+        user = self.user()
+        if user:
+            user_posts = Post.query(ancestor=blog_key()).filter(
+                                          Post.posting_user == user)
+            posts = user_posts.fetch()
+            sorted_posts = sorted(posts,
+                                  key=lambda post: post.created,
+                                  reverse=True)
+            user_comments = Comment.query(ancestor=comment_key()).filter(
+                                          Comment.posting_user == user)
+            comments = user_comments.fetch()
+            sorted_comments = sorted(comments,
+                                     key=lambda comment: comment.created,
+                                     reverse=True)
+            self.render("manage.html", user=user,
+                        post_roll=sorted_posts, comment_roll=sorted_comments)
         else:  # If user is not logged in, show an error
             self.error(404)
 
