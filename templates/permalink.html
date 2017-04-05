@@ -14,7 +14,7 @@
         <input type="submit" value="edit comment">
       </form>
     </noscript>
-      <script> document.write('<button class="edit_button" onclick="show_edit({{c.key.id()}})">Edit Comment</button>');</script>
+      <script> document.write('<button class="edit_button" onclick="show_edit({{c.key.id()}},\'{{token}}\')">Edit Comment</button>');</script>
     {% endif %}
     <br>
   {% endfor %}

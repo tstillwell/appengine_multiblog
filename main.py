@@ -635,20 +635,25 @@ class ResetPassword(Handler):
 class UpdatePassword(Handler):
     """ Lets logged in users change their password """
     def get(self):
-        if self.user():
-            self.render("updatepass.html", user=self.user())
+        user = self.user()
+        if user:
+            self.render("updatepass.html", user=user,
+                        token=csrf_token_for(user))
         else:
             self.redirect('/login')
 
     def post(self):
+        user = self.user()
         current_pass = self.request.get("currentpassword")
         new_pass = self.request.get("newpassword")
         verify_new = self.request.get("newpassword-confirm")
+        csrf_token = self.request.get("csrf-token")
         params = dict()
-        if self.user() is None:
+        if user is None:
             return self.redirect("/login")
-        if self.user() and valid_password(new_pass) and verify_new == new_pass:
-            username = self.user()
+        if (user and valid_password(new_pass) and
+           verify_new == new_pass and csrf_token == csrf_token_for(user)):
+            username = user
             userquery = ndb.gql("""SELECT * FROM User
                                     WHERE username = '%s'""" % username)
             user = userquery.get()
@@ -672,7 +677,7 @@ class UpdatePassword(Handler):
             params['error_mismatch'] = "Passwords did not match."
         if not valid_password(new_pass):
             params['error_invalid'] = "Password is not valid."
-        self.render("updatepass.html", user=self.user(), **params)
+        self.render("updatepass.html", user=user, **params)
 
 
 class UserPage(Handler):
@@ -728,21 +733,25 @@ class EditPost(Handler):
     """ Edit page user gets here from clicking edit on posts from manage"""
     def get(self, post_id):
         """ IF user is the post owner, they can edit the post """
-        if self.user():
+        user = self.user()
+        if user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            if post.posting_user == self.user():
-                self.render("edit.html", post=post, user=self.user())
+            if post.posting_user == user:
+                self.render("edit.html", post=post,
+                            token=csrf_token_for(user), user=user)
         else:
             self.error(404)
 
     def post(self, post_id):
         """ If users match and they entered new content, change the post """
         content = self.request.get("content")
-        if self.user():
+        user = self.user()
+        csrf_token = self.request.get("csrf-token")
+        if user and csrf_token == csrf_token_for(user):
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            if post.posting_user == self.user():
+            if post.posting_user == user:
                 post.content = content
                 post.put()
                 self.redirect('/blog/%s' % str(post.key.id()))
@@ -783,11 +792,14 @@ class EditComment(Handler):
 class CommentAjax(Handler):
     """ Read JSON request, validates it, updates client with response """
     def post(self):
+        user = self.user()
         request_data = json.loads(self.request.body)
         target_comment = int(request_data['comment_id'])
+        submitted_csrf_token = request_data['csrf_token']
         comment_to_update = Comment.get_by_id(target_comment,
                                               parent=comment_key())
-        if comment_to_update.posting_user == self.user():
+        if (comment_to_update.posting_user == user and
+           submitted_csrf_token == csrf_token_for(user)):
             new_comment_text = (request_data['new_text'])
             comment_to_update.comment_text = new_comment_text
             comment_to_update.put()
