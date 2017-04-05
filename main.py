@@ -285,13 +285,18 @@ class Reset_token(ndb.Model):
 def reset_email(recipient, token):
     app_name = app_identity.get_application_id()
     from_address = ("noreply@%s.appspotmail.com" % app_name)
+    if os.environ['HTTPS'] == 'off':
+        url_protocol = 'http'
+    else:
+        url_protocol = 'https'
     body = """
               A password reset request was created for your blog account.
               If you wish to reset your password, please use this link
 
-              https://%s/resetpassword/%s
+              %s://%s/resetpassword/%s
 
-              This link is only valid for 15 minutes.""" % (HOST_NAME, token)
+              This link is only valid for 15 minutes.""" % (
+              url_protocol, HOST_NAME, token)
     mail.send_mail(sender=from_address, to=recipient,
                    subject="Blog password reset requested", body=body)
 
