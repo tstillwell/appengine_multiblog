@@ -882,6 +882,16 @@ class CleanupComments(Handler):
                 comment.key.delete()
 
 
+class CleanupRateLimiter(Handler):
+    """ Remove login rate limiting if IPs haven't attempted recently """
+    def get(self):
+        limited_ips = ndb.gql("SELECT * FROM Login_attempt")
+        for offender in limited_ips:
+            if (offender.last_attempt <
+               datetime.datetime.now() - datetime.timedelta(hours=2)):
+                    offender.key.delete()
+
+
 # Router - Bind these URLs to above Request Handler instances
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/?', FrontPage),
@@ -904,5 +914,6 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/delete/([0-9]+)', DeletePost),
                                ('/commentajax/', CommentAjax),
                                ('/tasks/orphan-comments', CleanupComments),
+                               ('/tasks/de-ratelimit', CleanupRateLimiter),
                                ],
                               debug=True,)

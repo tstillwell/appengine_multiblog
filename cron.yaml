@@ -2,3 +2,8 @@ cron:
 - description: Delete Orphaned Comments
   url: /tasks/orphan-comments
   schedule: every 72 hours
+
+cron:
+- description: Cleanup login rate limiter
+  url: /tasks/de-ratelimit
+  schedule: every 12 hours
