@@ -871,6 +871,7 @@ class Logout(Handler):
 
 
 class CleanupComments(Handler):
+    """ Removes comments from the datastore if parent post has been removed """
     def get(self):
         all_comments = ndb.gql("SELECT * FROM Comment")
         for comment in all_comments:
