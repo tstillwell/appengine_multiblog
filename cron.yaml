@@ -1,0 +1,4 @@
+cron:
+- description: Delete Orphaned Comments
+  url: /tasks/orphan-comments
+  schedule: every 72 hours

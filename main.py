@@ -867,6 +867,20 @@ class Logout(Handler):
         self.redirect("/blog")
 
 
+""" CRON & maintainance task handlers (see cron.yaml) """
+
+
+class CleanupComments(Handler):
+    def get(self):
+        all_comments = ndb.gql("SELECT * FROM Comment")
+        for comment in all_comments:
+            parent_post_key = ndb.Key(
+             'Post', int(comment.parent_post_id), parent=blog_key())
+            parent_post = parent_post_key.get()
+            if parent_post is None:
+                comment.key.delete()
+
+
 # Router - Bind these URLs to above Request Handler instances
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/?', FrontPage),
@@ -888,5 +902,6 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/edit/c/([0-9]+)', EditComment),
                                ('/delete/([0-9]+)', DeletePost),
                                ('/commentajax/', CommentAjax),
+                               ('/tasks/orphan-comments', CleanupComments),
                                ],
                               debug=True,)
