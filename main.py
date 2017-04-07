@@ -892,6 +892,15 @@ class CleanupRateLimiter(Handler):
                     offender.key.delete()
 
 
+class PurgeResetTokens(Handler):
+    """ Remove reset tokens that have been used or expired """
+    def get(self):
+        reset_tokens = ndb.gql("SELECT * FROM Reset_token")
+        for token in reset_tokens:
+            if token.expires < datetime.datetime.now():
+                token.key.delete()
+
+
 # Router - Bind these URLs to above Request Handler instances
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/?', FrontPage),
@@ -915,5 +924,6 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/commentajax/', CommentAjax),
                                ('/tasks/orphan-comments', CleanupComments),
                                ('/tasks/de-ratelimit', CleanupRateLimiter),
+                               ('/tasks/old-reset-tokens', PurgeResetTokens),
                                ],
                               debug=True,)

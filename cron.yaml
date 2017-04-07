@@ -7,3 +7,8 @@ cron:
 - description: Cleanup login rate limiter
   url: /tasks/de-ratelimit
   schedule: every 12 hours
+
+cron:
+- description: Remove password reset tokens that have expired or been used
+  url: /tasks/old-reset-tokens
+  schedule: every 48 hours
