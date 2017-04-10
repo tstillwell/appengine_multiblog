@@ -2,7 +2,11 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<<<<<<< HEAD
   <meta name="viewport" content="width=device-width, initial-scale=1">
+=======
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+>>>>>>> parent of 1d3c337... Reflowed navbar
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link type="text/css" rel="stylesheet" href="/static/main.css" />
   <title>Example Blog</title>
@@ -18,7 +22,6 @@
     </div>
   </div>
   <nav class="navbar navbar-default">
-  <div class="container-fluid">
     <ul class="nav navbar-nav">
       <li><a href="/blog">Front Page</a></li>
       {%if user%}
@@ -30,6 +33,7 @@
       <li><a href="/signup">Register</a></li>
       {%endif %}
       </ul>
+<<<<<<< HEAD
       {%if user%}
       <ul class="nav navbar-nav navbar-right">
       <li class="navbar">Logged in as: {{user}}</li>
@@ -37,7 +41,15 @@
       </ul>
       {%endif %}
   </div>
+=======
+>>>>>>> parent of 1d3c337... Reflowed navbar
   </nav>
+  {%if user%}
+  <ul>
+  <li>Logged in as: {{user}}</li>
+  <li><a href="/logout">Logout</a></li>
+  </ul>
+  {%endif %}
   <br>
   <div id="content">
   {% block content %}
