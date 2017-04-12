@@ -99,3 +99,9 @@ input[name=email] {
 	width: 25%;
 	margin-bottom: 2em;
 }
+
+.navbar-btn {
+  position: relative;
+  display: block;
+  margin: 10px 15px;
+}
