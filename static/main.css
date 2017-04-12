@@ -105,3 +105,7 @@ input[name=email] {
   display: block;
   margin: 10px 15px;
 }
+
+.glyphicon {
+  padding-left: 1em;
+}
