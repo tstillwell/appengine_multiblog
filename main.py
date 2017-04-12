@@ -852,7 +852,7 @@ class DeletePost(Handler):
 
 class Logout(Handler):
     """Logout Behavior"""
-    def get(self):
+    def post(self):
         if self.user():
             user_query = ndb.gql("""SELECT * FROM User WHERE
                                      username = '%s'""" % self.user())

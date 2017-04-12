@@ -34,11 +34,13 @@
       {%if user%}
       <ul class="nav navbar-nav navbar-right">
       <li class="navbar-text">Logged in as: {{user}}</li>
-      <li><a href="/logout">Logout</a></li>
+      <li><form method="post" action="/logout">
+        <button type="submit" class="btn btn-default navbar-btn">Logout</button>
+      </form></li>
       </ul>
       {%endif %}
-  </div>
-  </nav>
+    </div>
+    </nav>
   <br>
   <div id="content">
   {% block content %}
