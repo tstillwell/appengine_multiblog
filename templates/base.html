@@ -32,9 +32,9 @@
       {%endif %}
       </ul>
       {%if user%}
-      <ul class="nav navbar-right">
-        <li class="navbar-text">Logged in as: {{user}}</li>
-        <li class="navbar-nav"><form method="post" action="/logout">
+      <ul class="nav navbar-right navbar-nav">
+        <li><a href="/users/{{user}}">{{user}}<span class="glyphicon glyphicon-user"></span></a></li>
+        <li><form method="post" action="/logout">
           <button type="submit" class="btn btn-default navbar-btn">Logout
           <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
           </button></form></li>
