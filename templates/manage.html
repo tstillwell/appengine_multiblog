@@ -23,7 +23,8 @@
 {% for comment in comment_roll %}
   {{comment.render() | safe}}
   <form method ="get" action="/edit/c/{{comment.key.id()}}">
-    <input type ="submit" value="Edit Comment"></input>
+    <button type ="submit" class="btn btn-default">
+      Edit Comment<span class="glyphicon glyphicon-edit"></span></button>
   <br><br>
 {% endfor %}
 </div>
