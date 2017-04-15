@@ -7,11 +7,13 @@
 {{post.render() | safe}}
 <br>
 <form method ="get" action="/edit/{{post.key.id()}}">
-  <input type = "submit" value="Edit Post" ></input>
+  <button type ="submit" class="btn btn-default">
+    Edit Post<span class="glyphicon glyphicon-edit"></span></button>
 </form>
 
 <form method ="get" action="/delete/{{post.key.id()}}">
-  <input type ="submit" value="Delete Post"></input>
+  <button type ="submit" class="btn btn-default">
+    Delete Post<span class="glyphicon glyphicon-remove-circle"></span></button>
 </form>
 <br>
 {% endfor %}
