@@ -7,7 +7,7 @@
     {{post.render() | safe}}
       <br>
     <p>WARNING: NO WAY TO UNDO - THIS IS PERMANENT</p>
-    <input type="submit" value="DELETE This Post" >
+    <button type="submit" class="btn btn-danger">Delete Post</button>
     <p>WARNING: NO WAY TO UNDO - THIS IS PERMANENT</p>
     <input type="hidden" name="csrf-token" value="{{token}}"></input>
   </form>
