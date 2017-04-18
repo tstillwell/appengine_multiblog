@@ -5,6 +5,7 @@ body {
     padding: 10px;
     max-width: 84%;
     color: #333;
+    background-color: #f5f5f5;
 }
 
 h2 {
@@ -100,6 +101,10 @@ input[name=email] {
 	margin-bottom: 2em;
 }
 
+.navbar{
+  background-color: #fff;
+}
+
 .navbar-btn {
   position: relative;
   display: block;
@@ -108,4 +113,10 @@ input[name=email] {
 
 .glyphicon {
   padding-left: 1em;
+}
+
+.post {
+  padding: 1em 2em 4em 1em;
+  background-color: #fff;
+  border-radius: 2.2em;
 }
