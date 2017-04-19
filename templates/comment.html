@@ -1,11 +1,9 @@
 <div class="comment comment-{{c.key.id()}}" >
+  <div class="posted-by">
+    <a href="/users/{{c.posting_user}}">{{c.posting_user}}, </a>
+     on {{c.created.strftime("%b %d, %Y")}}
+  </div>
   <div class="comment-content-{{c.key.id()}}">
     {{c._render_text}}
-  </div>
-  <div class="posted-by">
-    {{c.posting_user}}
-  </div>
-  <div class="comment-date">
-    {{c.created.strftime("%b %d, %Y")}}
   </div>
 </div>
