@@ -7,16 +7,20 @@
   {{error}}
   <hr>
   {% for c in comment_roll %}
-    {{ c.render() | safe }}
+  <div class="container-fluid col-lg-12">
+    <div class="comment-box col-lg-6">
     {% if c.posting_user == user %}
     <noscript>
       <form name ="edit-comment" method ="get" action="/edit/c/{{c.key.id()}}">
         <input type="submit" value="edit comment">
       </form>
     </noscript>
-      <script> document.write('<button class="edit_button" onclick="show_edit({{c.key.id()}},\'{{token}}\')">Edit Comment</button>');</script>
+      <script> document.write('<button class="edit-button" onclick="show_edit({{c.key.id()}},\'{{token}}\')">Edit Comment</button>');</script>
     {% endif %}
+    {{ c.render() | safe }}
     <br>
+    </div>
+  </div>
   {% endfor %}
   <form name ="comment-form" method ="post">
     <textarea name="comment_text" placeholder="Type a comment here"></textarea>

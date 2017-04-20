@@ -31,7 +31,7 @@ function edit_comment(comment_id, csrf_token){
   })
   .done(function( response ) {
     var comment_class = 'comment-content-' + comment_id;
-    var newdiv = '<div class=' + '"' + comment_class + '"' + '>';
+    var newdiv = '<div class=' + '"comment-body ' + comment_class + '"' + '>';
     $('.' + comment_class).replaceWith(newdiv + response['new_text'] + '</div>');
     $(".edit_area").remove();
     $('form[name=comment-form]').show();

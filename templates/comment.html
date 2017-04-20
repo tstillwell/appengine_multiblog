@@ -1,9 +1,9 @@
 <div class="comment comment-{{c.key.id()}}" >
   <div class="posted-by">
-    <a href="/users/{{c.posting_user}}">{{c.posting_user}}, </a>
+    <a href="/users/{{c.posting_user}}">{{c.posting_user}} </a>,
      on {{c.created.strftime("%b %d, %Y")}}
   </div>
-  <div class="comment-content-{{c.key.id()}}">
+  <div class="comment-body comment-content-{{c.key.id()}}">
     {{c._render_text}}
   </div>
 </div>

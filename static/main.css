@@ -121,3 +121,17 @@ input[name=email] {
   background-color: #fff;
   border-radius: 2.2em;
 }
+
+.comment-box {
+  margin: 1.5em 0;
+  padding: 1em 2.5em 2.5em;
+  background-color: #fff;
+}
+
+.comment-body {
+  margin-top: 1.2em;
+}
+
+.edit-button {
+  float: right;
+}
