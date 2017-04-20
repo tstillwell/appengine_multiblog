@@ -12,7 +12,7 @@
     {% if c.posting_user == user %}
     <noscript>
       <form name ="edit-comment" method ="get" action="/edit/c/{{c.key.id()}}">
-        <input type="submit" value="edit comment">
+        <button type="submit" class="edit-button btn btn-default">Edit Comment</button>
       </form>
     </noscript>
       <script> document.write('<button class="edit-button btn btn-default" onclick="show_edit({{c.key.id()}},\'{{token}}\')">Edit Comment</button>');</script>
