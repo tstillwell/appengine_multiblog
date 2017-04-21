@@ -4,9 +4,9 @@ function show_edit(comment_id, csrf_token){
   $("." + comment_classname).replaceWith(
       '<div class="comment comment-' + comment_id + '">' + old_comment +
       '<div class="edit_area"><textarea id="new_comment_field_' + comment_id + '">' +
-      '</textarea><br>' + '<button onclick="edit_comment(' + comment_id +
+      '</textarea><br>' + '<button class="btn btn-primary update-confirm" onclick="edit_comment(' + comment_id +
       ', ' + '\'' + csrf_token + '\'' + ')">' +
-      'Update Comment' + '</button><button onclick="cancel_edit(' + comment_id +
+      'Update Comment' + '</button><button class="btn btn-default update-cancel" onclick="cancel_edit(' + comment_id +
     ')"> Cancel</button></div></div>'
   );
   $(".edit_button").hide();
