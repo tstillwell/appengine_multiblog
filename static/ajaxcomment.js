@@ -9,12 +9,12 @@ function show_edit(comment_id, csrf_token){
       'Update Comment' + '</button><button class="btn btn-default update-cancel" onclick="cancel_edit(' + comment_id +
     ')"> Cancel</button></div></div>'
   );
-  $(".edit_button").hide();
+  $(".edit-button").hide();
   $('form[name=comment-form]').hide();
 }
 function cancel_edit(comment_id){
   $(".edit_area").remove();
-  $(".edit_button").show();
+  $(".edit-button").show();
   $('form[name=comment-form]').show();
 }
 function new_comment_text(comment_id){
@@ -35,6 +35,6 @@ function edit_comment(comment_id, csrf_token){
     $('.' + comment_class).replaceWith(newdiv + response['new_text'] + '</div>');
     $(".edit_area").remove();
     $('form[name=comment-form]').show();
-    $(".edit_button").show();
+    $(".edit-button").show();
   });
 };
