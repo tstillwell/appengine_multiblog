@@ -120,12 +120,14 @@ input[name=email] {
   padding: 1em 2em 4em 1em;
   background-color: #fff;
   border-radius: 2.2em;
+  box-shadow: rgba(0, 0, 0, 0.31) 0 1em 1.8em 0 ;
 }
 
 .comment-box {
   margin: 1.5em 0;
   padding: 1em 2.5em 2.5em;
   background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.31) 0 1.2em 2em 0.5em;
 }
 
 .comment-body {
