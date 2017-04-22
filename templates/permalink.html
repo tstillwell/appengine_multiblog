@@ -26,7 +26,7 @@
     <textarea name="comment_text" placeholder="Type a comment here"></textarea>
     <br>
     <input type="hidden" name="csrf-token" value="{{token}}"></input>
-    <input type="submit" value="Add Comment">
+    <button type="submit" class="btn btn-default">Add Comment<span class="glyphicon glyphicon-comment"></span></button>
   </form>
 <script type="text/javascript" src="/static/ajaxcomment.js"></script>
 {% endblock %}
