@@ -174,7 +174,7 @@ class NewPost(Handler):
         else:
             """ If all data fields are not present,
                  report an error and ask for fields again """
-            error = "subject and content, please!"
+            error = "Subject and Content are both required"
             self.render("newpost.html", subject=subject, content=content,
                         error=error, user=user, token=csrf_token_for(user))
 
