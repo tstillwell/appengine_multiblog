@@ -17,7 +17,16 @@
 	{{error_email}}
 	{{error_taken}}
 	<br>
-	<button type="submit" class="btn btn-primary">Create Account</button>
+	<button type="submit" class="btn btn-primary registerbtn" data-loading-text="Registering...">
+		Create Account
+	</button>
 </form>
+<script>
+$("button").click(function() {
+    var $register = $(this);
+    $register.button('loading');
+    setTimeout(3000);
+});
+</script>
 </div>
 {% endblock %}
