@@ -65,8 +65,9 @@ class Post(ndb.Model):
     posting_user = ndb.StringProperty(required=True)
 
     def render(self):
-        """ Draws all blog post data """
-        self._render_text = self.content.replace('\n', '<br>')
+        """ escape all html tags from post, then convert newlines to <br> """
+        escaped_post = jinja2.escape(self.content)
+        self._render_text = escaped_post.replace('\n', jinja2.Markup('<br>'))
         return render_str("post.html", p=self)
 
 
