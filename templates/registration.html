@@ -1,15 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="registration-form">
+<div class="registration-form form-group">
 <form method="post">
-	Username: <input type="text" name="username" value="{{username}}">
-	<br>
-	Password: <input type="password" name="password">
-	<br>
-	Verify: <input type="password" name="verify">
-	<br>
-	Email: <input type="text" name="email" value="{{email}}">
+	<h4>Username</h4> <input type="text " class="form-control" name="username" value="{{username}}">
+	<h4>Password</h4> <input type="password" class="form-control" name="password">
+	<h4>Confirm Password</h4> <input type="password" class="form-control" name="verify">
+	<h4>Email</h4> <input type="text" class="form-control" name="email" value="{{email}}">
 	<br>
 	{{error_username}}
 	{{error_password}}

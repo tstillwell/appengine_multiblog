@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="login-form">
+<div class="login-form form-group">
 <form method="post">
-	Username: <input type="text" name="username">
-	<br>
-	Password: <input type="password" name="password">
-	<br>
+	<h4>Username</h4>
+	<input type="text" class="form-control" name="username">
+	<h4>Password</h4>
+	<input type="password" class="form-control" name="password">
 	{{error}}
-	<br><br>
+	<br>
 	<button type="submit" class="btn btn-primary">Login
 		<span class="glyphicon glyphicon-log-in"></span></button>
 </form>
