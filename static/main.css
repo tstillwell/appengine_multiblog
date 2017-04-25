@@ -37,7 +37,10 @@ input[type=text] {
 textarea {
   max-width: 500px;
   min-height: 400px;
-  font-size: 17px;
+}
+
+textarea.form-control{
+  font-size: 16px;
   font-family: monospace;
 }
 
