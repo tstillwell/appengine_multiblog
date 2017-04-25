@@ -86,7 +86,7 @@ input[name=username] {
 	margin-bottom: 2em;
 }
 
-input[name=password] {
+input[type=password] {
 	width: 25%;
 	margin-bottom: 2em;
 }

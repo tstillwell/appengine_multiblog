@@ -2,14 +2,15 @@
 
 {% block content %}
 {%if not updated %}
-<div class="updatepw-form">
+<div class="updatepw-form form-group">
+  <p>Use this form to change your login password</p>
   <form method="post">
-    Current Password:<input type="password" name="currentpassword">
-    <br>
-    New Password:<input type="password" name="newpassword">
-    <br>
-    Confirm New Password:<input type="password" name="newpassword-confirm">
-    <br>
+    <h4>Current Password</h4>
+    <input type="password" class="form-control" name="currentpassword">
+    <h4>New Password</h4>
+    <input type="password" class="form-control" name="newpassword">
+    <h4>Confirm New Password</h4>
+    <input type="password" class="form-control" name="newpassword-confirm">
     {{error}}<br>
     {{error_mismatch}}<br>
     {{error_invalid}}<br>
