@@ -4,7 +4,7 @@
 <h3><a href="/manage/updatepass">Update your password</a></h3>
 <h1> Manage User Posts - {{user}}</h1>
 {% for post in post_roll %}
-{{post.render() | safe}}
+{{post.peek() | safe}}
 <br>
 <form method ="get" action="/edit/{{post.key.id()}}">
   <button type ="submit" class="btn btn-default">

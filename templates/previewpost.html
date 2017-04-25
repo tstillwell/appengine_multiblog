@@ -1,0 +1,24 @@
+<div class="post">
+  <div class="post-heading">
+    <div class="post-title">
+      <a href="/blog/{{p.key.id()}}">{{p.subject}}</a>
+    </div>
+
+    <div class="post-author">
+      Posted by:<a href="/users/{{p.posting_user}}">{{p.posting_user}}</a>
+    </div>
+
+    <div class="post-date">
+      {{p.created.strftime("%b %d, %Y")}}
+    </div>
+
+  </div>
+
+  <div class="post-content">
+    {{p._render_text}}.....
+    <br>
+    <div class="read-more"><a href="/blog/{{p.key.id()}}">
+      <button type="button" class="btn btn-primary">Read More</button></a>
+    </div>
+  </div>
+</div>

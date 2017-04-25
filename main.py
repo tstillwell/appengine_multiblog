@@ -70,6 +70,17 @@ class Post(ndb.Model):
         self._render_text = escaped_post.replace('\n', jinja2.Markup('<br>'))
         return render_str("post.html", p=self)
 
+    def peek(self):
+        """ Show first part of long posts to not clutter manage and front """
+        escaped_post = jinja2.escape(self.content)
+        marked_up_post = escaped_post.replace('\n', jinja2.Markup('<br>'))
+        if (len(marked_up_post) > 1000):
+            self._render_text = marked_up_post[:1000]
+            return render_str("previewpost.html", p=self)
+        else:
+            self._render_text = marked_up_post
+            return render_str("post.html", p=self)
+
 
 def blog_key(name='default'):
     """ Generate a blog key used as parent for posts """

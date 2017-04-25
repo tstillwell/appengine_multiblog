@@ -144,3 +144,10 @@ input[name=email] {
 .update-confirm {
   margin-right: 1em;
 }
+
+.read-more {
+  margin-top: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

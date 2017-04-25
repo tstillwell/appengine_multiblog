@@ -3,7 +3,7 @@
 {% block content %}
 <div class="posts scroll">
   {% for p in blogroll %}
-    {{ p.render() | safe }}
+    {{ p.peek() | safe}}
     <br><br>
   {% endfor %}
   <script>document.write('<div class="jscroll-next"><a href="/blog/nextpage/{{page_id+1}}">Next Page</a></div>')</script>
