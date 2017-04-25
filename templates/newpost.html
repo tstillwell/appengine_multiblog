@@ -4,15 +4,15 @@
   <h2>Create New Post</h2>
     <div class="error">{{error}}</div>
     {%if user %}
-    <form method="post">
+    <form method="post" class="newpost-form form-group">
       <label>
         <div>Subject</div>
-        <input type="text" name="subject" value="{{subject}}">
+        <input type="text" class="form-control" name="subject" value="{{subject}}">
       </label>
 
       <label>
         <div>Post Content</div>
-        <textarea name="content">{{content}}</textarea>
+        <textarea class="form-control" name="content">{{content}}</textarea>
       </label>
       <input type="hidden" name="csrf-token" value="{{token}}"></input>
       <button type="submit" class="btn btn-primary btn-lg">
