@@ -4,7 +4,7 @@
   <br>
 <h3> Recent Activity for {{view_user.username}} </h3>
 {% for post in post_roll %}
-  {{post.render() | safe}}
+  {{post.peek() | safe}}
 {% endfor %}
 
 {% endblock %}
