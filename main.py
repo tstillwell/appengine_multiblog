@@ -735,7 +735,7 @@ class Manage(Handler):
     """Allows user to edit/delete their own comments & posts"""
     def get(self):
         user = self.user()
-        if user:
+        if user:  # only load this page if user has a valid login
             user_posts = Post.query(ancestor=blog_key()).filter(
                                           Post.posting_user == user)
             posts = user_posts.fetch()
@@ -750,8 +750,8 @@ class Manage(Handler):
                                      reverse=True)
             self.render("manage.html", user=user,
                         post_roll=sorted_posts, comment_roll=sorted_comments)
-        else:  # If user is not logged in, show an error
-            self.error(404)
+        else:
+            self.redirect('/login')
 
 
 class EditPost(Handler):
