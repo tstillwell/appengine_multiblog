@@ -160,3 +160,25 @@ input[name=email] {
     text-align: center;
     margin: 0 auto;
 }
+
+@media(max-width:767px){
+
+  input[type=text] {
+    min-width: 80%;
+  }
+
+  input[type=password] {
+    min-width: 80%;
+  }
+}
+
+@media(min-width:768px) and (max-width: 980px){
+
+  input[type=text] {
+    min-width: 40%;
+  }
+
+  input[type=password] {
+    min-width: 40%;
+  }
+}
