@@ -6,7 +6,12 @@
     {{ p.peek() | safe}}
     <br><br>
   {% endfor %}
-  <script>document.write('<div class="jscroll-next"><a href="/blog/nextpage/{{page_id+1}}">Next Page</a></div>')</script>
+  <div class="jscroll-next">
+  <!-- links to the next page and is used by jscroll/autopager and
+  only work with js so they should be hidden in css with
+  .jscroll-next {display: none;} and unhidden with scripting on this page -->
+    <a href="/blog/nextpage/{{page_id+1}}">Next Page</a>
+  </div>
 </div>
 <noscript>
   {% for page in range(pagecount) %}
@@ -19,5 +24,8 @@
   {% endfor %}
 </noscript>
 <script type="text/javascript" src="/static/jquery.jscroll.js"></script>
-<script>$('.scroll').jscroll()</script>
+<script>
+  $('.jscroll-next').show();
+  $('.scroll').jscroll();
+</script>
 {% endblock %}

@@ -165,6 +165,10 @@ input[name=email] {
   display: none;
 }
 
+.jscroll-next {
+  display: none;
+}
+
 @media(max-width:767px){
 
   input[type=text] {
