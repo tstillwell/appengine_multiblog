@@ -23,34 +23,34 @@
   <div class="col-lg-8 col-md-8">
   <nav class="navbar navbar-default">
     <div class="container-fluid">
-      <script><!--Script is used here since bootstrap navigation collapse only works if javascript is enabled -->
-        document.write('<div class="navbar-header">');
-        document.write('<div class="visible-xs-inline-block navigation-text"><h3>Menu</h3></div>');
-        document.write('<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">');
-        document.write('<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>');
-        document.write('</button></div><div class="collapse navbar-collapse" id="myNavbar">');
-      </script>
-    <ul class="nav navbar-nav">
-      <li><a href="/blog">Front Page</a></li>
-      {%if user%}
-      <li><a href="/blog/newpost">New Post<span class="glyphicon glyphicon-plus"></span></a></li>
-      <li><a href="/manage">Manage<span class="glyphicon glyphicon-cog"></span></a></li>
-      {%endif %}
-      {%if not user %}
-      <li><a href="/login">Log in<span class="glyphicon glyphicon-log-in"></span></a></li>
-      <li><a href="/signup">Register<span class="glyphicon glyphicon-user"></span></a></li>
-      {%endif %}
-      </ul>
-      {%if user%}
-      <ul class="nav navbar-right navbar-nav">
-        <li><a href="/users/{{user}}">{{user}}<span class="glyphicon glyphicon-user"></span></a></li>
-        <li><form method="post" action="/logout">
-          <button type="submit" class="btn btn-default navbar-btn">Logout
-          <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-          </button></form></li>
-      </ul>
-      {%endif %}
-    <script>document.write('</div>');</script>
+        <div class="navbar-header ">
+          <div class="visible-xs-inline-block navigation-text"><h3>Menu</h3></div>
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="myNavbar">
+            <ul class="nav navbar-nav">
+              <li><a href="/blog">Front Page</a></li>
+              {%if user%}
+              <li><a href="/blog/newpost">New Post<span class="glyphicon glyphicon-plus"></span></a></li>
+              <li><a href="/manage">Manage<span class="glyphicon glyphicon-cog"></span></a></li>
+              {%endif %}
+              {%if not user %}
+              <li><a href="/login">Log in<span class="glyphicon glyphicon-log-in"></span></a></li>
+              <li><a href="/signup">Register<span class="glyphicon glyphicon-user"></span></a></li>
+              {%endif %}
+            </ul>
+            {%if user%}
+            <ul class="nav navbar-right navbar-nav">
+              <li><a href="/users/{{user}}">{{user}}<span class="glyphicon glyphicon-user"></span></a></li>
+              <li><form method="post" action="/logout">
+              <button type="submit" class="btn btn-default navbar-btn">Logout
+            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+            </button></form></li>
+        </ul>
+        {%endif %}
+        </div>
     </div>
     </nav>
     </div>
@@ -67,5 +67,13 @@
   <div class="col-lg-2 col-md-2"></div>
 </div>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script>
+    // Ensure the navigation menu is open (and usable) if js is disabled
+    // if no js is present this code wont run and the navbar is open by default
+    // if js is enabled add relevant classes to the collapsable div
+    var nav_div = document.getElementById("myNavbar");
+    nav_div.classList.add("collapse");
+    nav_div.classList.add("navbar-collapse");
+  </script>
 </body>
 </html>
