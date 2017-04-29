@@ -161,6 +161,10 @@ input[name=email] {
     margin: 0 auto;
 }
 
+#delete-modal-opener {
+  display: none;
+}
+
 @media(max-width:767px){
 
   input[type=text] {
