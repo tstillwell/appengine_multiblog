@@ -9,6 +9,10 @@
   <a href="/signup" class="btn btn-default">Register </a>
   {%endif %}
   <hr>
+  <!-- .js-comment div below is used for inline comment editing along with ajaxcomment.js
+       and requires javascript. It should be hidden with css and unhidden with scripting
+       in the page so the button does not show up if js is disabled. The <noscript>
+       form allows users with js disabled to edit comments -->
   {% for c in comment_roll %}
   <div class="container-fluid col-lg-12">
     <div class="comment-box col-lg-6">
@@ -18,7 +22,9 @@
         <button type="submit" class="edit-button btn btn-default">Edit Comment</button>
       </form>
     </noscript>
-      <script> document.write('<button class="edit-button btn btn-default" onclick="show_edit({{c.key.id()}},\'{{token}}\')">Edit Comment</button>');</script>
+    <div class="js-comment">
+      <button class="edit-button btn btn-default" onclick="show_edit({{c.key.id()}},'{{token}}')">Edit Comment</button>
+    </div>
     {% endif %}
     {{ c.render() | safe }}
     <br>
@@ -33,5 +39,6 @@
     <button type="submit" class="btn btn-default">Add Comment<span class="glyphicon glyphicon-comment"></span></button>
   </form>
 <script type="text/javascript" src="/static/ajaxcomment.js"></script>
+<script>$('.js-comment').show();</script>
   {% endif %}
 {% endblock %}

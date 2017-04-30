@@ -165,6 +165,10 @@ input[name=email] {
   display: none;
 }
 
+.js-comment {
+  display: none;
+}
+
 .jscroll-next {
   display: none;
 }
