@@ -223,8 +223,4 @@ input[name=email] {
     min-width: 40%;
   }
 
-  .navbar-collapse {
-    padding-left: 15px;
-    padding-right: 15px;
-  }  
 }
