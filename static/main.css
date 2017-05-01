@@ -56,6 +56,11 @@ input[type=submit] {
     text-align: center;
     margin-bottom: 30px;
     text-decoration: none;
+
+}
+
+.main-title:link {
+  text-decoration: none;
 }
 
 .post + .post {
@@ -68,8 +73,13 @@ input[type=submit] {
 }
 
 .post-title {
-    font-size: 24px;
+    font-size: 2em;
     font-weight: bold;
+}
+
+.post-title > a {
+  color: #667799;
+  text-decoration: none;
 }
 
 .post-date {
