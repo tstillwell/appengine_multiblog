@@ -172,6 +172,11 @@ input[name=email] {
     margin: 0 auto;
 }
 
+.navbar-collapse {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 #delete-modal-opener {
   display: none;
 }
@@ -197,6 +202,11 @@ input[name=email] {
   input[type=password] {
     min-width: 80%;
   }
+
+  .navbar-collapse {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 
 @media(min-width:768px) and (max-width: 980px){
@@ -212,4 +222,9 @@ input[name=email] {
   input[type=password] {
     min-width: 40%;
   }
+
+  .navbar-collapse {
+    padding-left: 15px;
+    padding-right: 15px;
+  }  
 }
