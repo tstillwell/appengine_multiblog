@@ -92,6 +92,7 @@ input[type=submit] {
 
 .post-content {
     margin-top: 5px;
+    font-size: 1.4em;;
 }
 
 input[name=username] {
@@ -185,6 +186,10 @@ input[name=email] {
 
 @media(max-width:767px){
 
+  .post-content {
+    font-size: 1.2em;
+  }
+
   input[type=text] {
     min-width: 80%;
   }
@@ -195,6 +200,10 @@ input[name=email] {
 }
 
 @media(min-width:768px) and (max-width: 980px){
+
+  .post-content {
+    font-size: 1.25em;
+  }
 
   input[type=text] {
     min-width: 40%;
