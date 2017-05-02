@@ -1,3 +1,9 @@
+""" Main application module. Intended for deployment to Google App Engine
+    Python Standard Environment platform. Uses Python 2.7.
+    Controls all backend processing, storage, and backing service setup using
+    WSGI application specification.
+    Open Source Project licensed under the MIT License. See LICENSE file. """
+
 import os
 import re
 import json
@@ -20,15 +26,19 @@ JINJA_ENV = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR),
 HOST_NAME = os.environ['HTTP_HOST']  # The current host name of the app
 
 
-def render_str(template, **params):  # Pass data to templates
+def render_str(template, **params):
+    """ Passes data from application into jinja templates to render pages"""
     t = JINJA_ENV.get_template(template)
     return t.render(params)
 
 
 class Handler(webapp2.RequestHandler):
-    """ Base Handler Class """
+    """ Base Handler. All application classes inheriet from Handler and have
+        access to these functions. Child classes are mapped with URLs
+        into WSGIApplication router. """
+
     def write(self, *a, **kw):
-        """write data to HTTP response used for render and testing"""
+        """ write data to HTTP response used for render and testing """
         self.response.out.write(*a, **kw)
 
     def render_str(self, template, **params):
@@ -51,13 +61,14 @@ class Handler(webapp2.RequestHandler):
 
 
 class MainPage(Handler):
-    """Defines behavior of get and post requests for main app page"""
+    """ Defines behavior of http requests for main app page """
     def get(self):
+        """ What to display when user visits the homepage """
         self.write("Testblog up and running!")
 
 
 class Post(ndb.Model):
-    """ Adds the Post DB table"""
+    """ Blog Post data model for datastore """
     subject = ndb.StringProperty(required=True)
     content = ndb.TextProperty(required=True)
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -71,7 +82,7 @@ class Post(ndb.Model):
         return render_str("post.html", p=self)
 
     def peek(self):
-        """ Show first part of long posts to not clutter manage and front """
+        """ Show first part of long posts to not overload multi-post pages """
         escaped_post = jinja2.escape(self.content)
         marked_up_post = escaped_post.replace('\n', jinja2.Markup('<br>'))
         if len(marked_up_post) > 1000:
@@ -95,7 +106,7 @@ def post_count():
 
 
 class Comment(ndb.Model):
-    """ Comments DB Table """
+    """ Comments data model used for datastore """
     comment_text = ndb.TextProperty(required=True)
     parent_post_id = ndb.StringProperty(required=True)
     created = ndb.DateTimeProperty(auto_now_add=True)
@@ -116,6 +127,7 @@ def comment_key(name='default'):
 class FrontPage(Handler):
     """ Shows the front page/ blogroll """
     def get(self):
+        """ Render the front page and pagination links """
         pagecount = ((post_count() / 10) + 1)
         blogroll = ndb.gql("SELECT * FROM Post ORDER BY created DESC LIMIT 10")
         if self.user():
@@ -129,6 +141,8 @@ class FrontPage(Handler):
 class FrontPaginate(Handler):
     """ next page/numbered page links containing additonal posts for no js """
     def get(self, page_id):
+        """ Uses offset to get further pages if user wants to browse older
+        blog posts. Note this is only if browser javascript is disabled"""
         page_offset = ((int(page_id) * 10) - 10)
         pagecount = ((post_count() / 10) + 1)
         nextroll = ndb.gql("""SELECT * FROM Post ORDER BY created
@@ -142,8 +156,11 @@ class FrontPaginate(Handler):
 
 
 class AutoPager(Handler):
-    """ Gets next page of posts with only bare html for use with jscroll """
+    """ Javascript auto pagination using jscroll to load in next set of
+    posts once the user reaches the bottom of Front page """
     def get(self, page_id):
+        """ Links from autopager only contain bare html that will be inserted
+        into the DOM by jscroll """
         pagecount = ((post_count() / 10) + 1)
         if int(page_id) > pagecount:
             self.render("nextpage.html", no_more_posts=True)
@@ -157,6 +174,7 @@ class AutoPager(Handler):
 class NewPost(Handler):
     """ Page for adding new blog posts """
     def get(self):
+        """ Renders the newpost form with anti-forgery token into the page """
         user = self.user()
         if user:
             self.render("newpost.html", user=user,
@@ -166,13 +184,14 @@ class NewPost(Handler):
             self.render("newpost.html", error=error)
 
     def post(self):
-        """ takes info from forms """
+        """ Take info from forms, verify the request is not forged or expired
+             and add a post to the datastore """
         subject = self.request.get("subject")
         content = self.request.get("content")
         csrf_token = self.request.get("csrf-token")
         user = self.user()
         if subject and content:
-            """ If data fields present, make new Post and add it to the db """
+            # If data fields present, make new Post and add it to the db
             if not user:
                 error = "You must be logged in to post"
                 self.render("newpost.html", subject=subject,
@@ -184,16 +203,17 @@ class NewPost(Handler):
                 self.redirect('/blog/%s' % str(p.key.id()))  # Permalink
                 logging.info("New post created : %s", p.key.id())
         else:
-            """ If all data fields are not present,
-                 report an error and ask for fields again """
+            # If all data fields are not present,
+            # report an error and ask for fields again
             error = "Subject and Content are both required"
             self.render("newpost.html", subject=subject, content=content,
                         error=error, user=user, token=csrf_token_for(user))
 
 
 class PermaLink(Handler):
-    """ For getting existing posts.. """
+    """ Page dedicated to one post and associated comments """
     def get(self, post_id):
+        """ Make sure the link is valid and show the post with comments """
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
         user = self.user()
@@ -212,7 +232,7 @@ class PermaLink(Handler):
                         comment_roll=comment_roll)
 
     def post(self, post_id):
-        """ For adding comments """
+        """ For adding comments. Verify user is valid and add comment to db """
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
         user = self.user()
@@ -243,16 +263,19 @@ class PermaLink(Handler):
                          c.parent_post_id, c.posting_user)
 
 
-""" USER RELATED classes """
+# *** User & Security functions. Below section is very important ***
+# *** and incorporates web security best practices. ***
+# *** If you change this seciton please proceed with caution ***
 
 
 class Secret(ndb.Model):
-    """HMAC Secret Key stored in datastore"""
+    """ HMAC Secret Key stored in datastore. Used to verify session cookies """
     key_string = ndb.StringProperty(required=True)
 
 
 def secret_key():
-    """ Get secret key from datastore. If one does not exist it makes one"""
+    """ Get secret key from datastore. If one does not exist it makes one
+    and the event gets logged since this is an important security event"""
     secret_check = ndb.gql("SELECT key_string FROM Secret")
     key = secret_check.get()
     if key:  # if key is present return it
@@ -269,7 +292,8 @@ SECRET = secret_key()
 
 
 class User(ndb.Model):
-    """ Adds Users DB Table """
+    """ User data model for letting users log in. Passwords are salted then
+    hashed with pbkdf2. Don't change this in """
     username = ndb.StringProperty(required=True)
     user_hash = ndb.StringProperty(required=True)
     salt = ndb.StringProperty(required=True)
@@ -284,17 +308,21 @@ def user_key(name='default'):
 
 
 class Anti_CSRF_token(ndb.Model):
+    """ Anti forgery token embedded in hidden form fields used
+        to ensure the request came from the site and not an external site """
     csrf_sync_token = ndb.StringProperty(required=True)
     associated_user = ndb.StringProperty(required=True)
 
 
 class Reset_token(ndb.Model):
+    """ Password reset token used in email when user forgot their password """
     associated_acct_email = ndb.StringProperty(required=True)
     token_guid = ndb.StringProperty(required=True)
     expires = ndb.DateTimeProperty(required=True)
 
 
 def reset_email(recipient, token):
+    """ Sends email containing a password reset link if user requests it"""
     app_name = app_identity.get_application_id()
     from_address = ("noreply@%s.appspotmail.com" % app_name)
     if os.environ['HTTPS'] == 'off':
@@ -321,7 +349,7 @@ class Login_attempt(ndb.Model):
 
 
 def cookie_hash(value):
-    """Use the secret value with HMAC to prevent cookie tampering"""
+    """Use the secret value with HMAC to prevent session forgery/tampering"""
     hash = hmac.new(SECRET, str(value)).hexdigest()
     hash = str(hash)
     return hash
@@ -432,26 +460,33 @@ EMAIL_RE = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 
 
 def valid_username(username):
+    """ Use USER_RE regex to ensure well-formed username """
     return username and USER_RE.match(username)
 
 
 def valid_password(password):
+    """ Use PASS_RE regex to ensure minimum pass length"""
     return password and PASS_RE.match(password)
 
 
 def valid_email(email):
+    """ Use EMAIL_RE regex to ensure email address is well-formed """
     if EMAIL_RE.match(email):
         return email
 
 
+# *** This is the end of User & Security functions section *** ""
+
+
 class Signup(Handler):
-    """ Registering new user accounts """
+    """ Page used for registering new user accounts """
     def get(self):
-        """Draws registration page"""
+        """ Draws registration page and forms """
         self.render("registration.html")
 
     def post(self):
-        """takes new user info from forms"""
+        """ Take data from forms and verify it is well-formed and not taken
+        then add an account to the datastore """
         username = self.request.get("username")
         password = self.request.get("password")
         verify = self.request.get("verify")
@@ -519,6 +554,7 @@ class Signup(Handler):
 class Welcome(Handler):
     """ Redirect new users here after registering """
     def get(self):
+        """ Check cookie and if it's valid show the page """
         user = self.user()
         if user:
             self.render('welcome.html', user=user)
@@ -529,15 +565,18 @@ class Welcome(Handler):
 class Login(Handler):
     """ Login page """
     def get(self):
-        """ Draw the login form ONLY with HTTP GET """
+        """ Render the login page and form """
         self.render("login.html")
 
     def post(self):
-        """ When user submits the login form """
+        """ If the ip address of the user was
+        recently rate limited, return an error and stop processing.
+        Otherwise take the form and verify the password hash matches
+        the hash in the datastore. """
         user_ip = self.request.remote_addr
         if login_rate_limit(user_ip) == 403:
             return self.error(403)
-        """ Takes login credentials that were input by user """
+        # Takes login credentials that were input by user
         input_username = self.request.get("username")
         input_password = self.request.get("password")
 
@@ -555,7 +594,7 @@ class Login(Handler):
             if hash_input != target_user.user_hash:  # password mismatch
                 break
 
-            """ If user session expired create a new one, otherwise reuse """
+            # If user session expired create a new one, otherwise reuse
             if (target_user.session_expires is None or
                     target_user.session_expires < datetime.datetime.now()):
                 target_user.current_session = session_uuid()
@@ -584,9 +623,12 @@ class Login(Handler):
 class ForgotPassword(Handler):
     """ User uses this form to reset their password via email """
     def get(self):
+        """ Draw the forgot password page and form """
         self.render('forgotpassword.html')
 
     def post(self):
+        """ Verify the email belongs to a user and send them an email
+            with a password reset link """
         email = self.request.get("email")
         forgot_user = ndb.gql("""SELECT * FROM User
                                   WHERE email = '%s'""" % email)
@@ -614,6 +656,8 @@ class ForgotPassword(Handler):
 class ResetPassword(Handler):
     """ Form to enter new password user gets link in email from forgot form """
     def get(self, reset_token):
+        """ Verify the reset link is valid and not used or expired then draw
+            the form. If link is invalid show an error """
         token_query = ndb.gql("""SELECT * FROM Reset_token
                                  WHERE token_guid = '%s'""" % reset_token)
         token = token_query.get()
@@ -624,6 +668,8 @@ class ResetPassword(Handler):
             self.render("resetpassword.html")
 
     def post(self, reset_token):
+        """ Take the form and again make sure the reset token is still unused
+            and valid and let the user create a new password """
         new_pass = self.request.get("password")
         new_pass_verify = self.request.get("verify")
         token_query = ndb.gql("""SELECT * FROM Reset_token
@@ -653,6 +699,7 @@ class ResetPassword(Handler):
 class UpdatePassword(Handler):
     """ Lets logged in users change their password """
     def get(self):
+        """ Verify user has a valid session cookie and draw the form """
         user = self.user()
         if user:
             self.render("updatepass.html", user=user,
@@ -661,6 +708,8 @@ class UpdatePassword(Handler):
             self.redirect('/login')
 
     def post(self):
+        """ Take form inputs and verify they match and user current password
+            hash matches hash on file then update the hash in the datastore """
         user = self.user()
         current_pass = self.request.get("currentpassword")
         new_pass = self.request.get("newpassword")
@@ -702,6 +751,7 @@ class UpdatePassword(Handler):
 class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
     def get(self, username):
+        """ Make sure the user in the url is valid then show their page """
         view_user = ndb.gql("""SELECT * FROM User
                                 WHERE username = '%s'""" % username)
         profileUser = view_user.get()
@@ -721,6 +771,7 @@ class UserPage(Handler):
 class UserRSS(Handler):
     """ Renders RSS feed for each user """
     def get(self, username):
+        """ Make sure the user in url is valid then show their rss feed """
         view_user = ndb.gql("""SELECT * FROM User
                                 WHERE username = '%s'""" % username)
         profileUser = view_user.get()
@@ -736,8 +787,9 @@ class UserRSS(Handler):
 class Manage(Handler):
     """Allows user to edit/delete their own comments & posts"""
     def get(self):
+        """ Verify user is logged in show their manage page """
         user = self.user()
-        if user:  # only load this page if user has a valid login
+        if user:
             user_posts = Post.query(ancestor=blog_key()).filter(
                 Post.posting_user == user)
             posts = user_posts.fetch()
@@ -787,6 +839,7 @@ class EditPost(Handler):
 
 
 class EditComment(Handler):
+    """ Page used to edit comments when user does not have javascript """
     def get(self, comment_id):
         """ If comment owner matches current user draw comment edit form """
         user = self.user()
@@ -819,6 +872,9 @@ class EditComment(Handler):
 class CommentAjax(Handler):
     """ Read JSON request, validates it, updates client with response """
     def post(self):
+        """ Verify user is who they say they are with cookie then update
+        the comment in the datastore and send a response with the new comment
+        text to load into the DOM """
         user = self.user()
         request_data = json.loads(self.request.body)
         target_comment = int(request_data['comment_id'])
@@ -867,6 +923,8 @@ class DeletePost(Handler):
 class Logout(Handler):
     """Logout Behavior"""
     def post(self):
+        """ Check if user is logged in and purge their session from the
+            datastore if they are, then redirect to front page """
         if self.user():
             user_query = ndb.gql("""SELECT * FROM User WHERE
                                      username = '%s'""" % self.user())
@@ -881,12 +939,14 @@ class Logout(Handler):
         self.redirect("/blog")
 
 
-""" CRON & maintainance task handlers (see cron.yaml) """
+#  CRON & maintainance task handlers (see cron.yaml)
 
 
 class CleanupComments(Handler):
     """ Removes comments from the datastore if parent post has been removed """
     def get(self):
+        """ Get every comment in the datastore and make sure they have parents.
+            If the parent does not exist, remove the comment """
         all_comments = ndb.gql("SELECT * FROM Comment")
         for comment in all_comments:
             parent_post_key = ndb.Key(
@@ -899,6 +959,8 @@ class CleanupComments(Handler):
 class CleanupRateLimiter(Handler):
     """ Remove login rate limiting if IPs haven't attempted recently """
     def get(self):
+        """ Check all rate limited ips and if no activity from them
+            in the last 2 hours, remove the rate limiting for that ip """
         limited_ips = ndb.gql("SELECT * FROM Login_attempt")
         for offender in limited_ips:
             if (offender.last_attempt <
@@ -909,6 +971,8 @@ class CleanupRateLimiter(Handler):
 class PurgeResetTokens(Handler):
     """ Remove reset tokens that have been used or expired """
     def get(self):
+        """ Check all reset tokens and if they are past their expiration time,
+            remove them from the datastore """
         reset_tokens = ndb.gql("SELECT * FROM Reset_token")
         for token in reset_tokens:
             if token.expires < datetime.datetime.now():
