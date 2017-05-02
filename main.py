@@ -74,7 +74,7 @@ class Post(ndb.Model):
         """ Show first part of long posts to not clutter manage and front """
         escaped_post = jinja2.escape(self.content)
         marked_up_post = escaped_post.replace('\n', jinja2.Markup('<br>'))
-        if (len(marked_up_post) > 1000):
+        if len(marked_up_post) > 1000:
             self._render_text = marked_up_post[:1000]
             return render_str("previewpost.html", p=self)
         else:
@@ -138,7 +138,7 @@ class FrontPaginate(Handler):
                         pagecount=pagecount, page_id=int(page_id))
         else:
             self.render('front.html', blogroll=nextroll,
-                        pagecount=pagecount,  page_id=int(page_id))
+                        pagecount=pagecount, page_id=int(page_id))
 
 
 class AutoPager(Handler):
@@ -308,7 +308,7 @@ def reset_email(recipient, token):
               %s://%s/resetpassword/%s
 
               This link is only valid for 15 minutes.""" % (
-              url_protocol, HOST_NAME, token)
+                  url_protocol, HOST_NAME, token)
     mail.send_mail(sender=from_address, to=recipient,
                    subject="Blog password reset requested", body=body)
 
@@ -340,7 +340,7 @@ def valid_user(cookie_str):
                              % cookie_parts[0])
         current_user = user_query.get()
         if (current_user and
-           datetime.datetime.now() < current_user.session_expires):
+                datetime.datetime.now() < current_user.session_expires):
             current_user.session_expires = (datetime.datetime.now() +
                                             datetime.timedelta(hours=1))
             current_user.put()
@@ -397,7 +397,7 @@ def csrf_token_for(username):
 def load_comments(post_id):
     """ Returns all comments associated with specific post """
     comment_query = Comment.query(ancestor=comment_key()).filter(
-                                  Comment.parent_post_id == post_id)
+        Comment.parent_post_id == post_id)
     comments = comment_query.fetch()
     sorted_comments = sorted(comments, key=lambda comment: comment.created,
                              reverse=True)
@@ -408,16 +408,17 @@ def login_rate_limit(ip_address):
     """ Prevents repetitive login attacks by limiting logins from one ip """
     check_attempt_query = ndb.gql("""SELECT * FROM Login_attempt
                                       WHERE ip_addr = '%s'""" % ip_address)
-    attempted_prev_login = check_attempt_query.get()
-    if attempted_prev_login:
-        attempts_so_far = attempted_prev_login.attempt_count
-        if (attempts_so_far >= 10 and (datetime.datetime.now() <=
-           attempted_prev_login.last_attempt + datetime.timedelta(minutes=1))):
-                logging.info("IP %s is limited on login attempts", ip_address)
-                return 403  # Too many attempts.
-        attempted_prev_login.attempt_count += 1
-        attempted_prev_login.last_attempt = datetime.datetime.now()
-        attempted_prev_login.put()
+    recent_attempt = check_attempt_query.get()
+    if recent_attempt:
+        attempts_so_far = recent_attempt.attempt_count
+        if (attempts_so_far >= 10 and
+                (datetime.datetime.now() <=
+                 recent_attempt.last_attempt+datetime.timedelta(minutes=1))):
+            logging.info("IP %s is limited on login attempts", ip_address)
+            return 403  # Too many attempts.
+        recent_attempt.attempt_count += 1
+        recent_attempt.last_attempt = datetime.datetime.now()
+        recent_attempt.put()
     else:  # if user has not attempted to login prevoiusly
         attempt = Login_attempt(ip_addr=ip_address,
                                 last_attempt=datetime.datetime.now(),
@@ -508,9 +509,9 @@ class Signup(Handler):
                     csrf_sync_token=new_csrf_token())
                 anti_forgery_token.put()
                 self.response.headers.add_header(
-                  'Set-Cookie', 'Session= %s|%s Path=/'
-                  % (str(u.current_session), (cookie_hash
-                     (u.current_session))))
+                    'Set-Cookie', 'Session= %s|%s Path=/'
+                    % (str(u.current_session), (cookie_hash
+                                                (u.current_session))))
                 logging.info("New user account created: %s", username)
                 self.render('welcome.html', user=u.username)
 
@@ -556,7 +557,7 @@ class Login(Handler):
 
             """ If user session expired create a new one, otherwise reuse """
             if (target_user.session_expires is None or
-               target_user.session_expires < datetime.datetime.now()):
+                    target_user.session_expires < datetime.datetime.now()):
                 target_user.current_session = session_uuid()
                 csrf_token_query = ndb.gql("""
                            SELECT * FROM Anti_CSRF_token WHERE
@@ -569,10 +570,10 @@ class Login(Handler):
             target_user.put()
 
             self.response.headers.add_header(
-              'Set-Cookie',
-              'Session= %s|%s Path=/'
-              % (str(target_user.current_session),
-                 (cookie_hash(target_user.current_session))))
+                'Set-Cookie',
+                'Session= %s|%s Path=/'
+                % (str(target_user.current_session),
+                   (cookie_hash(target_user.current_session))))
             logging.info("Login successful: %s", input_username)
             return self.render('welcome.html', user=target_user.username)
 
@@ -638,7 +639,7 @@ class ResetPassword(Handler):
             error = "The password you entered is invalid. Please try another"
             self.render("resetpassword.html", error=error)
         if (new_pass == new_pass_verify and valid_password(new_pass) and
-           token.expires > datetime.datetime.now()):  # valid token and pass
+                token.expires > datetime.datetime.now()):
             userquery = ndb.gql("""SELECT * FROM User WHERE email =
             '%s'""" % token.associated_acct_email)
             user = userquery.get()
@@ -669,7 +670,7 @@ class UpdatePassword(Handler):
         if user is None:
             return self.redirect("/login")
         if (user and valid_password(new_pass) and
-           verify_new == new_pass and csrf_token == csrf_token_for(user)):
+                verify_new == new_pass and csrf_token == csrf_token_for(user)):
             username = user
             userquery = ndb.gql("""SELECT * FROM User
                                     WHERE username = '%s'""" % username)
@@ -687,8 +688,9 @@ class UpdatePassword(Handler):
             user.put()
             logging.info("Password updated for user: %s", user.username)
             self.response.set_cookie(
-                  'Session', ('%s|%s' % (str(new_session),
-                              cookie_hash(new_session))), overwrite=True)
+                'Session',
+                ('%s|%s' % (str(new_session),
+                            cookie_hash(new_session))), overwrite=True)
             return self.render("updatepass.html", user=username, updated=True)
         if new_pass != verify_new:
             params['error_mismatch'] = "Passwords did not match."
@@ -737,13 +739,13 @@ class Manage(Handler):
         user = self.user()
         if user:  # only load this page if user has a valid login
             user_posts = Post.query(ancestor=blog_key()).filter(
-                                          Post.posting_user == user)
+                Post.posting_user == user)
             posts = user_posts.fetch()
             sorted_posts = sorted(posts,
                                   key=lambda post: post.created,
                                   reverse=True)
             user_comments = Comment.query(ancestor=comment_key()).filter(
-                                          Comment.posting_user == user)
+                Comment.posting_user == user)
             comments = user_comments.fetch()
             sorted_comments = sorted(comments,
                                      key=lambda comment: comment.created,
@@ -806,7 +808,7 @@ class EditComment(Handler):
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
             if (comment.posting_user == user and
-               csrf_token == csrf_token_for(user)):
+                    csrf_token == csrf_token_for(user)):
                 comment.comment_text = content
                 comment.put()
                 self.redirect('/blog/%s' % str(comment.parent_post_id))
@@ -824,12 +826,12 @@ class CommentAjax(Handler):
         comment_to_update = Comment.get_by_id(target_comment,
                                               parent=comment_key())
         if (comment_to_update.posting_user == user and
-           submitted_csrf_token == csrf_token_for(user)):
+                submitted_csrf_token == csrf_token_for(user)):
             new_comment_text = (request_data['new_text'])
             comment_to_update.comment_text = new_comment_text
             comment_to_update.put()
             self.response.out.write(json.dumps((
-                                    {'new_text': new_comment_text})))
+                {'new_text': new_comment_text})))
 
 
 class DeletePost(Handler):
@@ -888,7 +890,7 @@ class CleanupComments(Handler):
         all_comments = ndb.gql("SELECT * FROM Comment")
         for comment in all_comments:
             parent_post_key = ndb.Key(
-             'Post', int(comment.parent_post_id), parent=blog_key())
+                'Post', int(comment.parent_post_id), parent=blog_key())
             parent_post = parent_post_key.get()
             if parent_post is None:
                 comment.key.delete()
@@ -900,8 +902,8 @@ class CleanupRateLimiter(Handler):
         limited_ips = ndb.gql("SELECT * FROM Login_attempt")
         for offender in limited_ips:
             if (offender.last_attempt <
-               datetime.datetime.now() - datetime.timedelta(hours=2)):
-                    offender.key.delete()
+                    datetime.datetime.now() - datetime.timedelta(hours=2)):
+                offender.key.delete()
 
 
 class PurgeResetTokens(Handler):
@@ -937,5 +939,4 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/tasks/orphan-comments', CleanupComments),
                                ('/tasks/de-ratelimit', CleanupRateLimiter),
                                ('/tasks/old-reset-tokens', PurgeResetTokens),
-                               ],
-                              debug=True,)
+                               ], debug=True,)
