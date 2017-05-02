@@ -3,13 +3,14 @@
     <div class="post-title">
       <a href="/blog/{{p.key.id()}}">{{p.subject}}</a>
     </div>
+    <div class="post-subheading">
+      <div class="post-author">
+        Posted by:<a class="author-link" href="/users/{{p.posting_user}}">{{p.posting_user}}</a>
+      </div>
 
-    <div class="post-author">
-      Posted by:<a href="/users/{{p.posting_user}}">{{p.posting_user}}</a>
-    </div>
-
-    <div class="post-date">
-      {{p.created.strftime("%b %d, %Y")}}
+      <div class="post-date">
+        {{p.created.strftime("%b %d, %Y")}}
+      </div>
     </div>
 
   </div>

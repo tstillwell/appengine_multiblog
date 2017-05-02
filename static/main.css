@@ -72,22 +72,42 @@ input[type=submit] {
     border-bottom: 3px solid #666;
 }
 
+.post-subheading {
+    background-color: #ddd;
+}
+
 .post-title {
     font-size: 2em;
     font-weight: bold;
+    background-color: #667799;
+    padding-right: 3vw;
+    padding-left: 1.5vw;
+    padding-bottom: 0.5vh;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
 }
 
 .post-title > a {
-  color: #667799;
   text-decoration: none;
+  color: #fff;
+}
+
+.post-author {
+  padding-left: 0.5vw;
+}
+
+.author-link {
+  text-decoration: none;
+  color: #1930E0;
+  font-weight: bold;
+  margin-left: 0.2vw;
 }
 
 .post-date {
     position: absolute;
     right: 0px;
     bottom: 0px;
-    color: #999;
-
+    padding-right: 0.5vw;
 }
 
 .post-content {
@@ -130,7 +150,7 @@ input[name=email] {
 }
 
 .post {
-  padding: 1em 2em 4em 1em;
+  padding: 1em 1em 4em 1em;
   background-color: #fff;
   border-radius: 2.2em;
   box-shadow: rgba(0, 0, 0, 0.31) 0 1em 1.8em 0;
