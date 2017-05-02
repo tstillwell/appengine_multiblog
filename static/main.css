@@ -189,6 +189,14 @@ input[name=email] {
   display: none;
 }
 
+.userpage-title  {
+  margin-top: 0;
+}
+
+.userpage-header {
+  margin-bottom: 1vh;
+}
+
 @media(max-width:767px){
 
   .post-content {

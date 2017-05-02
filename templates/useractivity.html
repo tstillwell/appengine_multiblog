@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <br>
-<h3> Recent Activity for {{view_user.username}} </h3>
+<div class="userpage-header">
+<h3 class="userpage-title"> Recent Posts from {{view_user.username}} </h3>
+<a class="btn btn-default rss-btn" href="/users/{{view_user.username}}/rss">
+  Feed
+</a>
+</div>
+<br>
 {% for post in post_roll %}
   {{post.peek() | safe}}
 {% endfor %}
