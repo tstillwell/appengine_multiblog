@@ -19,7 +19,6 @@ from google.appengine.ext import ndb
 from google.appengine.api import app_identity
 from google.appengine.api import mail
 
-# point to jinja template dir
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 JINJA_ENV = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR),
                                autoescape=True)  # always autoescape
@@ -28,8 +27,8 @@ HOST_NAME = os.environ['HTTP_HOST']  # The current host name of the app
 
 def render_str(template, **params):
     """ Passes data from application into jinja templates to render pages"""
-    t = JINJA_ENV.get_template(template)
-    return t.render(params)
+    template_page = JINJA_ENV.get_template(template)
+    return template_page.render(params)
 
 
 class Handler(webapp2.RequestHandler):
@@ -43,8 +42,8 @@ class Handler(webapp2.RequestHandler):
 
     def render_str(self, template, **params):
         """ Used to inject the info into the templates """
-        t = JINJA_ENV.get_template(template)
-        return t.render(params)
+        template_page = JINJA_ENV.get_template(template)
+        return template_page.render(params)
 
     def render(self, template, **kw):
         """ Fills data into the template and writes as response"""
@@ -197,11 +196,11 @@ class NewPost(Handler):
                 self.render("newpost.html", subject=subject,
                             content=content, error=error)
             if user and csrf_token == csrf_token_for(user):
-                p = Post(parent=blog_key(), subject=subject,
-                         content=content, posting_user=user)
-                p.put()
-                self.redirect('/blog/%s' % str(p.key.id()))  # Permalink
-                logging.info("New post created : %s", p.key.id())
+                blog_post = Post(parent=blog_key(), subject=subject,
+                                 content=content, posting_user=user)
+                blog_post.put()
+                self.redirect('/blog/%s' % str(blog_post.key.id()))
+                logging.info("New post created : %s", blog_post.key.id())
         else:
             # If all data fields are not present,
             # report an error and ask for fields again
@@ -252,15 +251,14 @@ class PermaLink(Handler):
                         comment_roll=comment_roll, error=error)
             return
         if user and csrf_token == csrf_token_for(user):
-            c = Comment(parent=comment_key(), comment_text=comment_text,
-                        posting_user=user,
-                        parent_post_id=parent_post_id)
-            c.put()
+            comment = Comment(parent=comment_key(), comment_text=comment_text,
+                              posting_user=user, parent_post_id=parent_post_id)
+            comment.put()
             comment_roll = load_comments(post_id)
             self.render("permalink.html", post=post, user=user,
                         comment_roll=comment_roll, token=csrf_token_for(user))
             logging.info("New comment added to post [%s] by user: %s",
-                         c.parent_post_id, c.posting_user)
+                         comment.parent_post_id, comment.posting_user)
 
 
 # *** User & Security functions. Below section is very important ***
@@ -307,14 +305,14 @@ def user_key(name='default'):
     return ndb.Key('users', name)
 
 
-class Anti_CSRF_token(ndb.Model):
+class AntiCsrfToken(ndb.Model):
     """ Anti forgery token embedded in hidden form fields used
         to ensure the request came from the site and not an external site """
     csrf_sync_token = ndb.StringProperty(required=True)
     associated_user = ndb.StringProperty(required=True)
 
 
-class Reset_token(ndb.Model):
+class ResetToken(ndb.Model):
     """ Password reset token used in email when user forgot their password """
     associated_acct_email = ndb.StringProperty(required=True)
     token_guid = ndb.StringProperty(required=True)
@@ -341,7 +339,7 @@ def reset_email(recipient, token):
                    subject="Blog password reset requested", body=body)
 
 
-class Login_attempt(ndb.Model):
+class LoginAttempt(ndb.Model):
     """ Keeps track of login attempts for rate limiting """
     ip_addr = ndb.StringProperty(required=True)
     last_attempt = ndb.DateTimeProperty(required=True)
@@ -416,7 +414,7 @@ def new_csrf_token():
 
 def csrf_token_for(username):
     """ Return the users anti CSRF token to embed in html forms """
-    query = ndb.gql("""SELECT * FROM Anti_CSRF_token
+    query = ndb.gql("""SELECT * FROM AntiCsrfToken
                        WHERE associated_user = '%s'""" % username)
     csrf_token = query.get()
     return csrf_token.csrf_sync_token
@@ -434,7 +432,7 @@ def load_comments(post_id):
 
 def login_rate_limit(ip_address):
     """ Prevents repetitive login attacks by limiting logins from one ip """
-    check_attempt_query = ndb.gql("""SELECT * FROM Login_attempt
+    check_attempt_query = ndb.gql("""SELECT * FROM LoginAttempt
                                       WHERE ip_addr = '%s'""" % ip_address)
     recent_attempt = check_attempt_query.get()
     if recent_attempt:
@@ -448,9 +446,9 @@ def login_rate_limit(ip_address):
         recent_attempt.last_attempt = datetime.datetime.now()
         recent_attempt.put()
     else:  # if user has not attempted to login prevoiusly
-        attempt = Login_attempt(ip_addr=ip_address,
-                                last_attempt=datetime.datetime.now(),
-                                attempt_count=1)
+        attempt = LoginAttempt(ip_addr=ip_address,
+                               last_attempt=datetime.datetime.now(),
+                               attempt_count=1)
         attempt.put()
 
 
@@ -534,21 +532,21 @@ class Signup(Handler):
                 current_session = session_uuid()
                 session_expires = (datetime.datetime.now() +
                                    datetime.timedelta(hours=1))
-                u = User(parent=user_key(), username=username,
-                         email=email, user_hash=user_hash,
-                         salt=salt, current_session=current_session,
-                         session_expires=session_expires)
-                u.put()  # Put this person into the db
-                anti_forgery_token = Anti_CSRF_token(
+                account = User(parent=user_key(), username=username,
+                               email=email, user_hash=user_hash,
+                               salt=salt, current_session=current_session,
+                               session_expires=session_expires)
+                account.put()  # Put this person into the db
+                anti_forgery_token = AntiCsrfToken(
                     associated_user=username,
                     csrf_sync_token=new_csrf_token())
                 anti_forgery_token.put()
                 self.response.headers.add_header(
                     'Set-Cookie', 'Session= %s|%s Path=/'
-                    % (str(u.current_session), (cookie_hash
-                                                (u.current_session))))
+                    % (str(account.current_session),
+                       (cookie_hash(account.current_session))))
                 logging.info("New user account created: %s", username)
-                self.render('welcome.html', user=u.username)
+                self.render('welcome.html', user=account.username)
 
 
 class Welcome(Handler):
@@ -599,7 +597,7 @@ class Login(Handler):
                     target_user.session_expires < datetime.datetime.now()):
                 target_user.current_session = session_uuid()
                 csrf_token_query = ndb.gql("""
-                           SELECT * FROM Anti_CSRF_token WHERE
+                           SELECT * FROM AntiCsrfToken WHERE
                            associated_user = '%s'""" % target_user.username)
                 users_token = csrf_token_query.get()
                 users_token.csrf_sync_token = new_csrf_token()
@@ -644,9 +642,9 @@ class ForgotPassword(Handler):
             token_expires = (datetime.datetime.now() +
                              datetime.timedelta(minutes=15))
             acct_email = target_user.email
-            token_for_db = Reset_token(associated_acct_email=acct_email,
-                                       token_guid=reset_token_uuid,
-                                       expires=token_expires)
+            token_for_db = ResetToken(associated_acct_email=acct_email,
+                                      token_guid=reset_token_uuid,
+                                      expires=token_expires)
             token_for_db.put()
             reset_email(acct_email, reset_token_uuid)
             sent_email = True
@@ -658,7 +656,7 @@ class ResetPassword(Handler):
     def get(self, reset_token):
         """ Verify the reset link is valid and not used or expired then draw
             the form. If link is invalid show an error """
-        token_query = ndb.gql("""SELECT * FROM Reset_token
+        token_query = ndb.gql("""SELECT * FROM ResetToken
                                  WHERE token_guid = '%s'""" % reset_token)
         token = token_query.get()
         if not token or token.expires < datetime.datetime.now():
@@ -672,7 +670,7 @@ class ResetPassword(Handler):
             and valid and let the user create a new password """
         new_pass = self.request.get("password")
         new_pass_verify = self.request.get("verify")
-        token_query = ndb.gql("""SELECT * FROM Reset_token
+        token_query = ndb.gql("""SELECT * FROM ResetToken
                                  WHERE token_guid = '%s'""" % reset_token)
         token = token_query.get()
         if not token or token.expires < datetime.datetime.now():
@@ -754,17 +752,17 @@ class UserPage(Handler):
         """ Make sure the user in the url is valid then show their page """
         view_user = ndb.gql("""SELECT * FROM User
                                 WHERE username = '%s'""" % username)
-        profileUser = view_user.get()
-        if not profileUser:
+        profile_user = view_user.get()
+        if not profile_user:
             self.error(404)
             return
         post_roll = ndb.gql("""SELECT * FROM Post WHERE posting_user = '%s'
                                 ORDER BY created DESC""" % username)
         if self.user():
-            self.render("useractivity.html", view_user=profileUser,
+            self.render("useractivity.html", view_user=profile_user,
                         post_roll=post_roll, user=self.user())
         else:
-            self.render("useractivity.html", view_user=profileUser,
+            self.render("useractivity.html", view_user=profile_user,
                         post_roll=post_roll)
 
 
@@ -774,13 +772,13 @@ class UserRSS(Handler):
         """ Make sure the user in url is valid then show their rss feed """
         view_user = ndb.gql("""SELECT * FROM User
                                 WHERE username = '%s'""" % username)
-        profileUser = view_user.get()
-        if not profileUser:
+        profile_user = view_user.get()
+        if not profile_user:
             self.error(404)
             return
         post_roll = ndb.gql("""SELECT * FROM Post WHERE posting_user = '%s'
                                 ORDER BY created DESC LIMIT 10""" % username)
-        self.render("userrss.xml", requested_user=profileUser,
+        self.render("userrss.xml", requested_user=profile_user,
                     blog_roll=post_roll, host=HOST_NAME)
 
 
@@ -961,7 +959,7 @@ class CleanupRateLimiter(Handler):
     def get(self):
         """ Check all rate limited ips and if no activity from them
             in the last 2 hours, remove the rate limiting for that ip """
-        limited_ips = ndb.gql("SELECT * FROM Login_attempt")
+        limited_ips = ndb.gql("SELECT * FROM LoginAtempt")
         for offender in limited_ips:
             if (offender.last_attempt <
                     datetime.datetime.now() - datetime.timedelta(hours=2)):
@@ -973,7 +971,7 @@ class PurgeResetTokens(Handler):
     def get(self):
         """ Check all reset tokens and if they are past their expiration time,
             remove them from the datastore """
-        reset_tokens = ndb.gql("SELECT * FROM Reset_token")
+        reset_tokens = ndb.gql("SELECT * FROM ResetToken")
         for token in reset_tokens:
             if token.expires < datetime.datetime.now():
                 token.key.delete()
