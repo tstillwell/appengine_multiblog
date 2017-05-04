@@ -343,9 +343,8 @@ class LoginAttempt(ndb.Model):
 
 def cookie_hash(value):
     """Use the secret value with HMAC to prevent session forgery/tampering"""
-    hash = hmac.new(SECRET, str(value)).hexdigest()
-    hash = str(hash)
-    return hash
+    session_digest = str(hmac.new(SECRET, str(value)).hexdigest())
+    return session_digest
 
 
 def valid_user(cookie_str):
@@ -395,8 +394,7 @@ def new_hash(user_entity, new_password):
 
 def session_uuid():
     """ Make a new UUID for logged-in session tokens """
-    new_uuid = uuid.uuid4()
-    new_uuid = str(new_uuid)
+    new_uuid = str(uuid.uuid4())
     return new_uuid
 
 
@@ -937,7 +935,7 @@ class Logout(Handler):
 
 class CleanupComments(Handler):
     """ Removes comments from the datastore if parent post has been removed """
-    def get(self):
+    def get():
         """ Get every comment in the datastore and make sure they have parents.
             If the parent does not exist, remove the comment """
         all_comments = ndb.gql("SELECT * FROM Comment")
@@ -983,7 +981,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/welcome', Welcome),
                                ('/login', Login),
                                ('/forgot-password', ForgotPassword),
-                               ('/resetpassword/([a-f\d\-]+)', ResetPassword),
+                               (r'/resetpassword/([a-f\d\-]+)', ResetPassword),
                                ('/logout', Logout),
                                ('/users/([a-zA-Z0-9-]+)', UserPage),
                                ('/users/([a-zA-Z0-9-]+)/rss', UserRSS),
