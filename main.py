@@ -40,14 +40,9 @@ class Handler(webapp2.RequestHandler):
         """ write data to HTTP response used for render and testing """
         self.response.out.write(*a, **kw)
 
-    def render_str(self, template, **params):
-        """ Used to inject the info into the templates """
-        template_page = JINJA_ENV.get_template(template)
-        return template_page.render(params)
-
     def render(self, template, **kw):
         """ Fills data into the template and writes as response"""
-        self.write(self.render_str(template, **kw))
+        self.write(render_str(template, **kw))
 
     def cookie(self):
         """Used by child classes to get the current Session cookie"""
