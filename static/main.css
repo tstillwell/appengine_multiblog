@@ -1,9 +1,9 @@
 body {
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: 'Montserrat', arial, sans-serif;
     font-size: 14px;
     margin: 0 auto;
     padding: 10px;
-    color: #333;
+    color: #242424;
     background-color: #f5f5f5;
     overflow-y: scroll;
 }
@@ -49,9 +49,10 @@ input[type=submit] {
 }
 
 .main-title {
+    font-family: 'Kanit', sans-serif;
     display: block;
     color: #222;
-    font-size: 40px;
+    font-size: 44px;
     font-weight: bold;
     text-align: center;
     margin-bottom: 30px;
@@ -137,6 +138,7 @@ input[name=email] {
 
 .navbar{
   background-color: #fff;
+  font-family: 'Kanit', sans-serif;
 }
 
 .navbar-btn {
