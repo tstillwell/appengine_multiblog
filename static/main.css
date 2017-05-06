@@ -69,20 +69,22 @@ input[type=submit] {
 
 .post-heading {
     position: relative;
-    border-bottom: 3px solid #666;
+    border-bottom: 1px solid #666;
 }
 
 .post-subheading {
     background-color: #ddd;
+    padding-left: 1vw;
 }
 
 .post-title {
     font-size: 2em;
     font-weight: bold;
-    background-color: #667799;
-    padding-right: 3vw;
-    padding-left: 1.5vw;
-    padding-bottom: 0.5vh;
+    background-color: #19436c;
+    padding-top: 1vh;
+    padding-right: 1vw;
+    padding-left: 1vw;
+    padding-bottom: 2vh;
     border-top-left-radius: 0.5em;
     border-top-right-radius: 0.5em;
 }
@@ -92,13 +94,9 @@ input[type=submit] {
   color: #fff;
 }
 
-.post-author {
-  padding-left: 0.5vw;
-}
-
 .author-link {
   text-decoration: none;
-  color: #1930E0;
+  color: #042442;
   font-weight: bold;
   margin-left: 0.2vw;
 }
@@ -107,12 +105,14 @@ input[type=submit] {
     position: absolute;
     right: 0px;
     bottom: 0px;
-    padding-right: 0.5vw;
+    padding-right: 1vw;
 }
 
 .post-content {
     margin-top: 5px;
-    font-size: 1.4em;;
+    padding: 1vw;
+    min-height: 15vh;
+    font-size: 16px;
 }
 
 input[name=username] {
@@ -150,9 +150,8 @@ input[name=email] {
 }
 
 .post {
-  padding: 1em 1em 4em 1em;
   background-color: #fff;
-  border-radius: 2.2em;
+  border-radius: 2em;
   box-shadow: rgba(0, 0, 0, 0.31) 0 1em 1.8em 0;
   margin-bottom: 3em;
 }
