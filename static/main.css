@@ -79,7 +79,7 @@ input[type=submit] {
 }
 
 .post-title {
-    font-size: 2em;
+    font-size: 1.55em;
     font-weight: bold;
     background-color: #19436c;
     padding-top: 1vh;
@@ -139,6 +139,7 @@ input[name=email] {
 .navbar{
   background-color: #fff;
   font-family: 'Kanit', sans-serif;
+  font-size: 16px;
 }
 
 .navbar-btn {
