@@ -221,8 +221,21 @@ input[name=email] {
 
 @media(max-width:767px){
 
+  .post-title {
+    padding: 1em;
+  }
+
+  .post-subheading {
+    padding: 1.5em;
+  }
+
+  .post-date {
+    padding-right: 1.5em;
+  }
+
   .post-content {
     font-size: 1.2em;
+    margin: 1em;
   }
 
   input[type=text] {
@@ -241,8 +254,21 @@ input[name=email] {
 
 @media(min-width:768px) and (max-width: 980px){
 
+  .post-title {
+    padding: 1em;
+  }
+
+  .post-subheading {
+    padding: 1.5em;
+  }
+
   .post-content {
     font-size: 1.25em;
+    margin: 1em;
+  }
+
+  .post-date {
+    padding-right: 1.5em;
   }
 
   input[type=text] {
