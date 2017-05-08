@@ -109,7 +109,9 @@ class Comment(ndb.Model):
 
     def render(self):
         """ Draws comments """
-        self._render_text = self.comment_text.replace('\n', '<br>')
+        escapedcomment = jinja2.escape(self.comment_text)
+        marked_up_comment = escapedcomment.replace('\n', jinja2.Markup('<br>'))
+        self._render_text = marked_up_comment
         return render_str("comment.html", c=self)
 
 
