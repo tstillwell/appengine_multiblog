@@ -9,8 +9,11 @@ and post directly to the front page out of the box.
 It uses Google's App Engine platform and runs on the standard (free) environment
 and can be deployed to app engine in less than a mintue.
 
+Navigate to where the project lives on your system in your terminal and run:
 
+`gcloud app deploy app.yaml index.yaml cron.yaml`
 
+##Features
 Each user gets their own page and RSS feed containing their posts.
 The users can edit or delete their posts at any time.
 
@@ -23,21 +26,21 @@ The blog is easily customizable with css.
 
 There are several security features built in to prevent hijacking and abuse.
 
-#Built with help from
+##Built with help from
 
-####Google App Engine
+###Google App Engine
 http://cloud.google.com/appengine/
 
-####Bootstrap
+###Bootstrap
 http://getbootstrap.com
 
-####Glyphicons
+###Glyphicons
 http://glyphicons.com
 
-####jQuery
+###jQuery
 http://jquery.com/
 
-####jScroll
+###jScroll
 https://github.com/pklauzinski/jscroll
 http://jscroll.com/
 
@@ -47,7 +50,7 @@ http://jscroll.com/
  http://www.opensource.org/licenses/mit-license.php
  http://www.gnu.org/licenses/gpl-2.0.html
 
-#LICENSE Info
+##LICENSE Info
 Copyright 2017 T. Stillwell
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
