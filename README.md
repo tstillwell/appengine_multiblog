@@ -14,22 +14,38 @@ Navigate to where the project lives on your system in your terminal and run:
 `gcloud app deploy app.yaml index.yaml cron.yaml`
 
 ## Features
+
+Builtin HTTPS/SSL support.
+
+Easy account registration.
+
+Session management via cookies with HMAC signing.
+
 Each user gets their own page and RSS feed containing their posts.
+
 The users can edit or delete their posts at any time.
 
-Commenting is built in to the app and does not require external services.
-
+Commenting is built in to the site and does not require external services.
 
 It uses javascript for visual enhancements but degrades gracefully if users have javascript disabled.
 
 The blog is easily customizable with css.
 
-There are several security features built in to prevent hijacking and abuse.
+Custom pages and features can be created and existing structure modified using jinja2 templates and simple python.
+
+Several security features built in to prevent hijacking and abuse.
+
+Password resets via email.
+
+
 
 ## Built with help from
 
 ### Google App Engine
 http://cloud.google.com/appengine/
+
+### Jinja
+http://jinja.pocoo.org/
 
 ### Bootstrap
 http://getbootstrap.com
@@ -49,6 +65,10 @@ http://jscroll.com/
  http://jscroll.com/#license
  http://www.opensource.org/licenses/mit-license.php
  http://www.gnu.org/licenses/gpl-2.0.html
+
+### Python PBKDF2 library
+ pbkdf2 - PKCS#5 v2.0 Password-Based Key Derivation
+ Copyright (C) 2007-2011 Dwayne C. Litzenberger <dlitz@dlitz.net>
 
 ## LICENSE Info
 Copyright 2017 T. Stillwell
