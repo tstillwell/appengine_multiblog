@@ -13,6 +13,8 @@ Navigate to where the project lives on your system in your terminal and run:
 
 `gcloud app deploy app.yaml index.yaml cron.yaml`
 
+If you want to customize and test the app before deploying it to app engine you need to use the App Engine SDK which includes a local development server so you can check your changes locally before pushing the code to production. For more info see the Setup Info section below.
+
 ## Features
 
 Builtin HTTPS/SSL support.
@@ -36,6 +38,25 @@ Custom pages and features can be created and existing structure modified using j
 Several security features built in to prevent hijacking and abuse.
 
 Password resets via email.
+
+## Setup Info
+If you are unfamiliar with google app engine, it is a Platform as a Service (PaaS) that runs on Google's cloud infrastructure.
+
+App Engine supports multiple languages and build types- this app uses what is known as the Python Standard Environment (as opposed to the flexible environment)
+
+The standard environment uses Python 2.7
+
+While deploying the application to app engine works with only the gcloud command line tool and the code in this repo, you will probably want to customize it first.
+
+To customize the app and test it locally you first need to have Python 2.7 installed, then install the Google Cloud SDK and the App Engine extension for python
+
+To get the SDK follow the guide here:
+
+https://cloud.google.com/appengine/docs/standard/python/download
+
+There is more general info on Google App engine available here:
+https://cloud.google.com/appengine/
+
 
 
 
