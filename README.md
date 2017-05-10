@@ -57,6 +57,47 @@ https://cloud.google.com/appengine/docs/standard/python/download
 There is more general info on Google App engine available here:
 https://cloud.google.com/appengine/
 
+## Code & Technical info
+The application uses the webapp2 framework. It creates WSGI application instances that map URLs to Request Handlers.
+
+This map is visible in main.py as the 'app' variable and looks like this:
+
+```
+ ('/', MainPage),
+ ('/blog/?', FrontPage),
+ ('/blog/newpost', NewPost),
+ ('/blog/([0-9]+)', PermaLink),
+ ('/signup', Signup),
+
+```
+
+There are two seperate parts of each value in this map.
+ `('/blog/?', FrontPage)`
+
+The values to the left are the URL paths
+ `'/blog/?'`
+
+and the values on the right are the class names that handle HTTP requests to those paths.
+
+`FrontPage`
+
+So whenever an HTTP request from a client is received for /blog , an instance of FrontPage is used to generate a response.
+
+```
+class FrontPage(Handler):
+    def get(self):
+		...do stuff...
+        if self.user():
+           ...do stuff if user is logged in...
+        else:
+           ...do stuff if user is not logged in...
+
+
+```
+
+for each class, seperate GET and POST handlers are defined so the app can respond to the requests appropriately.
+
+Using this paradigm, it is simple to add a new part to the URL mapping and build new classes to handle different app functions.
 
 
 
