@@ -99,6 +99,13 @@ for each class, seperate GET and POST handlers are defined so the app can respon
 
 Using this paradigm, it is simple to add a new part to the URL mapping and build new classes to handle different app functions.
 
+HTML pages are created by using self.render() with
+the jinja template as the first argument and any variables needed by the templates as the other arguments.
+
+The templates are stored in the *templates* directory of the project and use the Jinja template engine.
+
+For more info on how to use Jinja, see the Jinja documentation here
+http://jinja.pocoo.org/docs/2.9/
 
 
 ## Built with help from
