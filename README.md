@@ -57,7 +57,7 @@ https://cloud.google.com/appengine/docs/standard/python/download
 There is more general info on Google App engine available here:
 https://cloud.google.com/appengine/
 
-## Code & Technical info
+## Extending the Code
 The application uses the webapp2 framework. It creates WSGI application instances that map URLs to Request Handlers.
 
 This map is visible in main.py as the 'app' variable and looks like this:
