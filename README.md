@@ -48,14 +48,56 @@ The standard environment uses Python 2.7.9
 
 While deploying the application to app engine works with only the gcloud command line tool and the code in this repo, you will probably want to customize it first.
 
-To customize the app and test it locally you first need to have Python 2.7 installed, then install the Google Cloud SDK and the App Engine extension for python
+To customize the app and test it locally you first need to have Python 2.7.9 installed, then install the Google Cloud SDK and the App Engine extension for python
 
 To get the SDK follow the guide here:
 
 https://cloud.google.com/appengine/docs/standard/python/download
 
-There is more general info on Google App engine available here:
-https://cloud.google.com/appengine/
+
+Once you have the SDK setup, you need the required dependencies
+to test the app locally or you will get errors when you try to start the app.
+
+The easiest way to get the dependencies is by using pip
+on the requirements.txt file included with this project.
+
+`pip install requirements.txt`
+
+
+Finally, execute dev_appserver.py included with the Google Cloud SDK like so
+
+`
+python /Google/Cloud SDK/google-cloud-sdk/bin/dev_appserver.py /this_project
+`
+
+to get the local development server up and running.
+
+If the local development server started successfully 
+
+You should get a message in the console that says
+
+```starting module "default" running at: http://localhost:8080```
+
+Then just go to
+
+`http://localhost:8080`
+(or wherever the above console message says the module is started)
+
+in your browser
+
+And you should see the FrontPage in the browser.
+
+From here, make any changes you want to the code and you can preview them in your
+browser until you are satisfied.
+
+The initial console message when you start the local development
+server also shows
+
+`Starting admin server at...`
+
+That is the local development server admin
+panel where you can view the contents of the datastore
+and more.
 
 ## Extending the Code
 The application uses the webapp2 framework. It creates WSGI application instances that map URLs to Request Handlers.
