@@ -1,0 +1,4 @@
+Jinja2==2.8
+webapp2==2.5.2
+WebOb==1.6.2
+pbkdf2==1.3
