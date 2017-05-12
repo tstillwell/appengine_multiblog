@@ -44,7 +44,7 @@ If you are unfamiliar with google app engine, it is a Platform as a Service (Paa
 
 App Engine supports multiple languages and build types- this app uses what is known as the Python Standard Environment (as opposed to the flexible environment)
 
-The standard environment uses Python 2.7
+The standard environment uses Python 2.7.9
 
 While deploying the application to app engine works with only the gcloud command line tool and the code in this repo, you will probably want to customize it first.
 
