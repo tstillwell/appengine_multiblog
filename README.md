@@ -171,6 +171,29 @@ The templates are stored in the *templates* directory of the project and use the
 For more info on how to use Jinja, see the Jinja documentation here
 http://jinja.pocoo.org/docs/2.9/
 
+## Limitations
+
+There are a few limits
+of using this app with App Engine.
+
+You should be aware of these limitations and understand
+their workarounds and downsides.
+
+App Engine has a a free quota tier that allows applications
+to use a certain amount of resources each day at no cost.
+
+If these quotas are exceeded and you do not have billing
+enabled on your account, certain parts of the app
+will become unusable until the next 24 hour cycle.
+
+If you do have billing enabled understand
+that you will be billed by google for usage
+that exceeds the free quota.
+
+For more info on these quotas and billing, see
+
+http://cloud.google.com/appengine/quotas
+
 
 ## Built with help from
 
