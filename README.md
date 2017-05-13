@@ -42,13 +42,22 @@ Password resets via email.
 ## Setup Info
 If you are unfamiliar with google app engine, it is a Platform as a Service (PaaS) that runs on Google's cloud infrastructure.
 
-App Engine supports multiple languages and build types- this app uses what is known as the Python Standard Environment (as opposed to the flexible environment)
+App Engine supports multiple languages and build types-
+this app uses what is known as the
+Python Standard Environment
+(as opposed to the flexible environment)
 
 The standard environment uses Python 2.7.9
 
-While deploying the application to app engine works with only the gcloud command line tool and the code in this repo, you will probably want to customize it first.
+While deploying the application to app engine works with only
+the gcloud command line tool and the code in this repo -
+you will probably want to customize it first.
 
-To customize the app and test it locally you first need to have Python 2.7.9 installed, then install the Google Cloud SDK and the App Engine extension for python
+
+#### Local Development Server
+To customize the app and test it locally you first need to have Python 2.7.9 installed
+
+then install the Google Cloud SDK and the App Engine extension for python
 
 To get the SDK follow the guide here:
 
@@ -72,7 +81,7 @@ python /Google/Cloud SDK/google-cloud-sdk/bin/dev_appserver.py /this_project
 
 to get the local development server up and running.
 
-If the local development server started successfully 
+If the local development server started successfully
 
 You should get a message in the console that says
 
@@ -85,19 +94,19 @@ Then just go to
 
 in your browser
 
-And you should see the FrontPage in the browser.
+And you should see the FrontPage.
 
 From here, make any changes you want to the code and you can preview them in your
 browser until you are satisfied.
 
-The initial console message when you start the local development
-server also shows
+The initial console message when you start the local development server also shows
 
 `Starting admin server at...`
 
 That is the local development server admin
-panel where you can view the contents of the datastore
-and more.
+panel where you can view the contents of the datastore and more.
+
+If you run into errors or the page does not load, check the console first to see if there is a stack trace or other error message being logged there.
 
 ## Extending the Code
 The application uses the webapp2 framework. It creates WSGI application instances that map URLs to Request Handlers.
