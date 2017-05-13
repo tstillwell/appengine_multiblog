@@ -106,7 +106,20 @@ The initial console message when you start the local development server also sho
 That is the local development server admin
 panel where you can view the contents of the datastore and more.
 
-If you run into errors or the page does not load, check the console first to see if there is a stack trace or other error message being logged there.
+If you run into errors or the page does not load,
+check the console first to see if there is a stack trace
+or other error message being logged there.
+
+**WARNING** -
+
+The project behaves functionally the same on the local development server as it does in production on app engine, but unfortunately there are differences between the two environments that might cause different behavior.
+
+If you change the code, be aware that there are differences between testing and production for app engine and just because something works on the local dev server does not mean that it will work in production so feature testing on app engine is recommended whenever adding or changing features to confirm they work when you go live.
+
+The documentaiton for the Local Development Server can be found here
+
+http://cloud.google.com/appengine/docs/standard/python/tools/using-local-server
+
 
 ## Extending the Code
 The application uses the webapp2 framework. It creates WSGI application instances that map URLs to Request Handlers.
