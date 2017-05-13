@@ -204,18 +204,16 @@ The free quota for email sent using App Engine is
 
 
 There are a few workarounds to the low email limit
-You may want to look into using the Mailgun API
-which also has a free daily quota tier that is much higher.
 
-For more info on using mailgun check out Google's documentation
+You may want to look into using a supported App Engine
+mail API which have free quotas which are much higher than
+the Google provided mail API.
 
+
+Here are some documented/supported mail APIs you can choose from:
+
+Mailgun
 http://cloud.google.com/appengine/docs/standard/python/mail/mailgun
-
-and Mailgun's documentation
-
-http://documentation.mailgun.com/
-
-There are other options for email that work with App Engine including:
 
 Mailjet
 http://cloud.google.com/appengine/docs/standard/python/mail/mailjet
