@@ -173,6 +173,8 @@ http://jinja.pocoo.org/docs/2.9/
 
 ## Limitations
 
+#### Free Tier
+
 There are a few limits
 of using this app with App Engine.
 
@@ -194,6 +196,35 @@ For more info on these quotas and billing, see
 
 http://cloud.google.com/appengine/quotas
 
+#### Emails
+
+The app uses email to send password reset emails.
+The free quota for email sent using App Engine is
+**only 10 emails per day**
+
+
+There are a few workarounds to the low email limit
+You may want to look into using the Mailgun API
+which also has a free daily quota tier that is much higher.
+
+For more info on using mailgun check out Google's documentation
+
+http://cloud.google.com/appengine/docs/standard/python/mail/mailgun
+
+and Mailgun's documentation
+
+http://documentation.mailgun.com/
+
+There are other options for email that work with App Engine including:
+
+Mailjet
+http://cloud.google.com/appengine/docs/standard/python/mail/mailjet
+
+Sendgrid
+http://cloud.google.com/appengine/docs/standard/python/mail/sendgrid
+
+Be aware that emails are not actually sent when using
+the local development server by default, although this can be configured.
 
 ## Built with help from
 
