@@ -233,6 +233,9 @@ The app logs events using the python logging library.
 Application logs are saved to the
 Google Cloud Platform logging interface
 
+The app also logs all GET and POST requests
+in addition to any application errors.
+
 To see these logs, visit the logs viewer page
 
 http://console.cloud.google.com/logs
