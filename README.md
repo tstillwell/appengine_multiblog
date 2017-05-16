@@ -175,7 +175,7 @@ For more info on how to use Jinja, see the Jinja documentation here
 http://jinja.pocoo.org/docs/2.9/
 
 Each request handler class that inherits from `Handler`
-can use self.user() to get the current account from the data_store
+can use self.user() to get the current account from the datastore
 and validate that the user is logged in. If the user is not logged
 in or has an expired session, then self.user() will return `None`.
 
