@@ -179,8 +179,25 @@ can use self.user() to get the current account from the data_store
 and validate that the user is logged in. If the user is not logged
 in or has an expired session, then self.user() will return `None`.
 
+User requests can also be validated by using
+anti cross-site request forgery (CSRF) tokens.
 
+To use anti-CSRF tokens, pass
+`token = csrf_token_for_user(username)`
+to the template as an argument in the page get handler.
 
+Then, in the jinja template, include the `token` variable
+in a hidden html input field
+
+```  <input type="hidden" name="csrf-token" value=" {{token}}"></input>```
+
+To validate the user's anti-CSRF token, just compare
+the value of the token received to the value of
+`csrf_token_for_user(username)`
+in the post handler and ensure they match.
+
+The anti-CSRF tokens are used per session and once
+the session is expired or logged out the token is invalidated.
 
 ## Limitations
 
