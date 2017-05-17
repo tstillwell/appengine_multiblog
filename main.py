@@ -372,8 +372,8 @@ def valid_user(cookie_str):
 
 
 def new_salt():
-    """ Generates a 32-bit hex salt for user pw salting """
-    salt = binascii.hexlify(os.urandom(32))
+    """ Generates a salt for user password security """
+    salt = binascii.b2a_uu(os.urandom(32))[0:-2]  # trim \n from end of string
     return salt
 
 
