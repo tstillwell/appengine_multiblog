@@ -187,9 +187,9 @@ To use anti-CSRF tokens, pass
 to the template as an argument in the page get handler.
 
 Then, in the jinja template, include the `token` variable
-in a hidden html input field
+in a hidden html input field inside the html form you want to validate
 
-```  <input type="hidden" name="csrf-token" value=" {{token}}"></input>```
+```  <input type="hidden" name="csrf-token" value="{{token}}"></input>```
 
 To validate the user's anti-CSRF token, just compare
 the value of the token received to the value of
