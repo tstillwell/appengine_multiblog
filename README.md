@@ -253,7 +253,7 @@ The free quota for email sent using App Engine is
 
 There are a few workarounds to the low email limit
 
-You may want to look into using a supported App Engine
+You may want to look into using a supported third party
 mail API which have free quotas which are much higher than
 the Google provided mail API.
 
