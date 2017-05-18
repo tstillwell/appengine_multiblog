@@ -469,6 +469,27 @@ def valid_email(email):
 
 
 # *** This is the end of User & Security functions section *** ""
+def signup_errors(username, password, verify, email):
+    """Returns a list of errors if user has invalid signup inputs """
+    params = dict(username=username,
+                  email=email)
+    have_error = False
+    if not valid_username(username):
+        params['error_username'] = "That's not a valid username."
+        have_error = True
+    if not valid_password(password):
+        params['error_password'] = "That wasn't a valid password."
+        have_error = True
+    if password != verify:
+        params['error_verify'] = "Your passwords didn't match."
+        have_error = True
+    if not valid_email(email):
+        params['error_email'] = "That's not a valid email."
+        have_error = True
+    if have_error is True:
+        return params
+    if have_error is False:
+        return False
 
 
 class Signup(Handler):
@@ -478,32 +499,14 @@ class Signup(Handler):
         self.render("registration.html")
 
     def post(self):
-        """ Take data from forms and verify it is well-formed and not taken
-        then add an account to the datastore """
+        """ Verify signup inputs are valid and create account """
         username = self.request.get("username")
         password = self.request.get("password")
         verify = self.request.get("verify")
         email = self.request.get("email")
-
-        params = dict(username=username,
-                      email=email)
-
-        have_error = False
-        if not valid_username(username):
-            params['error_username'] = "That's not a valid username."
-            have_error = True
-        if not valid_password(password):
-            params['error_password'] = "That wasn't a valid password."
-            have_error = True
-        if password != verify:
-            params['error_verify'] = "Your passwords didn't match."
-            have_error = True
-        if not valid_email(email):
-            params['error_email'] = "That's not a valid email."
-            have_error = True
-        if have_error:
-            self.render('registration.html', **params)
-
+        any_signup_errors = signup_errors(username, password, verify, email)
+        if any_signup_errors is not False:
+            self.render('registration.html', **any_signup_errors)
         else:  # check if user exists, if they do prompt a new username
             userquery = ndb.gql("""
              SELECT * FROM User
@@ -586,7 +589,6 @@ class Login(Handler):
             hash_input = hash_password(input_password, target_user.salt)
             if hash_input != target_user.user_hash:  # password mismatch
                 break
-
             # If user session expired create a new one, otherwise reuse
             if (target_user.session_expires is None or
                     target_user.session_expires < datetime.datetime.now()):
@@ -933,8 +935,6 @@ class Logout(Handler):
 
 
 #  CRON & maintainance task handlers (see cron.yaml)
-
-
 class CleanupComments(Handler):
     """ Removes comments from the datastore if parent post has been removed """
     def get(self):
