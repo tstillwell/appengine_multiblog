@@ -199,6 +199,26 @@ in the post handler and ensure they match.
 The anti-CSRF tokens are used per session and once
 the session is expired or logged out the token is invalidated.
 
+#### Changing the style & customizing look and feel
+The app uses default (uncustomized) Bootstrap hosted on MaxCDN for faster
+page load speeds and simple design.
+
+The app also uses jQuery.
+
+You can remove bootstrap and jquery entirely if you want by removing the links
+in the `<head>` section of `base.html` and writing your own css.
+
+Keep in mindthat if you remove bootstrap then any modals
+will have to be replaced/redesigned
+ as they will not work without bootstrap.
+The same goes for glyphicons that are used throughout the design.
+
+The default CSS is stored in /static/main.css and can be changed or overwritten
+to meet your needs.
+
+Google Fonts are also used in the default setup and can also be changed/reconfigured
+if you would like to use different fonts, by replacing the link in `base.html`
+
 ## Limitations
 
 #### Free Tier
