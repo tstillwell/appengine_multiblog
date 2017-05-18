@@ -23,19 +23,19 @@ Easy account registration.
 
 Session management via cookies with HMAC signing.
 
-Each user gets their own page and RSS feed containing their posts.
+Users gets their own page and RSS feed containing their posts.
 
-The users can edit or delete their posts at any time.
+Users can edit or delete their posts at any time.
 
 Commenting is built in to the site and does not require external services.
 
-It uses javascript for visual enhancements but degrades gracefully if users have javascript disabled.
+Uses javascript for visual enhancements but degrades gracefully if users have javascript disabled.
 
-The blog is easily customizable with css.
+Easily customizable with css.
 
 Custom pages and features can be created and existing structure modified using jinja2 templates and simple python.
 
-User activity logging.
+Bultin logging.
 
 Several security features built in to prevent hijacking and abuse.
 
