@@ -602,7 +602,6 @@ class Login(Handler):
             target_user.session_expires = (datetime.datetime.now() +
                                            datetime.timedelta(hours=1))
             target_user.put()
-
             self.response.headers.add_header(
                 'Set-Cookie',
                 'Session= %s|%s Path=/'
@@ -703,8 +702,7 @@ class UpdatePassword(Handler):
             self.redirect('/login')
 
     def post(self):
-        """ Take form inputs and verify they match and user current password
-            hash matches hash on file then update the hash in the datastore """
+        """ Validate old password and new passwords and update """
         user = self.user()
         current_pass = self.request.get("currentpassword")
         new_pass = self.request.get("newpassword")
