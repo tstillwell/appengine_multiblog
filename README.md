@@ -17,29 +17,29 @@ If you want to customize and test the app before deploying it to app engine you 
 
 ## Features
 
-Builtin HTTPS/SSL support.
+* Builtin HTTPS/SSL support.
 
-Easy account registration.
+* Easy account registration.
 
-Session management via cookies with HMAC signing.
+* Session management via cookies with HMAC signing.
 
-Users gets their own page and RSS feed containing their posts.
+* Users gets their own page and RSS feed containing their posts.
 
-Users can edit or delete their posts at any time.
+* Users can edit or delete their posts at any time.
 
-Commenting is built in to the site and does not require external services.
+* Commenting is built in to the site and does not require external services.
 
-Uses javascript for visual enhancements but degrades gracefully if users have javascript disabled.
+* Uses javascript for visual enhancements but degrades gracefully if users have javascript disabled.
 
-Easily customizable with css.
+* Easily customizable with css.
 
-Custom pages and features can be created and existing structure modified using jinja2 templates and simple python.
+* Custom pages and features can be created and existing structure modified using jinja2 templates and simple python.
 
-Bultin logging.
+* Bultin logging.
 
-Several security features built in to prevent hijacking and abuse.
+* Several security features built in to prevent hijacking and abuse.
 
-Password resets via email.
+* Password resets via email.
 
 
 ## Setup Info
