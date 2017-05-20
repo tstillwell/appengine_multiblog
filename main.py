@@ -49,6 +49,7 @@ class Handler(webapp2.RequestHandler):
         my_cookie = self.request.cookies.get('Session')
         return my_cookie
 
+    @property
     def user(self):
         """Returns logged-in username or None"""
         return valid_user(self.cookie())
@@ -126,8 +127,8 @@ class FrontPage(Handler):
         """ Render the front page and pagination links """
         pagecount = ((post_count() / 10) + 1)
         blogroll = ndb.gql("SELECT * FROM Post ORDER BY created DESC LIMIT 10")
-        if self.user():
-            self.render('front.html', blogroll=blogroll, user=self.user(),
+        if self.user:
+            self.render('front.html', blogroll=blogroll, user=self.user,
                         pagecount=pagecount, page_id=1)
         else:
             self.render('front.html', blogroll=blogroll,
@@ -143,8 +144,8 @@ class FrontPaginate(Handler):
         pagecount = ((post_count() / 10) + 1)
         nextroll = ndb.gql("""SELECT * FROM Post ORDER BY created
                                DESC LIMIT 10 OFFSET %s""" % page_offset)
-        if self.user():
-            self.render('front.html', blogroll=nextroll, user=self.user(),
+        if self.user:
+            self.render('front.html', blogroll=nextroll, user=self.user,
                         pagecount=pagecount, page_id=int(page_id))
         else:
             self.render('front.html', blogroll=nextroll,
@@ -171,7 +172,7 @@ class NewPost(Handler):
     """ Page for adding new blog posts """
     def get(self):
         """ Renders the newpost form with anti-forgery token into the page """
-        user = self.user()
+        user = self.user
         if user:
             self.render("newpost.html", user=user,
                         token=csrf_token_for(user))
@@ -185,7 +186,7 @@ class NewPost(Handler):
         subject = self.request.get("subject")
         content = self.request.get("content")
         csrf_token = self.request.get("csrf-token")
-        user = self.user()
+        user = self.user
         if subject and content:
             # If data fields present, make new Post and add it to the db
             if not user:
@@ -212,7 +213,7 @@ class PermaLink(Handler):
         """ Make sure the link is valid and show the post with comments """
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
-        user = self.user()
+        user = self.user
         # gets the comments whose post_id matches the post_id of the page
         comment_roll = load_comments(post_id)
 
@@ -231,7 +232,7 @@ class PermaLink(Handler):
         """ For adding comments. Verify user is valid and add comment to db """
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
-        user = self.user()
+        user = self.user
         comment_text = self.request.get("comment_text")
         csrf_token = self.request.get("csrf-token")
         parent_post_id = str(post.key.id())  # file the comment under this post
@@ -551,7 +552,7 @@ class Welcome(Handler):
     """ Redirect new users here after registering """
     def get(self):
         """ Check cookie and if it's valid show the page """
-        user = self.user()
+        user = self.user
         if user:
             self.render('welcome.html', user=user)
         else:
@@ -694,7 +695,7 @@ class UpdatePassword(Handler):
     """ Lets logged in users change their password """
     def get(self):
         """ Verify user has a valid session cookie and draw the form """
-        user = self.user()
+        user = self.user
         if user:
             self.render("updatepass.html", user=user,
                         token=csrf_token_for(user))
@@ -703,7 +704,7 @@ class UpdatePassword(Handler):
 
     def post(self):
         """ Validate old password and new passwords and update """
-        user = self.user()
+        user = self.user
         current_pass = self.request.get("currentpassword")
         new_pass = self.request.get("newpassword")
         verify_new = self.request.get("newpassword-confirm")
@@ -753,9 +754,9 @@ class UserPage(Handler):
             return
         post_roll = ndb.gql("""SELECT * FROM Post WHERE posting_user = '%s'
                                 ORDER BY created DESC""" % username)
-        if self.user():
+        if self.user:
             self.render("useractivity.html", view_user=profile_user,
-                        post_roll=post_roll, user=self.user())
+                        post_roll=post_roll, user=self.user)
         else:
             self.render("useractivity.html", view_user=profile_user,
                         post_roll=post_roll)
@@ -781,7 +782,7 @@ class Manage(Handler):
     """Allows user to edit/delete their own comments & posts"""
     def get(self):
         """ Verify user is logged in show their manage page """
-        user = self.user()
+        user = self.user
         if user:
             user_posts = Post.query(ancestor=blog_key()).filter(
                 Post.posting_user == user)
@@ -805,7 +806,7 @@ class EditPost(Handler):
     """ Edit page user gets here from clicking edit on posts from manage"""
     def get(self, post_id):
         """ IF user is the post owner, they can edit the post """
-        user = self.user()
+        user = self.user
         if user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
@@ -818,7 +819,7 @@ class EditPost(Handler):
     def post(self, post_id):
         """ If users match and they entered new content, change the post """
         content = self.request.get("content")
-        user = self.user()
+        user = self.user
         csrf_token = self.request.get("csrf-token")
         if user and csrf_token == csrf_token_for(user):
             key = ndb.Key('Post', int(post_id), parent=blog_key())
@@ -835,7 +836,7 @@ class EditComment(Handler):
     """ Page used to edit comments when user does not have javascript """
     def get(self, comment_id):
         """ If comment owner matches current user draw comment edit form """
-        user = self.user()
+        user = self.user
         if user:
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
@@ -847,7 +848,7 @@ class EditComment(Handler):
 
     def post(self, comment_id):
         """ If user matches comment owner, update comment in the datastore """
-        user = self.user()
+        user = self.user
         if user:
             content = self.request.get("content")
             csrf_token = self.request.get("csrf-token")
@@ -868,7 +869,7 @@ class CommentAjax(Handler):
         """ Verify user is who they say they are with cookie then update
         the comment in the datastore and send a response with the new comment
         text to load into the DOM """
-        user = self.user()
+        user = self.user
         request_data = json.loads(self.request.body)
         target_comment = int(request_data['comment_id'])
         submitted_csrf_token = request_data['csrf_token']
@@ -887,11 +888,11 @@ class DeletePost(Handler):
     """Allows a User to permanently and completely delete a post"""
     def get(self, post_id):
         """ If user is the post owner, they can delete the post """
-        if self.user():
+        if self.user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            user = self.user()
-            if post.posting_user == self.user():
+            user = self.user
+            if post.posting_user == self.user:
                 self.render("delete.html", post=post,
                             user=user, token=csrf_token_for(user))
         else:
@@ -899,10 +900,10 @@ class DeletePost(Handler):
 
     def post(self, post_id):
         """ If user match and they click delete form, remove the post """
-        if self.user():
+        if self.user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            user = self.user()
+            user = self.user
             csrf_token = self.request.get("csrf-token")
             actual_csrf_token = csrf_token_for(user)
             if post.posting_user == user and csrf_token == actual_csrf_token:
@@ -918,9 +919,9 @@ class Logout(Handler):
     def post(self):
         """ Check if user is logged in and purge their session from the
             datastore if they are, then redirect to front page """
-        if self.user():
+        if self.user:
             user_query = ndb.gql("""SELECT * FROM User WHERE
-                                     username = '%s'""" % self.user())
+                                     username = '%s'""" % self.user)
             person = user_query.get()
             # remove session token from DB, invalidating it server side
             person.current_session = ''
