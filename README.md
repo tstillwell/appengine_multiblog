@@ -125,6 +125,10 @@ http://cloud.google.com/appengine/docs/standard/python/tools/using-local-server
 
 
 ## Extending the Code
+
+#### Backend
+
+##### Request Handlers
 The application uses the webapp2 framework. It creates WSGI application instances that map URLs to Request Handlers.
 
 This map is visible in main.py as the 'app' variable and looks like this:
@@ -166,13 +170,7 @@ for each class, seperate GET and POST handlers are defined so the app can respon
 
 Using this paradigm, it is simple to add a new part to the URL mapping and build new classes to handle different app functions.
 
-HTML pages are created by using self.render() with
-the jinja template as the first argument and any variables needed by the templates as the other arguments.
-
-The templates are stored in the *templates* directory of the project and use the Jinja template engine.
-
-For more info on how to use Jinja, see the Jinja documentation here
-http://jinja.pocoo.org/docs/2.9/
+##### User validation
 
 Each request handler class that inherits from `Handler`
 can use `self.user` to get the current account from the datastore
@@ -199,7 +197,19 @@ in the post handler and ensure they match.
 The anti-CSRF tokens are used per session and once
 the session is expired or logged out the token is invalidated.
 
-#### Changing the style & customizing look and feel
+#### Frontend
+
+##### Pages & Templates
+HTML pages are created by using self.render() with
+the jinja template as the first argument and any variables needed by the templates as the other arguments.
+
+The templates are stored in the *templates* directory of the project and use the Jinja template engine.
+
+For more info on how to use Jinja, see the Jinja documentation here
+http://jinja.pocoo.org/docs/2.9/
+
+
+##### Changing the style & customizing look and feel
 The app uses default (uncustomized) Bootstrap hosted on MaxCDN for faster
 page load speeds and simple design.
 
@@ -208,7 +218,7 @@ The app also uses jQuery.
 You can remove bootstrap and jquery entirely if you want by removing the links
 in the `<head>` section of `base.html` and writing your own css.
 
-Keep in mindthat if you remove bootstrap then any modals
+Keep in mind that if you remove bootstrap then any modals
 will have to be replaced/redesigned
  as they will not work without bootstrap.
 The same goes for glyphicons that are used throughout the design.
