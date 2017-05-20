@@ -177,7 +177,7 @@ can use `self.user` to get the current account from the datastore
 and validate that the user is logged in. If the user is not logged
 in or has an expired session, then self.user will return `None`.
 
-User requests can also be validated by using
+User actions can also be validated by using
 anti cross-site request forgery (CSRF) tokens.
 
 To use anti-CSRF tokens, pass
