@@ -154,7 +154,7 @@ So whenever an HTTP request from a client is received for /blog , an instance of
 class FrontPage(Handler):
     def get(self):
 		...do stuff...
-        if self.user():
+        if self.user:
            ...do stuff if user is logged in...
         else:
            ...do stuff if user is not logged in...
@@ -175,9 +175,9 @@ For more info on how to use Jinja, see the Jinja documentation here
 http://jinja.pocoo.org/docs/2.9/
 
 Each request handler class that inherits from `Handler`
-can use self.user() to get the current account from the datastore
+can use `self.user` to get the current account from the datastore
 and validate that the user is logged in. If the user is not logged
-in or has an expired session, then self.user() will return `None`.
+in or has an expired session, then self.user will return `None`.
 
 User requests can also be validated by using
 anti cross-site request forgery (CSRF) tokens.
