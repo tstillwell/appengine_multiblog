@@ -231,6 +231,12 @@ if you would like to use different fonts, by replacing the link in `base.html`
 
 ## Limitations
 
+There are a few limits
+of using this app with App Engine.
+
+You should be aware of these limitations and understand
+their workarounds and downsides.
+
 #### Platform
 
 The app is designed for Google App Engine.
@@ -250,12 +256,6 @@ For more info on AppScale see
 http://www.appscale.com
 
 #### Free Tier
-
-There are a few limits
-of using this app with App Engine.
-
-You should be aware of these limitations and understand
-their workarounds and downsides.
 
 App Engine has a a free quota tier that allows applications
 to use a certain amount of resources each day at no cost.
