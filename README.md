@@ -231,6 +231,17 @@ if you would like to use different fonts, by replacing the link in `base.html`
 
 ## Limitations
 
+#### Platform
+
+The app is designed for Google App Engine.
+Because of this, the portability is limited.
+
+Luckily there is a workaround to this lock-in
+
+The app **can be deployed to other platforms** such as AWS
+by using AppScale
+
+
 #### Free Tier
 
 There are a few limits
