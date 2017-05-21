@@ -239,8 +239,15 @@ Because of this, the portability is limited.
 Luckily there is a workaround to this lock-in
 
 The app **can be deployed to other platforms** such as AWS
-by using AppScale
+by using AppScale.
 
+AppScale is an open source PaaS which
+allows portability of App Engine applications
+to different cloud platforms
+
+For more info on AppScale see
+
+http://www.appscale.com
 
 #### Free Tier
 
