@@ -73,7 +73,7 @@ to test the app locally or you will get errors when you try to start the app.
 The easiest way to get the dependencies is by using pip
 on the requirements.txt file included with this project.
 
-`pip install requirements.txt`
+`pip install -r requirements.txt`
 
 
 Finally, execute dev_appserver.py included with the Google Cloud SDK like so
