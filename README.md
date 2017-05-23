@@ -145,7 +145,12 @@ For more info about using a custom domain see
 
 http://cloud.google.com/appengine/docs/standard/python/console/using-custom-domains-and-ssl
 
-To create a project on GCP, log into the Google Cloud Platform console and choose the option to Create a Project-
+Login to Google Cloud Platform console
+
+http://console.cloud.google.com
+
+and go to the projects page and create a new project
+
 if you're using appspot domain this is where
 you choose your domain name.
 The Project ID is the name of your site and cannot be changed once you choose it, so be sure it's the one you want.
