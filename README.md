@@ -145,8 +145,13 @@ For more info about using a custom domain see
 
 http://cloud.google.com/appengine/docs/standard/python/console/using-custom-domains-and-ssl
 
-The second step involves uploading the code the project
-once it is created so the app can start handling requests.
+To create a project on GCP, log into the Google Cloud Platform console and choose the option to Create a Project-
+if you're using appspot domain this is where
+you choose your domain name.
+The Project ID is the name of your site and cannot be changed once you choose it, so be sure it's the one you want.
+
+
+The second step involves uploading the code to the project so the app can start handling requests.
 
 There are 3 YAML files that need to be deployed with the command to ensure the app works properly.
 
