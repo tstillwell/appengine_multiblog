@@ -124,6 +124,36 @@ The documentaiton for the Local Development Server can be found here
 http://cloud.google.com/appengine/docs/standard/python/tools/using-local-server
 
 
+#### Deployment
+Once you are satisfied with your changes and testing, time to deploy the app to gcloud.
+
+There are two steps to uploading the code to production
+for the first time.
+
+1. Create a project on Google Cloud Platform
+
+2. Upload project files
+
+The first step is where you choose a free appspot domain name or configure your custom domain
+
+If you use Google's free appspot domain, you get
+free SSL and don't have to worry about certificates.
+
+You do have the option to use your own domain or a custom domain
+
+For more info about using a custom domain see
+
+http://cloud.google.com/appengine/docs/standard/python/console/using-custom-domains-and-ssl
+
+The second step involves uploading the code the project
+once it is created so the app can start handling requests.
+
+There are 3 YAML files that need to be deployed with the command to ensure the app works properly.
+
+The other files are uploaded automatically.
+
+
+
 ## Extending the Code
 
 #### Backend
