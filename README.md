@@ -160,7 +160,14 @@ The second step involves uploading the code to the project so the app can start 
 
 There are 3 YAML files that need to be deployed with the command to ensure the app works properly.
 
-The other files are uploaded automatically.
+From the project directory you can run
+
+`gcloud app deploy app.yaml index.yaml cron.yaml`
+
+The other code files are uploaded automatically when
+app.yaml is parsed by the gcloud tool.
+
+Once the deploy command finishes, the app is serving requets and is up and running!
 
 
 
