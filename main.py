@@ -770,9 +770,7 @@ class UserRSS(Handler):
     """ Renders RSS feed for each user """
     def get(self, username):
         """ Make sure the user in url is valid then show their rss feed """
-        view_user = ndb.gql("""SELECT * FROM User
-                                WHERE username = '%s'""" % username)
-        profile_user = view_user.get()
+        profile_user = user_in_datastore(username)
         if not profile_user:
             self.error(404)
             return
