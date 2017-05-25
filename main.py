@@ -922,14 +922,12 @@ class Logout(Handler):
         """ Check if user is logged in and purge their session from the
             datastore if they are, then redirect to front page """
         if self.user:
-            user_query = ndb.gql("""SELECT * FROM User WHERE
-                                     username = '%s'""" % self.user)
-            person = user_query.get()
+            logout_user = user_in_datastore(self.user)
             # remove session token from DB, invalidating it server side
-            person.current_session = ''
-            person.session_expires = None
-            person.put()
-            logging.info("User logged out: %s", person.username)
+            logout_user.current_session = ''
+            logout_user.session_expires = None
+            logout_user.put()
+            logging.info("User logged out: %s", logout_user.username)
         # Reset the cookie value
         self.response.headers.add_header('Set-Cookie', 'Session=')
         self.redirect("/blog")
