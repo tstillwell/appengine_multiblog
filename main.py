@@ -303,6 +303,18 @@ def user_key(name='default'):
     return ndb.Key('users', name)
 
 
+def user_in_datastore(username):
+    """ query datastore for username and return user entity if it exists """
+    user_query = ndb.gql("""
+     SELECT * FROM User
+     WHERE username = '%s'""" % username)
+    user_entity = user_query.get()
+    if user_entity is not None:
+        return user_entity
+    else:
+        return None
+
+
 class AntiCsrfToken(ndb.Model):
     """ Anti forgery token embedded in hidden form fields used
         to ensure the request came from the site and not an external site """
@@ -505,17 +517,15 @@ class Signup(Handler):
         password = self.request.get("password")
         verify = self.request.get("verify")
         email = self.request.get("email")
+        params = dict(username=username, email=email)
         any_signup_errors = signup_errors(username, password, verify, email)
         if any_signup_errors is not False:
             self.render('registration.html', **any_signup_errors)
         else:  # check if user exists, if they do prompt a new username
-            userquery = ndb.gql("""
-             SELECT * FROM User
-             WHERE username = '%s'""" % username)
             emailquery = ndb.gql("""
              SELECT * FROM User
              WHERE email = '%s'""" % email)
-            user_exists = userquery.get()
+            user_exists = user_in_datastore(username)
             email_exists = emailquery.get()
             if user_exists:
                 params['error_taken'] = "Username unavailable."
