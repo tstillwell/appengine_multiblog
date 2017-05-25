@@ -709,20 +709,19 @@ class UpdatePassword(Handler):
 
     def post(self):
         """ Validate old password and new passwords and update """
-        user = self.user
+        valid_user = self.user
         current_pass = self.request.get("currentpassword")
         new_pass = self.request.get("newpassword")
         verify_new = self.request.get("newpassword-confirm")
         csrf_token = self.request.get("csrf-token")
         params = dict()
-        if user is None:
+        if valid_user is None:
             return self.redirect("/login")
-        if (user and valid_password(new_pass) and
-                verify_new == new_pass and csrf_token == csrf_token_for(user)):
-            username = user
-            userquery = ndb.gql("""SELECT * FROM User
-                                    WHERE username = '%s'""" % username)
-            user = userquery.get()
+        if (valid_user and valid_password(new_pass) and
+                verify_new == new_pass and
+                csrf_token == csrf_token_for(valid_user)):
+            username = valid_user
+            user = user_in_datastore(username)
             if user.user_hash != hash_password(current_pass, user.salt):
                 wrong_pw = "You did not enter your correct current password"
                 self.render("updatepass.html", user=username, error=wrong_pw)
