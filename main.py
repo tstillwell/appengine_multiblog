@@ -589,12 +589,7 @@ class Login(Handler):
 
         while (valid_username(input_username) and
                valid_password(input_password)):
-            userquery = ndb.gql("""
-              SELECT * FROM User
-              WHERE username =
-              '%s'""" % input_username)
-
-            target_user = userquery.get()
+            target_user = user_in_datastore(input_username)
             if target_user is None:
                 break
             hash_input = hash_password(input_password, target_user.salt)
