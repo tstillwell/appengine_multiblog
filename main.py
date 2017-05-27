@@ -302,7 +302,7 @@ def user_key(name='default'):
     return ndb.Key('users', name)
 
 
-def user_in_datastore(username):
+def user_by_name(username):
     """ query datastore for username and return user entity if it exists """
     user_query = ndb.gql("""
      SELECT * FROM User
@@ -524,7 +524,7 @@ class Signup(Handler):
             emailquery = ndb.gql("""
              SELECT * FROM User
              WHERE email = '%s'""" % email)
-            user_exists = user_in_datastore(username)
+            user_exists = user_by_name(username)
             email_exists = emailquery.get()
             if user_exists:
                 params['error_taken'] = "Username unavailable."
@@ -588,7 +588,7 @@ class Login(Handler):
 
         while (valid_username(input_username) and
                valid_password(input_password)):
-            target_user = user_in_datastore(input_username)
+            target_user = user_by_name(input_username)
             if target_user is None:
                 break
             hash_input = hash_password(input_password, target_user.salt)
@@ -720,7 +720,7 @@ class UpdatePassword(Handler):
                 verify_new == new_pass and
                 csrf_token == csrf_token_for(valid_user)):
             username = valid_user
-            user = user_in_datastore(username)
+            user = user_by_name(username)
             if user.user_hash != hash_password(current_pass, user.salt):
                 wrong_pw = "You did not enter your correct current password"
                 self.render("updatepass.html", user=username, error=wrong_pw)
@@ -749,7 +749,7 @@ class UserPage(Handler):
     """ User summary page shows their recent activity, publicly viewable """
     def get(self, username):
         """ Make sure the user in the url is valid then show their page """
-        profile_user = user_in_datastore(username)
+        profile_user = user_by_name(username)
         if not profile_user:
             self.error(404)
             return
@@ -767,7 +767,7 @@ class UserRSS(Handler):
     """ Renders RSS feed for each user """
     def get(self, username):
         """ Make sure the user in url is valid then show their rss feed """
-        profile_user = user_in_datastore(username)
+        profile_user = user_by_name(username)
         if not profile_user:
             self.error(404)
             return
@@ -919,7 +919,7 @@ class Logout(Handler):
         """ Check if user is logged in and purge their session from the
             datastore if they are, then redirect to front page """
         if self.user:
-            logout_user = user_in_datastore(self.user)
+            logout_user = user_by_name(self.user)
             # remove session token from DB, invalidating it server side
             logout_user.current_session = ''
             logout_user.session_expires = None
