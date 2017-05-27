@@ -288,8 +288,7 @@ SECRET = secret_key()
 
 
 class User(ndb.Model):
-    """ User data model for letting users log in. Passwords are salted then
-    hashed with pbkdf2. Don't change this in """
+    """ User account info for auth """
     username = ndb.StringProperty(required=True)
     user_hash = ndb.StringProperty(required=True)
     salt = ndb.StringProperty(required=True)
