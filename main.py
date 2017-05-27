@@ -298,7 +298,7 @@ class User(ndb.Model):
 
 
 def user_key(name='default'):
-    """ Generate a blog id from the db row """
+    """ Parent key for user accounts in datastore """
     return ndb.Key('users', name)
 
 
