@@ -674,8 +674,7 @@ class ResetPassword(Handler):
             self.render("resetpassword.html")
 
     def post(self, reset_token):
-        """ Take the form and again make sure the reset token is still unused
-            and valid and let the user create a new password """
+        """ Verify form inputs and token again and update password """
         new_pass = self.request.get("password")
         new_pass_verify = self.request.get("verify")
         token_query = ndb.gql("""SELECT * FROM ResetToken
