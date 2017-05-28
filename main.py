@@ -314,6 +314,18 @@ def user_by_name(username):
         return None
 
 
+def user_by_email(email):
+    """ query datastore for user by email and return entity if it exists """
+    user_query = ndb.gql("""
+     SELECT * FROM User
+     WHERE username = '%s'""" % email)
+    user_entity = user_query.get()
+    if user_entity is not None:
+        return user_entity
+    else:
+        return None
+
+
 class AntiCsrfToken(ndb.Model):
     """ Anti forgery token embedded in hidden form fields used
         to ensure the request came from the site and not an external site """
