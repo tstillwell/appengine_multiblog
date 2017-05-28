@@ -318,7 +318,7 @@ def user_by_email(email):
     """ query datastore for user by email and return entity if it exists """
     user_query = ndb.gql("""
      SELECT * FROM User
-     WHERE username = '%s'""" % email)
+     WHERE email = '%s'""" % email)
     user_entity = user_query.get()
     if user_entity is not None:
         return user_entity
@@ -533,11 +533,8 @@ class Signup(Handler):
         if any_signup_errors is not False:
             self.render('registration.html', **any_signup_errors)
         else:  # check if user exists, if they do prompt a new username
-            emailquery = ndb.gql("""
-             SELECT * FROM User
-             WHERE email = '%s'""" % email)
             user_exists = user_by_name(username)
-            email_exists = emailquery.get()
+            email_exists = user_by_email(email)
             if user_exists:
                 params['error_taken'] = "Username unavailable."
                 self.render('registration.html', **params)
