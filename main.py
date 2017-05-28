@@ -692,9 +692,7 @@ class ResetPassword(Handler):
             self.render("resetpassword.html", error=error)
         if (new_pass == new_pass_verify and valid_password(new_pass) and
                 token.expires > datetime.datetime.now()):
-            userquery = ndb.gql("""SELECT * FROM User WHERE email =
-            '%s'""" % token.associated_acct_email)
-            user = userquery.get()
+            user = user_by_email(token.associated_acct_email)
             new_hash(user, new_pass)
             logging.info("New password created for %s", user.username)
             token.expires = datetime.datetime.now()
