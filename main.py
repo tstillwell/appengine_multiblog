@@ -638,9 +638,7 @@ class ForgotPassword(Handler):
         """ Verify the email belongs to a user and send them an email
             with a password reset link """
         email = self.request.get("email")
-        forgot_user = ndb.gql("""SELECT * FROM User
-                                  WHERE email = '%s'""" % email)
-        target_user = forgot_user.get()
+        target_user = user_by_email(email)
         if target_user is None:
             logging.info("Invalid password reset attempt for %s", email)
             error = "No account with that email found"
