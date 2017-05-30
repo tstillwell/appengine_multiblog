@@ -806,7 +806,7 @@ class Manage(Handler):
 
 
 class EditPost(Handler):
-    """ Edit page user gets here from clicking edit on posts from manage"""
+    """ Allows users to edit/update their existing posts """
     def get(self, post_id):
         """ IF user is the post owner, they can edit the post """
         user = self.user
@@ -820,7 +820,7 @@ class EditPost(Handler):
             self.error(404)
 
     def post(self, post_id):
-        """ If users match and they entered new content, change the post """
+        """ If users match post owner change the post in db """
         content = self.request.get("content")
         user = self.user
         csrf_token = self.request.get("csrf-token")
