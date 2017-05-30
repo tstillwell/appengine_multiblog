@@ -869,8 +869,8 @@ class EditComment(Handler):
 class CommentAjax(Handler):
     """ Read JSON request, validates it, updates client with response """
     def post(self):
-        """ Verify user is who they say they are with cookie then update
-        the comment in the datastore and send a response with the new comment
+        """ Verify user with cookie and csrf token, update comment in datastore
+        then send a response with the new comment
         text to load into the DOM """
         user = self.user
         request_data = json.loads(self.request.body)
@@ -888,9 +888,9 @@ class CommentAjax(Handler):
 
 
 class DeletePost(Handler):
-    """Allows a User to permanently and completely delete a post"""
+    """ Remove post from datastore if user confirms delete """
     def get(self, post_id):
-        """ If user is the post owner, they can delete the post """
+        """ If user is the post owner, they are prompted for delete """
         if self.user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
@@ -964,8 +964,7 @@ class CleanupRateLimiter(Handler):
 class PurgeResetTokens(Handler):
     """ Remove reset tokens that have been used or expired """
     def get(self):
-        """ Check all reset tokens and if they are past their expiration time,
-            remove them from the datastore """
+        """ Check every token and remove from db if expired """
         reset_tokens = ndb.gql("SELECT * FROM ResetToken")
         for token in reset_tokens:
             if token.expires < datetime.datetime.now():
