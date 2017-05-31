@@ -18,6 +18,15 @@ from pbkdf2 import PBKDF2
 from google.appengine.ext import ndb
 from google.appengine.api import app_identity
 from google.appengine.api import mail
+from models import (
+    Post,
+    Comment,
+    Secret,
+    User,
+    AntiCsrfToken,
+    ResetToken,
+    LoginAttempt,
+)
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 JINJA_ENV = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR),
@@ -62,32 +71,6 @@ class MainPage(Handler):
         self.write("Testblog up and running!")
 
 
-class Post(ndb.Model):
-    """ Blog Post data model for datastore """
-    subject = ndb.StringProperty(required=True)
-    content = ndb.TextProperty(required=True)
-    created = ndb.DateTimeProperty(auto_now_add=True)
-    last_modified = ndb.DateTimeProperty(auto_now=True)
-    posting_user = ndb.StringProperty(required=True)
-
-    def render(self):
-        """ escape all html tags from post, then convert newlines to <br> """
-        escaped_post = jinja2.escape(self.content)
-        self._render_text = escaped_post.replace('\n', jinja2.Markup('<br>'))
-        return render_str("post.html", p=self)
-
-    def peek(self):
-        """ Show first part of long posts to not overload multi-post pages """
-        escaped_post = jinja2.escape(self.content)
-        marked_up_post = escaped_post.replace('\n', jinja2.Markup('<br>'))
-        if len(marked_up_post) > 1000:
-            self._render_text = marked_up_post[:1000]
-            return render_str("previewpost.html", p=self)
-        else:
-            self._render_text = marked_up_post
-            return render_str("post.html", p=self)
-
-
 def blog_key(name='default'):
     """ Generate a blog key used as parent for posts """
     return ndb.Key('blogs', name)
@@ -98,22 +81,6 @@ def post_count():
     all_posts = ndb.gql("SELECT * FROM Post").fetch(keys_only=True)
     count = len(all_posts)
     return count
-
-
-class Comment(ndb.Model):
-    """ Comments data model used for datastore """
-    comment_text = ndb.TextProperty(required=True)
-    parent_post_id = ndb.StringProperty(required=True)
-    created = ndb.DateTimeProperty(auto_now_add=True)
-    last_modified = ndb.DateTimeProperty(auto_now=True)
-    posting_user = ndb.StringProperty(required=True)
-
-    def render(self):
-        """ Draws comments """
-        escapedcomment = jinja2.escape(self.comment_text)
-        marked_up_comment = escapedcomment.replace('\n', jinja2.Markup('<br>'))
-        self._render_text = marked_up_comment
-        return render_str("comment.html", c=self)
 
 
 def comment_key(name='default'):
@@ -263,12 +230,6 @@ class PermaLink(Handler):
 # *** and incorporates web security best practices. ***
 # *** If you change this seciton please proceed with caution ***
 
-
-class Secret(ndb.Model):
-    """ HMAC Secret Key stored in datastore. Used to verify session cookies """
-    key_string = ndb.StringProperty(required=True)
-
-
 def secret_key():
     """ Get secret key from datastore. If one does not exist it makes one
     and the event gets logged since this is an important security event"""
@@ -285,16 +246,6 @@ def secret_key():
 
 
 SECRET = secret_key()
-
-
-class User(ndb.Model):
-    """ User account info for auth """
-    username = ndb.StringProperty(required=True)
-    user_hash = ndb.StringProperty(required=True)
-    salt = ndb.StringProperty(required=True)
-    email = ndb.StringProperty(required=True)
-    current_session = ndb.StringProperty(required=False)
-    session_expires = ndb.DateTimeProperty(required=False)
 
 
 def user_key(name='default'):
@@ -326,20 +277,6 @@ def user_by_email(email):
         return None
 
 
-class AntiCsrfToken(ndb.Model):
-    """ Anti forgery token embedded in hidden form fields used
-        to ensure the request came from the site and not an external site """
-    csrf_sync_token = ndb.StringProperty(required=True)
-    associated_user = ndb.StringProperty(required=True)
-
-
-class ResetToken(ndb.Model):
-    """ Password reset token used in email when user forgot their password """
-    associated_acct_email = ndb.StringProperty(required=True)
-    token_guid = ndb.StringProperty(required=True)
-    expires = ndb.DateTimeProperty(required=True)
-
-
 def reset_email(recipient, token):
     """ Sends email containing a password reset link if user requests it"""
     app_name = app_identity.get_application_id()
@@ -358,13 +295,6 @@ def reset_email(recipient, token):
                   url_protocol, HOST_NAME, token)
     mail.send_mail(sender=from_address, to=recipient,
                    subject="Blog password reset requested", body=body)
-
-
-class LoginAttempt(ndb.Model):
-    """ Keeps track of login attempts for rate limiting """
-    ip_addr = ndb.StringProperty(required=True)
-    last_attempt = ndb.DateTimeProperty(required=True)
-    attempt_count = ndb.IntegerProperty(required=True)
 
 
 def cookie_hash(value):
