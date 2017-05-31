@@ -41,8 +41,9 @@ If you want to customize and test the app before deploying it to app engine you 
 
 * Rate limiting for login attempts
 
-* Password resets via email.
+* Password resets via email
 
+* No waiting for index building (fast deployment)
 
 ## Setup Info
 If you are unfamiliar with google app engine, it is a Platform as a Service (PaaS) that runs on Google's cloud infrastructure.
