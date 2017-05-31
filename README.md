@@ -304,7 +304,7 @@ http://www.appscale.com
 
 #### Free Tier
 
-App Engine has a a free quota tier that allows applications
+App Engine has a free quota tier that allows applications
 to use a certain amount of resources each day at no cost.
 
 If these quotas are exceeded and you do not have billing
