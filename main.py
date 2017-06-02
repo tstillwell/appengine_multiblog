@@ -881,8 +881,7 @@ class CleanupComments(Handler):
 class CleanupRateLimiter(Handler):
     """ Remove login rate limiting if IPs haven't attempted recently """
     def get(self):
-        """ Check all rate limited ips and if no activity from them
-            in the last 2 hours, remove the rate limiting for that ip """
+        """ Remove rate limited addresses if no attempts in 2 hours """
         limited_ips = ndb.gql("SELECT * FROM LoginAtempt")
         for offender in limited_ips:
             if (offender.last_attempt <
