@@ -850,8 +850,7 @@ class DeletePost(Handler):
 class Logout(Handler):
     """Logout Behavior"""
     def post(self):
-        """ Check if user is logged in and purge their session from the
-            datastore if they are, then redirect to front page """
+        """ Expire user session in db and remove session info from cookie """
         if self.user:
             logout_user = user_by_name(self.user)
             # remove session token from DB, invalidating it server side
