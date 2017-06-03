@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% block title %} {{post.subject}} {% endblock %}
 {% block content %}
   {{post.render() | safe}}
   <br>
