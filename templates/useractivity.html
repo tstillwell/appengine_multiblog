@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% block title %} {{view_user.username}} - Posts {% endblock %}
 {% block content %}
 <div class="userpage-header">
 <h3 class="userpage-title"> Recent Posts from {{view_user.username}} </h3>
