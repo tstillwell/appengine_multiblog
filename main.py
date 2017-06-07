@@ -68,7 +68,7 @@ class MainPage(Handler):
     """ Defines behavior of http requests for main app page """
     def get(self):
         """ What to display when user visits the homepage """
-        self.write("Testblog up and running!")
+        self.redirect('/blog')
 
 
 def blog_key(name='default'):
