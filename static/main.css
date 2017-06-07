@@ -137,8 +137,8 @@ input[name=email] {
 }
 
 .navbar{
+  font-weight: bold;
   background-color: #fff;
-  font-family: 'Kanit', sans-serif;
   font-size: 16px;
 }
 
