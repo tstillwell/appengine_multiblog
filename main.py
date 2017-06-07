@@ -65,7 +65,7 @@ class Handler(webapp2.RequestHandler):
 
 
 class MainPage(Handler):
-    """ Defines behavior of http requests for main app page """
+    """ Defines behavior of http requests to main site index """
     def get(self):
         """ What to display when user visits the homepage """
         self.redirect('/blog')
