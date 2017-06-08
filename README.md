@@ -267,6 +267,13 @@ and
 ```{% endblock %}```
 at the end.
 
+Similarly, if you want to change the html page title,
+you can use
+
+```{% block title %} Example Title{% endblock %}```
+
+in the template to give that page a custom title, or omit that to keep the generic title defined in base.html
+
 ##### Changing the style & customizing look and feel
 The app uses default (uncustomized) Bootstrap hosted on MaxCDN for faster
 page load speeds and simple design.
