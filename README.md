@@ -258,6 +258,14 @@ The templates are stored in the *templates* directory of the project and use the
 For more info on how to use Jinja, see the Jinja documentation here
 http://jinja.pocoo.org/docs/2.9/
 
+Most page templates use the template base file `base.html` in the templates directory.
+
+To make a new page with the same structure as the others, use 
+```{% extends "base.html" %}```
+at the beginning of your template
+and
+```{% endblock %}```
+at the end.
 
 ##### Changing the style & customizing look and feel
 The app uses default (uncustomized) Bootstrap hosted on MaxCDN for faster
