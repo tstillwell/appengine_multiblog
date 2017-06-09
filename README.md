@@ -45,7 +45,7 @@ If you want to customize and test the app before deploying it to app engine you 
 
 * No waiting for index building (fast deployment)
 
-## Setup Info
+## Environment Info
 If you are unfamiliar with google app engine, it is a Platform as a Service (PaaS) that runs on Google's cloud infrastructure.
 
 App Engine supports multiple languages and build types-
