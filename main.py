@@ -520,7 +520,7 @@ class Login(Handler):
         the hash in the datastore. """
         user_ip = self.request.remote_addr
         if login_rate_limit(user_ip) == 403:
-            error = "Too many login attempts, try again later"
+            error = "Too many login attempts, please try again later."
             return self.render("login.html", error=error)
         # Takes login credentials that were input by user
         input_username = self.request.get("username")
