@@ -388,6 +388,14 @@ For more info on logging for App Engine see
 
 http://cloud.google.com/logging/docs/
 
+
+#### Post/Comment User Markup
+
+Users are not allowed to use HTML or javascript in their posts or comments because auto-escaping is enabled for user security.
+
+This prevents embedded content (such as video players and applets) from being added directly in user generated content.
+
+
 ## Built with help from
 
 ### Google App Engine
