@@ -8,11 +8,13 @@
 	<h4>Confirm Password</h4> <input type="password" class="form-control" name="verify">
 	<h4>Email</h4> <input type="text" class="form-control" name="email" value="{{email}}">
 	<br>
+	<div class="error">
 	{{error_username}}
 	{{error_password}}
 	{{error_verify}}
 	{{error_email}}
 	{{error_taken}}
+	</div>
 	<br>
 	<button type="submit" class="btn btn-primary registerbtn" data-loading-text="Registering...">
 		Create Account
