@@ -395,6 +395,7 @@ Users are not allowed to use HTML or javascript in their posts or comments becau
 
 This prevents embedded content (such as video players and applets) from being added directly in user generated content.
 
+It is not recommended to disable autoescaping as this can open the app (and users) to potential threat vectors and tracking.
 
 ## Built with help from
 
