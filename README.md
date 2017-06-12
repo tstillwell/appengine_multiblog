@@ -29,7 +29,7 @@ If you want to customize and test the app before deploying it to app engine you 
 
 * Commenting is built in to the site and does not require external services
 
-* Uses javascript for visual enhancements but degrades gracefully if users have javascript disabled
+* Uses javascript for enhancements but degrades gracefully with javascript disabled
 
 * Easily customizable with css and jinja2 templates
 
