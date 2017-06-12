@@ -17,11 +17,8 @@ If you want to customize and test the app before deploying it to app engine you 
 
 ## Features
 
-* Builtin HTTPS/SSL support
-
 * Easy account registration
 
-* Session management via cookies with HMAC signing
 
 * Users gets their own page and RSS feed containing their posts
 
@@ -29,11 +26,14 @@ If you want to customize and test the app before deploying it to app engine you 
 
 * Commenting is built in to the site and does not require external services
 
+
 * Uses javascript for enhancements but degrades gracefully with javascript disabled
 
 * Visual customization possible with css and jinja2 templates
 
 * Custom pages and features can be created and existing structure modified using jinja2 templates and simple python
+
+* No waiting for index building (fast deployment)
 
 * Bultin logging
 
@@ -41,9 +41,12 @@ If you want to customize and test the app before deploying it to app engine you 
 
 * Rate limiting for login attempts
 
+* Builtin HTTPS/SSL support
+
+* Session management via cookies with HMAC signing
+
 * Password resets via email
 
-* No waiting for index building (fast deployment)
 
 ## Environment Info
 If you are unfamiliar with google app engine, it is a Platform as a Service (PaaS) that runs on Google's cloud infrastructure.
