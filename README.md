@@ -31,7 +31,7 @@ If you want to customize and test the app before deploying it to app engine you 
 
 * Uses javascript for enhancements but degrades gracefully with javascript disabled
 
-* Easily customizable with css and jinja2 templates
+* Visual customization possible with css and jinja2 templates
 
 * Custom pages and features can be created and existing structure modified using jinja2 templates and simple python
 
