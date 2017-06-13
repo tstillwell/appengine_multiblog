@@ -17,6 +17,8 @@ If you want to customize and test the app before deploying it to app engine you 
 
 ## Features
 
+* Responsive interface (works on mobile)
+
 * Easy account registration
 
 
