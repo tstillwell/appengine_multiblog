@@ -21,7 +21,6 @@ If you want to customize and test the app before deploying it to app engine you 
 
 * Easy account registration
 
-
 * Users gets their own page and RSS feed containing their posts
 
 * Users can edit or delete their posts at any time
@@ -36,6 +35,8 @@ If you want to customize and test the app before deploying it to app engine you 
 * Custom pages and features can be created and existing structure modified using jinja2 templates and simple python
 
 * No waiting for index building (fast deployment)
+
+* Automatic caching with memcache
 
 * Bultin logging
 
