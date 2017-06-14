@@ -178,7 +178,9 @@ app.yaml is parsed by the gcloud tool.
 
 Once the deploy command finishes, the app is serving requets and is up and running!
 
+You should be able to visit your domain and see the front page.
 
+You can then use the google cloud console to manage and monitor the application.
 
 ## Extending the Code
 
