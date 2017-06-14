@@ -128,6 +128,8 @@ The project behaves functionally the same on the local development server as it 
 
 If you change the code, be aware that there are differences between testing and production for app engine and just because something works on the local dev server does not mean that it will work in production so feature testing on app engine is recommended whenever adding or changing features to confirm they work when you go live.
 
+App Engine Standard Environment uses a lightweight version of the Python runtime which only supports a subset of the language. If you want to use Python 3 or have access to more language features and libraries, consider using the Flexible Environment as it iess restrictive.
+
 The documentaiton for the Local Development Server can be found here
 
 http://cloud.google.com/appengine/docs/standard/python/tools/using-local-server
@@ -178,7 +180,7 @@ app.yaml is parsed by the gcloud tool.
 
 Once the deploy command finishes, the app is serving requets and is up and running!
 
-You should be able to visit your domain and see the front page.
+You should now be able to visit your site and see the front page.
 
 You can then use the google cloud console to manage and monitor the application.
 
