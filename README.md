@@ -61,7 +61,7 @@ this app uses what is known as the
 Python Standard Environment
 (as opposed to the flexible environment)
 
-The standard environment uses Python 2.7.9
+The standard environment uses Python 2.7.9 with a lightweight python runtime. For more info about environment limitations, see the _Limitations_ section
 
 While deploying the application to app engine works with only
 the gcloud command line tool and the code in this repo -
@@ -130,7 +130,6 @@ The project behaves functionally the same on the local development server as it 
 
 If you change the code, be aware that there are differences between testing and production for app engine and just because something works on the local dev server does not mean that it will work in production so feature testing on app engine is recommended whenever adding or changing features to confirm they work when you go live.
 
-App Engine Standard Environment uses a lightweight version of the Python runtime which only supports a subset of the language. If you want to use Python 3 or have access to more language features and libraries, consider using the Flexible Environment as it iess restrictive.
 
 The documentaiton for the Local Development Server can be found here
 
@@ -331,6 +330,14 @@ to different cloud platforms
 For more info on AppScale see
 
 http://www.appscale.com
+
+App Engine Standard Environment uses a lightweight version of the Python runtime which only supports a subset of the language. If you want to use Python 3 or have access to more language features and libraries, consider using the Flexible Environment as it iess restrictive.
+
+3rd party python libraries are supported, as long as they are pure python and do not use C extensions.
+
+Fore more info about using third-party libraries see:
+
+http://cloud.google.com/appengine/docs/standard/python/tools/using-libraries-python-27
 
 #### Free Tier
 
