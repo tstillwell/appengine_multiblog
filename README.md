@@ -63,6 +63,8 @@ this app uses what is known as the
 Python Standard Environment
 (as opposed to the flexible environment)
 
+http://cloud.google.com/appengine/docs/standard/python/
+
 The standard environment uses Python 2.7.9 with a lightweight python runtime. For more info about environment limitations, see the _Limitations_ section
 
 While deploying the application to app engine works with only
