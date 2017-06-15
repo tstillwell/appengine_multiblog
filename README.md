@@ -42,6 +42,8 @@ If you want to customize and test the app before deploying it to app engine you 
 
 * CSRF protection
 
+* PBKDF2 server-side password hashing
+
 * Rate limiting for login attempts
 
 * Builtin HTTPS/SSL support
