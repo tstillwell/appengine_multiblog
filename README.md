@@ -17,7 +17,7 @@ If you want to customize and test the app before deploying it to app engine you 
 
 ## Features
 
-* Responsive interface (works on mobile)
+* Responsive / mobile interface
 
 * Easy account registration
 
@@ -267,7 +267,7 @@ the session is expired or logged out the token is invalidated.
 
 Automatically scheduled tasks use the Cron interface that is built into App Engine. To see the cron jobs that are used, see the `cron.yaml` file.
 
-The file contains a url, schedule, and description for each task.
+The file contains a URL, schedule, and description for each task.
 
 The URLs are normal requests handlers defined just like other request handlers. Because of this, urls have to be protected so users can't just run the cron jobs by visiting the URL. This can be achieved by requring authorization for those URLs.
 
