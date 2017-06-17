@@ -185,6 +185,7 @@ app.yaml is parsed by the gcloud tool.
 
 Once the deploy command finishes, the app is serving requets and is up and running!
 
+
 You should now be able to visit your site and see the front page.
 
 You can then use the google cloud console to manage and monitor the application.
@@ -280,6 +281,21 @@ Furthermore, cron jobs on the local development server don't run on schedule but
 For more info on creating cron jobs see
 http://cloud.google.com/appengine/docs/standard/python/config/cron
 
+##### Datastore Indexes
+
+Normally, app engine applications that use the datastore require indexes to be built
+for the datastore. The indexes are used to make datastore queries more efficient.
+
+Since this app does not make very complicated queries, you don't have to wait
+for indexes to be built before it starts serving requets, simplifying deployment.
+
+Be mindful however, when adding new datastore interactions- they will automatically create
+indexes and work without hiccups on the local development server, but may fail
+if indexes have not been built yet on Google Cloud Platform.
+
+For more info regarding index configuration, see
+
+http://cloud.google.com/appengine/docs/standard/python/config/indexconfig
 
 #### Frontend
 
