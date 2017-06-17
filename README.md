@@ -271,10 +271,14 @@ The file contains a url, schedule, and description for each task.
 
 The URLs are normal requests handlers defined just like other request handlers.
 
+Because of this, urls have to be protected so users can't just run the cron jobs by visiting the URL.
+
+For this app,
+any urls that are in `/tasks/` are automatically protected by the `app.yaml` configuration so if new cron jobs are created, it's best to put them there.
+
+
 For more info on creating cron jobs see
 http://cloud.google.com/appengine/docs/standard/python/config/cron
-
-
 
 
 #### Frontend
