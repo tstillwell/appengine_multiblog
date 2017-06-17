@@ -262,6 +262,21 @@ in the post handler and ensure they match.
 The anti-CSRF tokens are used per session and once
 the session is expired or logged out the token is invalidated.
 
+
+##### Scheduled Tasks (Cron Jobs)
+
+Automatically scheduled tasks use the Cron interface that is built into App Engine. To see the cron jobs that are used, see the `cron.yaml` file.
+
+The file contains a url, schedule, and description for each task.
+
+The URLs are normal requests handlers defined just like other request handlers.
+
+For more info on creating cron jobs see
+http://cloud.google.com/appengine/docs/standard/python/config/cron
+
+
+
+
 #### Frontend
 
 ##### Pages & Templates
