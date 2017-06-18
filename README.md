@@ -289,8 +289,12 @@ Since this app does not make very complicated queries, you don't have to wait
 for indexes to be built before it starts serving requets, simplifying deployment.
 
 Be mindful, however, when adding new datastore interactions- they will automatically create
-indexes and work without hiccups on the local development server, but may fail
+indexes and work without hiccups on the local development server, but queries may fail when deployed
 if indexes have not been built yet on Google Cloud Platform.
+
+Indexes are created automatically in `index.yaml` by the local development server
+so as long as you excercise the development datastore by performing new query types
+before deployment then the indexes will be updated.
 
 For more info regarding index configuration, see
 
