@@ -283,13 +283,12 @@ http://cloud.google.com/appengine/docs/standard/python/config/cron
 
 ##### Datastore Indexes
 
-Normally, app engine applications that use the datastore require indexes to be built
-for the datastore. The indexes are used to make datastore queries more efficient.
+Normally, app engine applications that use the datastore require indexes to be built. The indexes are used to make datastore queries more efficient.
 
 Since this app does not make very complicated queries, you don't have to wait
 for indexes to be built before it starts serving requets, simplifying deployment.
 
-Be mindful however, when adding new datastore interactions- they will automatically create
+Be mindful, however, when adding new datastore interactions- they will automatically create
 indexes and work without hiccups on the local development server, but may fail
 if indexes have not been built yet on Google Cloud Platform.
 
