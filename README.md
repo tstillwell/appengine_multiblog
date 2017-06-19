@@ -31,7 +31,7 @@ If you want to customize and test the app before deploying it to app engine you 
 
 * Visual customization possible with css and jinja2 templates
 
-* Custom pages and features can be created and existing structure modified using jinja2 templates and simple python
+* Extensible with jinja2 and python
 
 * No waiting for index building (fast deployment)
 
