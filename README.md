@@ -43,13 +43,13 @@ If you want to customize and test the app before deploying it to app engine you 
 
 * PBKDF2 server-side password hashing with salting
 
-* Rate limiting for login attempts
+* Rate limiting for login attempts (Login attack protection)
 
 * Builtin HTTPS/SSL support
 
 * Session management via cookies with HMAC signing
 
-* Password resets via email
+* Automatic Password resets via email
 
 
 ## Environment Info
