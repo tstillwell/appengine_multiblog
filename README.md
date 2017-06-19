@@ -25,10 +25,9 @@ If you want to customize and test the app before deploying it to app engine you 
 
 * Users can edit or delete their posts at any time
 
-* Commenting is built in to the site and does not require external services
+* Builtin commenting
 
-
-* Uses javascript for enhancements but degrades gracefully with javascript disabled
+* Noscript fallback / graceful degradation
 
 * Visual customization possible with css and jinja2 templates
 
