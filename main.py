@@ -446,6 +446,25 @@ def signup_errors(username, password, verify, email):
         return False
 
 
+def make_account(username, email, password):
+    """ Add a new account to the datastore """
+    salt = new_salt()
+    user_hash = hash_password(password, salt)
+    current_session = session_uuid()
+    session_expires = (datetime.datetime.now() +
+                       datetime.timedelta(hours=1))
+    account = User(parent=user_key(), username=username,
+                   email=email, user_hash=user_hash,
+                   salt=salt, current_session=current_session,
+                   session_expires=session_expires)
+    account.put()  # Put this person into the db
+    anti_forgery_token = AntiCsrfToken(
+        associated_user=username,
+        csrf_sync_token=new_csrf_token())
+    anti_forgery_token.put()
+    return account
+
+
 class Signup(Handler):
     """ Page used for registering new user accounts """
     def get(self):
@@ -474,20 +493,7 @@ class Signup(Handler):
                 self.render('registration.html', **params)
                 logging.info("Attempted re-registration for: [%s]", email)
             else:  # if that user does not exist, add the account to the DB
-                salt = new_salt()
-                user_hash = hash_password(password, salt)
-                current_session = session_uuid()
-                session_expires = (datetime.datetime.now() +
-                                   datetime.timedelta(hours=1))
-                account = User(parent=user_key(), username=username,
-                               email=email, user_hash=user_hash,
-                               salt=salt, current_session=current_session,
-                               session_expires=session_expires)
-                account.put()  # Put this person into the db
-                anti_forgery_token = AntiCsrfToken(
-                    associated_user=username,
-                    csrf_sync_token=new_csrf_token())
-                anti_forgery_token.put()
+                account = make_account(username, email, password)
                 self.response.headers.add_header(
                     'Set-Cookie', 'Session= %s|%s Path=/'
                     % (str(account.current_session),
