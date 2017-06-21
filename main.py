@@ -460,7 +460,7 @@ class Signup(Handler):
         email = self.request.get("email")
         params = dict(username=username, email=email)
         any_signup_errors = signup_errors(username, password, verify, email)
-        if any_signup_errors is not False:
+        if any_signup_errors:
             self.render('registration.html', **any_signup_errors)
         else:  # check if user exists, if they do prompt a new username
             user_exists = user_by_name(username)
