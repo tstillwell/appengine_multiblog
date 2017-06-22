@@ -448,6 +448,14 @@ For more info on logging for App Engine see
 
 http://cloud.google.com/logging/docs/
 
+#### Offline Testing
+The app uses CDN hosted jQuery and Bootstrap along with Google Fonts.
+
+If you want to test the app offline
+you will need to host Bootstrap and jQuery locally
+and link to them in the base.html template.
+
+The fonts will use a local fallback so keep that in mind when testing offline.
 
 #### Post/Comment User Markup
 
