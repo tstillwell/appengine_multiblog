@@ -458,6 +458,9 @@ and link to them in the base.html template.
 The latest version of Bootstrap can be downloaded here:
 http://github.com/twbs/bootstrap/releases/latest
 
+The latest version of jQuery can be downloaded here:
+http://jquery.com/download/
+
 The fonts will use a local fallback so keep that in mind when testing offline.
 
 #### Post/Comment User Markup
