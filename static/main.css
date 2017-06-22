@@ -46,6 +46,7 @@ textarea {
 textarea.form-control{
   font-size: 16px;
   font-family: monospace;
+  padding: 2px;
 }
 
 input[type=submit] {
