@@ -34,6 +34,10 @@ input[type=text] {
     font-family: monospace;
 }
 
+input[type=password] {
+  padding: 2px;
+}
+
 textarea {
   max-width: 500px;
   min-height: 400px;
