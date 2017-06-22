@@ -455,6 +455,9 @@ If you want to test the app offline
 you will need to host Bootstrap and jQuery locally
 and link to them in the base.html template.
 
+The latest version of Bootstrap can be downloaded here:
+http://github.com/twbs/bootstrap/releases/latest
+
 The fonts will use a local fallback so keep that in mind when testing offline.
 
 #### Post/Comment User Markup
