@@ -15,10 +15,10 @@
 </div>
 <noscript>
     {% if page_id > 1 %}
-    <a href ="/blog/page/{{page_id - 1}}">Previous Page</a>
+    <a class="prevpage-link" href ="/blog/page/{{page_id - 1}}">Previous Page</a>
     {% endif %}
     {% if page_id < pagecount %}
-    <a href ="/blog/page/{{page_id + 1}}">Next Page</a>
+    <a class="nextpage-link" href ="/blog/page/{{page_id + 1}}">Next Page</a>
     {% endif %}
 </noscript>
 <script type="text/javascript" src="/static/jquery.jscroll.js"></script>

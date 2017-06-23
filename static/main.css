@@ -69,6 +69,14 @@ input[type=submit] {
   text-decoration: none;
 }
 
+.prevpage-link {
+  float: left;
+}
+
+.nextpage-link {
+  float: right;
+}
+
 .post + .post {
     margin-top: 15px;
 }
