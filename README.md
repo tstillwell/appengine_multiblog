@@ -473,6 +473,16 @@ This prevents embedded content (such as video players and applets) from being ad
 
 It is not recommended to disable autoescaping as this can open the app (and users) to potential threat vectors and tracking.
 
+## Contributing
+
+#### New Code / Features
+If you feel new features should be added and you know how to implement them:
+
+Ensure any python code is PEP8 compliant,and any HTMLis valid HTML5.
+
+Then simply create a Pull Request with a brief summary of your changes and
+the update will be reviewed
+
 ## Built with help from
 
 ### Google App Engine
