@@ -23,6 +23,8 @@ If you want to customize and test the app before deploying it to app engine you 
 
 * Users gets their own page and RSS feed containing their posts
 
+* Automatic pagination for front page and user pages
+
 * Users can edit or delete their posts at any time
 
 * Builtin commenting
