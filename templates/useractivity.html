@@ -11,5 +11,14 @@
 {% for post in post_roll %}
   {{post.peek() | safe}}
 {% endfor %}
-
+{% if page_id > 1  %}
+<a class="prevpage-link" href ="/users/{{view_user.username}}/page/{{page_id - 1}}">
+  <button type="button" class="btn btn-default"> &lt;- Prev </button>
+</a>
+{% endif %}
+{% if page_id < pagecount %}
+<a class="nextpage-link" href ="/users/{{view_user.username}}/page/{{page_id + 1}}">
+  <button type="button" class="btn btn-default">Next -&gt; </button>
+</a>
+{% endif %}
 {% endblock %}

@@ -83,6 +83,15 @@ def post_count():
     return count
 
 
+def post_count_for_user(username):
+    """ Returns total number of posts for given username """
+    user_posts = ndb.gql("""SELECT * FROM Post
+                             WHERE posting_user = '%s' """
+                         % username).fetch(keys_only=True)
+    count = len(user_posts)
+    return count
+
+
 def comment_key(name='default'):
     """ Parent key for comments """
     return ndb.Key('comments', name)
@@ -695,13 +704,38 @@ class UserPage(Handler):
             self.error(404)
             return
         post_roll = ndb.gql("""SELECT * FROM Post WHERE posting_user = '%s'
-                                ORDER BY created DESC""" % username)
+                                ORDER BY created DESC LIMIT 10""" % username)
+        pagecount = ((post_count_for_user(username) / 10) + 1)
         if self.user:
             self.render("useractivity.html", view_user=profile_user,
-                        post_roll=post_roll, user=self.user)
+                        user=self.user, post_roll=post_roll,
+                        pagecount=pagecount, page_id=1)
         else:
             self.render("useractivity.html", view_user=profile_user,
-                        post_roll=post_roll)
+                        post_roll=post_roll,  pagecount=pagecount, page_id=1)
+
+
+class UserPageMorePosts(Handler):
+    """ Userpage pagination, when there are many posts by one user """
+    def get(self, username, page_id):
+        """ Validate username and generate another page with more posts """
+        profile_user = user_by_name(username)
+        if not profile_user:
+            self.error(404)
+            return
+        page_offset = ((int(page_id) * 10) - 10)
+        pagecount = ((post_count_for_user(username) / 10) + 1)
+        post_roll = ndb.gql("""SELECT * FROM Post WHERE posting_user = '%s'
+                                ORDER BY created DESC LIMIT 10 OFFSET %s"""
+                            % (username, page_offset))
+        if self.user:
+            self.render("useractivity.html", view_user=profile_user,
+                        user=self.user, post_roll=post_roll,
+                        pagecount=pagecount, page_id=int(page_id))
+        else:
+            self.render("useractivity.html", view_user=profile_user,
+                        post_roll=post_roll,  pagecount=pagecount,
+                        page_id=int(page_id))
 
 
 class UserRSS(Handler):
@@ -919,6 +953,8 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                (r'/resetpassword/([a-f\d\-]+)', ResetPassword),
                                ('/logout', Logout),
                                ('/users/([a-zA-Z0-9-]+)', UserPage),
+                               ('/users/([a-zA-Z0-9-]+)/page/([1-9][0-9]*)',
+                               UserPageMorePosts),
                                ('/users/([a-zA-Z0-9-]+)/rss', UserRSS),
                                ('/manage', Manage),
                                ('/manage/updatepass', UpdatePassword),
