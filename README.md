@@ -473,6 +473,9 @@ This prevents embedded content (such as video players and applets) from being ad
 
 It is not recommended to disable autoescaping as this can open the app (and users) to potential threat vectors and tracking.
 
+For more info on jinja autoescaping see:
+http://jinja.pocoo.org/docs/2.9/api/#autoescaping
+
 ## Contributing
 
 #### New Code / Features
