@@ -135,6 +135,10 @@ The project behaves functionally the same on the local development server as it 
 
 If you change the code, be aware that there are differences between testing and production for app engine and just because something works on the local dev server does not mean that it will work in production so feature testing on app engine is recommended whenever adding or changing features to confirm they work when you go live.
 
+The major differences to watch out for here are missing indexes
+causing GQL/datastore queries to fail in production
+and attempting to use Python code not supported by the standard
+environment (tyically any code that uses C extensions).
 
 The documentaiton for the Local Development Server can be found here
 
