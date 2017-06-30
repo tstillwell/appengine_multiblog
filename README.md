@@ -199,6 +199,16 @@ You should now be able to visit your site and see the front page.
 
 You can then use the google cloud console to manage and monitor the application.
 
+#### Backups
+
+You can automatically backup the app data (users, posts, comments, etc...) by using cron jobs and a Google Cloud storage bucket.
+
+For more info on creating automatic backups, see:
+
+http://cloud.google.com/appengine/articles/scheduled_backups
+
+
+
 ## Extending the Code
 
 #### Backend
