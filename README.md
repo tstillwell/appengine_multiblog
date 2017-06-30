@@ -214,7 +214,12 @@ http://cloud.google.com/appengine/articles/scheduled_backups
 #### Backend
 
 ##### Request Handlers
-The application uses the webapp2 framework. It creates WSGI application instances that map URLs to Request Handlers.
+The application uses the webapp2 framework.
+See the documentation for webapp2 here:
+
+http://webapp2.readthedocs.io/en/latest/
+
+It creates WSGI application instances that map URLs to Request Handlers.
 
 This map is visible in main.py as the 'app' variable and looks like this:
 
