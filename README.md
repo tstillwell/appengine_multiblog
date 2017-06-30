@@ -66,7 +66,11 @@ Python Standard Environment
 
 http://cloud.google.com/appengine/docs/standard/python/
 
-The standard environment uses Python 2.7.9 with a lightweight python runtime. For more info about environment limitations, see the _Limitations_ section
+The standard environment uses Python 2.7.9 with a lightweight python runtime.
+For an overview of this environment see
+http://cloud.google.com/appengine/docs/standard/python/runtime
+
+For more info about environment limitations, see the _Limitations_ section
 
 While deploying the application to app engine works with only
 the gcloud command line tool and the code in this repo -
