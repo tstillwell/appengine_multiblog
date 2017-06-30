@@ -2,7 +2,7 @@
 
 #### A responsive blogging engine designed for multiple users
 
-This app is built to allow different users to sign up and easily blog.
+Allow different users to sign up and easily blog.
 It is not walled or gated so **anyone** can sign up
 and post directly to the front page out of the box.
 
@@ -60,8 +60,8 @@ If you are unfamiliar with google app engine, it is a Platform as a Service (Paa
 http://cloud.google.com/appengine/
 
 App Engine supports multiple languages and build types-
-this app uses what is known as the
-Python Standard Environment
+this app uses the
+__Python Standard Environment__
 (as opposed to the flexible environment)
 
 http://cloud.google.com/appengine/docs/standard/python/
