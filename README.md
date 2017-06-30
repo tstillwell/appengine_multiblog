@@ -484,6 +484,17 @@ It is not recommended to disable autoescaping as this can open the app (and user
 For more info on jinja autoescaping see:
 http://jinja.pocoo.org/docs/2.9/api/#autoescaping
 
+
+#### Terms & Conditions and Privacy Policy
+If you use this app for the public, you should have
+a terms and conditions and privacy policy available
+to protect yourself or your organization.
+
+There are no terms of service or privacy policy templates
+provided with this app.
+
+Consult a legal professional for more info.
+
 ## Contributing
 
 #### New Code / Features
