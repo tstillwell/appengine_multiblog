@@ -115,7 +115,7 @@ class FrontPaginate(Handler):
     """ next page/numbered page links containing additonal posts for no js """
     def get(self, page_id):
         """ Uses offset to get further pages if user wants to browse older
-        blog posts. Note this is only if browser javascript is disabled"""
+        blog posts. Note this is only if browser javascript is disabled """
         page_offset = ((int(page_id) * 10) - 10)
         pagecount = ((post_count() / 10) + 1)
         nextroll = ndb.gql("""SELECT * FROM Post ORDER BY created
@@ -239,7 +239,7 @@ class PermaLink(Handler):
 
 def secret_key():
     """ Get secret key from datastore. If one does not exist it makes one
-    and the event gets logged since this is an important security event"""
+    and the event gets logged since this is an important security event """
     secret_check = ndb.gql("SELECT key_string FROM Secret")
     key = secret_check.get()
     if key:  # if key is present return it
@@ -305,13 +305,13 @@ def reset_email(recipient, token):
 
 
 def cookie_hash(value):
-    """Use the secret value with HMAC to prevent session forgery/tampering"""
+    """ Use the secret value with HMAC to prevent session forgery/tampering """
     session_digest = str(hmac.new(SECRET, str(value)).hexdigest())
     return session_digest
 
 
 def valid_user(cookie_str):
-    """Returns username after validating the cookie session data"""
+    """ Returns username after validating the cookie session data """
     if cookie_str is None:
         return None
     cookie_parts = cookie_str.split("|")
@@ -339,7 +339,7 @@ def new_salt():
 
 
 def hash_password(password, salt):
-    """ Hash user pw with PBKDF2 alg with iterations as work factor"""
+    """ Hash user pw with PBKDF2 alg with iterations as work factor """
     hashed_pw_bin = PBKDF2(password, salt, iterations=20000)
     hashed_pw = hashed_pw_bin.hexread(32)
     return hashed_pw
@@ -419,7 +419,7 @@ def valid_username(username):
 
 
 def valid_password(password):
-    """ Use PASS_RE regex to ensure minimum pass length"""
+    """ Use PASS_RE regex to ensure minimum pass length """
     return password and PASS_RE.match(password)
 
 
@@ -431,7 +431,7 @@ def valid_email(email):
 
 # *** This is the end of User & Security functions section *** ""
 def signup_errors(username, password, verify, email):
-    """Returns a list of errors if user has invalid signup inputs """
+    """ Returns a list of errors if user has invalid signup inputs """
     params = dict(username=username,
                   email=email)
     have_error = False
@@ -751,7 +751,7 @@ class UserRSS(Handler):
 
 
 class Manage(Handler):
-    """Allows user to edit/delete their own comments & posts"""
+    """ Allows user to edit/delete their own comments & posts """
     def get(self):
         """ Verify user is logged in show their manage page """
         user = self.user
