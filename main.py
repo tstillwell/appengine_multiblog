@@ -235,8 +235,7 @@ class PermaLink(Handler):
                          comment.parent_post_id, comment.posting_user)
 
 
-# *** User & Security functions. Below section is very important ***
-# *** and incorporates web security best practices. ***
+# *** User & Security functions. Below section is important for security ***
 # *** If you change this seciton please proceed with caution ***
 
 def secret_key():
