@@ -453,7 +453,11 @@ the local development server by default, although this can be configured.
 #### Logging
 
 The app logs events using the python logging library.
-Application logs are saved to the
+The logging library is enhanced for App Engine.
+
+Logs for the development server are printed to the console where `dev_appserver.py` was started.
+
+Application logs in production are saved to the
 Google Cloud Platform logging interface
 
 The app also logs all GET and POST requests
