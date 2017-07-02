@@ -132,8 +132,7 @@ class AutoPager(Handler):
     """ Javascript auto pagination using jscroll to load in next set of
     posts once the user reaches the bottom of Front page """
     def get(self, page_id):
-        """ Links from autopager only contain bare html that will be inserted
-        into the DOM by jscroll """
+        """ Links from autopager - bare html used by jscroll """
         pagecount = ((post_count() / 10) + 1)
         if int(page_id) > pagecount:
             self.render("nextpage.html", no_more_posts=True)
