@@ -135,7 +135,7 @@ or other error message being logged there.
 
 **WARNING** -
 
-The project behaves functionally the same on the local development server as it does in production on app engine, but unfortunately there are differences between the two environments that might cause different behavior.
+The app behaves functionally the same on the local development server as it does in production on app engine, but unfortunately there are differences between the two environments that might cause different behavior.
 
 If you change the code, be aware that there are differences between testing and production for app engine and just because something works on the local dev server does not mean that it will work in production so feature testing on app engine is recommended whenever adding or changing features to confirm they work when you go live.
 
@@ -190,7 +190,7 @@ From the project directory you can run
 `gcloud app deploy app.yaml index.yaml cron.yaml`
 
 The other code files are uploaded automatically when
-app.yaml is parsed by the gcloud tool.
+`app.yaml` is parsed by the gcloud tool.
 
 Once the deploy command finishes, the app is serving requets and is up and running!
 
