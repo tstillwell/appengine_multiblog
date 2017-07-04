@@ -914,7 +914,7 @@ class CleanupComments(Handler):
             parent_post = parent_post_key.get()
             if parent_post is None:
                 comment.key.delete()
-
+        logging.info("Cron job finished: Remove orphaned comments")
 
 class CleanupRateLimiter(Handler):
     """ Remove login rate limiting if IPs haven't attempted recently """
@@ -925,7 +925,7 @@ class CleanupRateLimiter(Handler):
             if (offender.last_attempt <
                     datetime.datetime.now() - datetime.timedelta(hours=2)):
                 offender.key.delete()
-
+        logging.info("Cron job finished: Remove rate-limited IPs")
 
 class PurgeResetTokens(Handler):
     """ Remove reset tokens that have been used or expired """
@@ -935,7 +935,7 @@ class PurgeResetTokens(Handler):
         for token in reset_tokens:
             if token.expires < datetime.datetime.now():
                 token.key.delete()
-
+        logging.info("Cron job finished: Remove old reset tokens")
 
 # Router - Bind these URLs to above Request Handler instances
 app = webapp2.WSGIApplication([('/', MainPage),
