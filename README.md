@@ -383,10 +383,12 @@ their workarounds and downsides.
 
 The app is designed for Google App Engine.
 Because of this, the portability is limited.
+If you try to run the code without app Engine, it will not work because there is no API.
 
 Luckily there is a workaround to this lock-in
 
-The app **can be deployed to other platforms** such as AWS
+The app **can be deployed to other platforms**
+such as AWS (or even self hosted)
 by using AppScale.
 
 AppScale is an open source PaaS which
