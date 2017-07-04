@@ -427,6 +427,11 @@ The way this app is designed is to allow any user to create an account allowing 
 
 If you want to restrict the users who can create posts and add comments, you will have to gate the registration feature differently, such as by using authorization features of App Engine.
 
+#### Admin Interface
+Instead of using a custom admin interface, this app is intended to be administrated by using App Engine's built in admin console interface. On App Engine, this functionality is available from google cloud by accessing
+
+http://console.cloud.google.com
+
 #### Emails
 
 The app uses email to send password reset emails.
