@@ -521,6 +521,8 @@ If you use this app for the public, you should have
 a terms and conditions and privacy policy available
 to protect yourself or your organization.
 
+It is advised that you have these pages created as seperate top level URLs and that you link to them in the footer.
+
 There are no terms of service or privacy policy templates
 provided with this app.
 
