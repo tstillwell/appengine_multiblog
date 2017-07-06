@@ -159,12 +159,11 @@ for the first time.
 
 2. Upload project files
 
-The first step is where you choose a free appspot domain name or configure your custom domain
+The first step is where you can either choose a free appspot domain name or configure your custom domain
 
-If you use Google's free appspot domain, you get
-free SSL and don't have to worry about certificates.
+If you choose to use Google's free appspot domain, you get free SSL and don't have to worry about certificates.
 
-You do have the option to use your own domain or a custom domain
+You do have the option to use your own domain.
 
 For more info about using a custom domain see
 
