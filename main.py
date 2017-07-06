@@ -813,7 +813,7 @@ class EditComment(Handler):
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
             if comment.posting_user == user:
-                self.render("editc.html", comment=comment,
+                self.render("editcomment.html", comment=comment,
                             token=csrf_token_for(user), user=user)
         else:
             self.error(404)
