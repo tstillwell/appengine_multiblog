@@ -783,7 +783,7 @@ class EditPost(Handler):
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
             if post.posting_user == user:
-                self.render("edit.html", post=post,
+                self.render("editpost.html", post=post,
                             token=csrf_token_for(user), user=user)
         else:
             self.error(404)
