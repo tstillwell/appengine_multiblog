@@ -84,11 +84,10 @@ then install the Google Cloud SDK and the App Engine extension for python
 
 To get the SDK follow the guide here:
 
-https://cloud.google.com/appengine/docs/standard/python/download
+http://cloud.google.com/appengine/docs/standard/python/download
 
 
-Once you have the SDK setup, you need the required dependencies
-to test the app locally or you will get errors when you try to start the app.
+Once you have the SDK setup, you need the required dependencies (python imports) to test the app locally or you will get errors when you try to start the app.
 
 The easiest way to get the dependencies is by using pip
 on the requirements.txt file included with this project.
