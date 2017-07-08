@@ -132,6 +132,10 @@ If you run into errors or the page does not load,
 check the console first to see if there is a stack trace
 or other error message being logged there.
 
+The documentaiton for the Local Development Server can be found here
+
+http://cloud.google.com/appengine/docs/standard/python/tools/using-local-server
+
 **WARNING** -
 
 The app behaves functionally the same on the local development server as it does in production on app engine, but unfortunately there are differences between the two environments that might cause different behavior.
@@ -143,9 +147,6 @@ causing GQL/datastore queries to fail in production
 and attempting to use Python code not supported by the standard
 environment (tyically any code that uses C extensions).
 
-The documentaiton for the Local Development Server can be found here
-
-http://cloud.google.com/appengine/docs/standard/python/tools/using-local-server
 
 
 #### Deployment
