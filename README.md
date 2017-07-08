@@ -371,6 +371,8 @@ The same goes for glyphicons that are used throughout the design.
 The default CSS is stored in /static/main.css and can be changed or overwritten
 to meet your needs.
 
+Keep in mind that `base.html` actually links to a minified version of `main.css` so if you change `main.css` no style changes will happen unless you re-minify the file as main.min.css or change the link in `base.html` to link directly to `main.css`
+
 Google Fonts are also used in the default setup and can also be changed/reconfigured
 if you would like to use different fonts, by replacing the link in `base.html`
 
