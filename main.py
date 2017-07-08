@@ -529,8 +529,7 @@ class Login(Handler):
     def post(self):
         """ If the ip address of the user was
         recently rate limited, return an error and stop processing.
-        Otherwise take the form and verify the password hash matches
-        the hash in the datastore. """
+        Otherwise verify password hash matches stored hash """
         user_ip = self.request.remote_addr
         if login_rate_limit(user_ip) == 403:
             error = "Too many login attempts, please try again later."
