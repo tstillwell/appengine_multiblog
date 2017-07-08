@@ -152,7 +152,7 @@ environment (tyically any code that uses C extensions).
 #### Deployment
 Once you are satisfied with your changes and testing, time to deploy the app to gcloud.
 
-There are two steps to uploading the code to production
+There are two steps to deploying the app
 for the first time.
 
 1. Create a project on Google Cloud Platform
@@ -190,6 +190,10 @@ From the project directory you can run
 
 The other code files are uploaded automatically when
 `app.yaml` is parsed by the gcloud tool.
+
+For more info on how app.yaml works
+See the `app.yaml` reference here:
+http://cloud.google.com/appengine/docs/standard/python/config/appref
 
 Once the deploy command finishes, the app is serving requets and is up and running!
 
