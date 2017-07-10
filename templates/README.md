@@ -1,4 +1,4 @@
-#Templates Directory#
+# Templates Directory #
 
 Templates for views are stored in this directory.
 
@@ -11,6 +11,3 @@ Information can be added to templates by passing info to them with
 Then calling for the information in a template.html block inside the template file:
 
 `<p>  {{info}} was passed to template </p>`
-
-
-
