@@ -858,7 +858,7 @@ class CommentAjax(Handler):
 class DeletePost(Handler):
     """ Remove post from datastore if user confirms delete """
     def get(self, post_id):
-        """ If user is the post owner, they are prompted for delete """
+        """ If user is post owner, show delete form """
         if self.user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
