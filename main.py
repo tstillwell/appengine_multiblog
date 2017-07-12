@@ -870,7 +870,7 @@ class DeletePost(Handler):
             self.error(404)
 
     def post(self, post_id):
-        """ If user match and they click delete form, remove the post """
+        """ verify user match and csrf token and delete """
         if self.user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
