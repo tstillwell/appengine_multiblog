@@ -616,8 +616,9 @@ for the project, then feel free to open an issue on github for discussion.
 Any suggestions are greatly appreciated.
 
 #### Bugs
-If you find any bugs please open an issue on github
-and list the steps to reproduce the bug or what happened when the bug occured.
+If you find any bugs please open an issue on github with any details about the bug.
+
+If possible, please list the steps to reproduce the bug or what happened when the bug occured.
 
 
 ## Built with help from
