@@ -485,7 +485,7 @@ The way this app is designed is to allow any user to
 create an account allowing them to post.
 
 If you want to restrict the users who can create posts and add comments,
-you will have to gate the registration feature differently,
+you will need to change the way the user registration functionality works
 such as by using authorization features of App Engine.
 
 #### Admin Interface
