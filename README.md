@@ -54,7 +54,7 @@ info see the Setup Info section below.
 
 * Session management via cookies with HMAC signing
 
-* Automatic Password resets via email
+* User Password resets via email
 
 
 ## Environment Info
