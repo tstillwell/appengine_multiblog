@@ -13,10 +13,7 @@ Navigate to where the project lives on your system in your terminal and run:
 
 `gcloud app deploy app.yaml index.yaml cron.yaml`
 
-If you want to customize / test the app before deploying, you will
-need to use the App Engine SDK which includes a local development server so you
-can simulate App Engine on your system. For more
-info see the Setup Info section below.
+
 
 ## Features
 
@@ -81,6 +78,9 @@ While deploying the application to app engine works with only
 the gcloud command line tool and the code in this repo -
 you will probably want to customize it first.
 
+If you want to customize / test the app before deploying, you will
+need to use the App Engine SDK which includes a local development server so you
+can simulate App Engine on your system.
 
 #### Local Development Server
 To customize the app and test it locally
