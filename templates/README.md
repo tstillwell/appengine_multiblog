@@ -17,5 +17,5 @@ block inside the template file:
 When the template is rendered, it evaluates any expressions
 and replaces the expression blocks with the results.
 
-For more info on designing jinja templates see the jinja2 templatesd docs
+For more info on designing jinja templates see the jinja2 template design docs
 http://jinja.pocoo.org/docs/2.9/templates/
