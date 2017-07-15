@@ -13,9 +13,9 @@ Navigate to where the project lives on your system in your terminal and run:
 
 `gcloud app deploy app.yaml index.yaml cron.yaml`
 
-If you want to customize and test the app before deploying it to app engine you
+If you want to customize / test the app before deploying, you will
 need to use the App Engine SDK which includes a local development server so you
-can check your changes locally before pushing the code to production. For more
+can simulate App Engine on your system. For more
 info see the Setup Info section below.
 
 ## Features
