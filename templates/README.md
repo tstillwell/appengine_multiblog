@@ -14,5 +14,8 @@ block inside the template file:
 
 `<p>  {{info}} was passed to template </p>`
 
-When the template is rendered, it evaluated any expressions
+When the template is rendered, it evaluates any expressions
 and replaces the expression blocks with the results.
+
+For more info on designing jinja templates see the jinja2 templatesd docs
+http://jinja.pocoo.org/docs/2.9/templates/
