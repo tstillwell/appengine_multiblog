@@ -127,7 +127,7 @@ in your browser
 And you should see the FrontPage.
 
 From here, make any changes you want to the code and
-you can preview them in your browser until you are satisfied.
+you can save and preview them in your browser until you are satisfied. When a file is saved or updated, the SDK restarts the dev server.
 
 The initial console message when you start the
 local development server also shows
