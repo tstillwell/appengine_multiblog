@@ -138,7 +138,7 @@ That is the local development server admin
 panel where you can view the contents of the datastore and more.
 
 If you run into errors or the page does not load,
-check the console first to see if there is a stack trace
+check the SDK console window first to see if there is a stack trace
 or other error message being logged there.
 
 The documentaiton for the Local Development Server can be found here
