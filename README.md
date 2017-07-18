@@ -127,7 +127,7 @@ in your browser
 And you should see the FrontPage.
 
 From here, make any changes you want to the code and
-you can save and preview them in your browser until you are satisfied. When a file is saved or updated, the SDK restarts the dev server.
+then save and preview them in the browser until you are satisfied. When a file is saved or updated, the SDK restarts the dev server.
 
 The initial console message when you start the
 local development server also shows
@@ -155,7 +155,7 @@ If you change the code, be aware that there are differences between testing
 and production for app engine and just because something works on the
 local dev server does not mean that it will work in production so
 feature testing on app engine is recommended whenever adding or
-changing features to confirm they work when you go live.
+changing features to confirm they work before going live.
 
 The major differences to watch out for here are missing indexes
 causing GQL/datastore queries to fail in production
@@ -165,7 +165,7 @@ environment (tyically any code that uses C extensions).
 
 
 #### Deployment
-Once you are satisfied with your changes and testing,
+Once you are satisfied with any changes and testing,
 it's time to deploy the app to gcloud.
 
 There are two steps to deploying the app
