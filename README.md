@@ -192,8 +192,7 @@ http://console.cloud.google.com
 
 and go to the projects page and create a new project
 
-if you're using appspot domain this is where
-you choose your domain name.
+if you're using appspot domain specify the domain here.
 
 The Project ID is the name of your site and cannot be changed
 once you choose it, so be sure it's the one you want.
@@ -384,7 +383,7 @@ in the templates directory.
 
 To make a new page with the same structure as the others, use
 ```{% extends "base.html" %}```
-at the beginning of your template
+at the beginning of the template
 and
 ```{% endblock %}```
 at the end.
@@ -403,7 +402,7 @@ page load speeds and simple design.
 
 The app also uses jQuery.
 
-You can remove bootstrap and jquery entirely if you want by removing the links
+You can remove bootstrap and jquery entirely by removing the links
 in the `<head>` section of `base.html` and writing your own css.
 
 Keep in mind that if you remove bootstrap then any modals
@@ -411,8 +410,7 @@ will have to be replaced/redesigned
  as they will not work without bootstrap.
 The same goes for glyphicons that are used throughout the design.
 
-The default CSS is stored in /static/main.css and can be changed or overwritten
-to meet your needs.
+The default CSS is stored in /static/main.css and can be changed or overwritten.
 
 Keep in mind that `base.html` actually links to a minified
 version of `main.css` so if you change `main.css` no style changes
