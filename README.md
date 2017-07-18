@@ -175,13 +175,12 @@ for the first time.
 
 2. Upload project files
 
-The first step is where you can either choose a free appspot domain name
+The first step is where you can specify a domain:
+either choose a free appspot domain name
 or configure your own custom domain
 
 If you choose to use Google's free appspot domain,
 you get SSL builtin and don't have to worry about certificates.
-
-You do have the option to use your own domain.
 
 For more info about using a custom domain see
 
@@ -195,6 +194,7 @@ and go to the projects page and create a new project
 
 if you're using appspot domain this is where
 you choose your domain name.
+
 The Project ID is the name of your site and cannot be changed
 once you choose it, so be sure it's the one you want.
 
