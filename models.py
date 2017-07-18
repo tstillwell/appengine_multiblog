@@ -1,3 +1,4 @@
+""" Data model module """
 from google.appengine.ext import ndb
 import jinja2
 import os
@@ -11,6 +12,10 @@ def render_str(template, **params):
     """ Passes data from application into jinja templates to render pages"""
     template_page = JINJA_ENV.get_template(template)
     return template_page.render(params)
+
+
+""" All datastore models defined here are imported in main.py """
+""" Take care when modifying these as doing so may cause consistency issues """
 
 
 class Post(ndb.Model):
