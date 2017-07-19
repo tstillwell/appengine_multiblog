@@ -1,6 +1,6 @@
 """ Main application module. Intended for deployment to Google App Engine.
 
-    Python Standard Environment platform. Uses Python 2.7.
+    Built for App Engine Python Standard Environment platform. Uses Python 2.7.
     Controls all backend processing, storage, and backing service setup using
     WSGI application specification. See README file for more info.
     Open Source Project licensed under the MIT License. See LICENSE file.
