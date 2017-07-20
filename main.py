@@ -43,9 +43,8 @@ def render_str(template, **params):
 
 
 class Handler(webapp2.RequestHandler):
-    """ Base Handler. All application classes inheriet from Handler and have
-        access to these functions. Child classes are mapped with URLs
-        into WSGIApplication router. """
+    """ Base Handler. All application classes inheriet from Handler.
+        Child classes are mapped with URLs into WSGIApplication router. """
 
     def write(self, *a, **kw):
         """ write data to HTTP response used for render and testing """
