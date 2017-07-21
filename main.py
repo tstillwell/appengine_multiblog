@@ -44,7 +44,8 @@ def render_str(template, **params):
 
 class Handler(webapp2.RequestHandler):
     """ Base Handler. All application classes inheriet from Handler.
-        Child classes are mapped with URLs into WSGIApplication router. """
+        Child classes are mapped with URLs into WSGIApplication router.
+    """
 
     def write(self, *a, **kw):
         """ write data to HTTP response used for render and testing """
@@ -116,7 +117,8 @@ class FrontPaginate(Handler):
     """ next page/numbered page links containing additonal posts for no js """
     def get(self, page_id):
         """ Uses offset to get further pages if user wants to browse older
-        blog posts. Note this is only if browser javascript is disabled """
+            blog posts. Note this is only if browser javascript is disabled
+        """
         page_offset = ((int(page_id) * 10) - 10)
         pagecount = ((post_count() / 10) + 1)
         nextroll = ndb.gql("""SELECT * FROM Post ORDER BY created
@@ -131,7 +133,8 @@ class FrontPaginate(Handler):
 
 class AutoPager(Handler):
     """ Javascript auto pagination using jscroll to load in next set of
-    posts once the user reaches the bottom of Front page """
+        posts once the user reaches the bottom of Front page
+    """
     def get(self, page_id):
         """ Links from autopager - bare html used by jscroll """
         pagecount = ((post_count() / 10) + 1)
@@ -158,7 +161,8 @@ class NewPost(Handler):
 
     def post(self):
         """ Take info from forms, verify the request is not forged or expired
-             and add a post to the datastore """
+            and add a post to the datastore
+        """
         subject = self.request.get("subject")
         content = self.request.get("content")
         csrf_token = self.request.get("csrf-token")
@@ -240,7 +244,8 @@ class PermaLink(Handler):
 
 def secret_key():
     """ Get secret key from datastore. If one does not exist it makes one
-    and the event gets logged since this is an important security event """
+        and the event gets logged since this is an important security event
+    """
     secret_check = ndb.gql("SELECT key_string FROM Secret")
     key = secret_check.get()
     if key:  # if key is present return it
@@ -286,7 +291,7 @@ def user_by_email(email):
 
 
 def reset_email(recipient, token):
-    """ Sends email containing a password reset link if user requests it"""
+    """ Sends email containing a password reset link if user requests it """
     app_name = app_identity.get_application_id()
     from_address = ("noreply@%s.appspotmail.com" % app_name)
     if os.environ['HTTPS'] == 'off':
@@ -529,8 +534,9 @@ class Login(Handler):
 
     def post(self):
         """ If the ip address of the user was
-        recently rate limited, return an error and stop processing.
-        Otherwise verify password hash matches stored hash """
+            recently rate limited, return an error and stop processing.
+            Otherwise verify password hash matches stored hash
+        """
         user_ip = self.request.remote_addr
         if login_rate_limit(user_ip) == 403:
             error = "Too many login attempts, please try again later."
@@ -580,7 +586,8 @@ class ForgotPassword(Handler):
 
     def post(self):
         """ Verify the email belongs to a user and send them an email
-            with a password reset link """
+            with a password reset link
+        """
         email = self.request.get("email")
         target_user = user_by_email(email)
         if target_user is None:
@@ -607,7 +614,8 @@ class ResetPassword(Handler):
     """ Form to enter new password user gets link in email from forgot form """
     def get(self, reset_token):
         """ Verify the reset link is valid and not used or expired then draw
-            the form. If link is invalid show an error """
+            the form. If link is invalid show an error
+        """
         token_query = ndb.gql("""SELECT * FROM ResetToken
                                  WHERE token_guid = '%s'""" % reset_token)
         token = token_query.get()
@@ -839,8 +847,9 @@ class CommentAjax(Handler):
     """ Read JSON request, validates it, updates client with response """
     def post(self):
         """ Verify user with cookie and csrf token, update comment in datastore
-        then send a response with the new comment
-        text to load into the DOM """
+            then send a response with the new comment
+            text to load into the DOM
+        """
         user = self.user
         request_data = json.loads(self.request.body)
         target_comment = int(request_data['comment_id'])
