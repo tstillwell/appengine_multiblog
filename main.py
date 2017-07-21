@@ -44,7 +44,10 @@ def render_str(template, **params):
 
 class Handler(webapp2.RequestHandler):
     """ Base Handler. All application classes inheriet from Handler.
+
         Child classes are mapped with URLs into WSGIApplication router.
+        Each handler has a "get" and "post" method used to handle different
+        HTTP requests with those verbs
     """
 
     def write(self, *a, **kw):
