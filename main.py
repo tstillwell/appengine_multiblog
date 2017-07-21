@@ -37,7 +37,7 @@ HOST_NAME = os.environ['HTTP_HOST']  # The current host name of the app
 
 
 def render_str(template, **params):
-    """ Passes data from application into jinja templates to render pages"""
+    """ Passes data from application into jinja templates to render pages """
     template_page = JINJA_ENV.get_template(template)
     return template_page.render(params)
 
@@ -51,17 +51,17 @@ class Handler(webapp2.RequestHandler):
         self.response.out.write(*a, **kw)
 
     def render(self, template, **kw):
-        """ Fills data into the template and writes as response"""
+        """ Fills data into the template and writes as response """
         self.write(render_str(template, **kw))
 
     def cookie(self):
-        """Used by child classes to get the current Session cookie"""
+        """ Used by child classes to get the current Session cookie """
         my_cookie = self.request.cookies.get('Session')
         return my_cookie
 
     @property
     def user(self):
-        """Returns logged-in username or None"""
+        """ Returns logged-in username or None """
         return valid_user(self.cookie())
 
 
