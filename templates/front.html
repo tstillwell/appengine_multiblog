@@ -13,12 +13,12 @@
 <noscript>
     {% if page_id > 1 %}
     <a class="prevpage-link" href ="/blog/page/{{page_id - 1}}">
-      <button type="button" class="btn btn-default"> &lt;- Prev </button>
+      <button type="button" class="btn btn-default"> &larr; Prev </button>
     </a>
     {% endif %}
     {% if page_id < pagecount %}
     <a class="nextpage-link" href ="/blog/page/{{page_id + 1}}">
-      <button type="button" class="btn btn-default">Next -&gt; </button>
+      <button type="button" class="btn btn-default">Next &rarr; </button>
     </a>
     {% endif %}
 </noscript>
