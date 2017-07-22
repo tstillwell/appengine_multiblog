@@ -263,6 +263,10 @@ There are two seperate parts of each value in this map.
 
 The values to the left are the URL paths
  `'/blog/?'`
+and are written as regular expressions
+
+For more info on webapp2s routing see
+http://webapp2.readthedocs.io/en/latest/guide/routing.html
 
 and the values on the right are the class names
 that handle HTTP requests to those paths.
@@ -287,8 +291,9 @@ class FrontPage(Handler):
 for each class, seperate GET and POST handlers are defined
 so the app can respond to the requests appropriately.
 
-Using this paradigm, it is simple to add a new part to the
-URL mapping and build new classes to handle different app functions.
+Using this paradigm, it is simple to add a new part to create
+new routes and build new classes to
+handle different app functions.
 
 ##### User validation
 
