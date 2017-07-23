@@ -242,9 +242,6 @@ class PermaLink(Handler):
                          comment.parent_post_id, comment.posting_user)
 
 
-# *** User & Security functions. Below section is important for security ***
-# *** If you change this seciton please proceed with caution ***
-
 def secret_key():
     """ Get secret key from datastore. If one does not exist it makes one
         and the event gets logged since this is an important security event
@@ -437,7 +434,6 @@ def valid_email(email):
         return email
 
 
-# *** This is the end of User & Security functions section *** ""
 def signup_errors(username, password, verify, email):
     """ Returns a list of errors if user has invalid signup inputs """
     params = dict(username=username,
