@@ -361,7 +361,6 @@ def new_hash(user_entity, new_password):
     user_entity.salt = salt
     user_entity.user_hash = user_hash
     user_entity.put()  # add new salt and hash to datastore
-    return True
 
 
 def session_uuid():
