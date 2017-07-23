@@ -243,7 +243,9 @@ class PermaLink(Handler):
 
 
 def secret_key():
-    """ Get secret key from datastore. If one does not exist it makes one
+    """ Get secret key from datastore.
+
+        Read Secret Key from db. If one does not exist, create one
         and the event gets logged since this is an important security event
     """
     secret_check = ndb.gql("SELECT key_string FROM Secret")
