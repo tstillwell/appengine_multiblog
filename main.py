@@ -613,9 +613,7 @@ class ForgotPassword(Handler):
 class ResetPassword(Handler):
     """ Form to enter new password user gets link in email from forgot form """
     def get(self, reset_token):
-        """ Verify the reset link is valid and not used or expired then draw
-            the form. If link is invalid show an error
-        """
+        """ Verify link is still valid and draw reset form """
         token_query = ndb.gql("""SELECT * FROM ResetToken
                                  WHERE token_guid = '%s'""" % reset_token)
         token = token_query.get()
