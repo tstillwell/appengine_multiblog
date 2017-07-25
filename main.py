@@ -783,7 +783,7 @@ class Manage(Handler):
 class EditPost(Handler):
     """ Allows users to edit/update their existing posts """
     def get(self, post_id):
-        """ IF user is the post owner, they can edit the post """
+        """ Let user see edit form if they are owner """
         user = self.user
         if user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
