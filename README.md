@@ -588,7 +588,8 @@ http://jinja.pocoo.org/docs/2.9/api/#autoescaping
 #### Terms & Conditions and Privacy Policy
 If you use this app for the public, you should have
 a terms and conditions and privacy policy available
-to protect yourself or your organization.
+to protect yourself or your organization, and notify users
+what you are doing with their data.
 
 It is advised that you have these pages created as
 seperate top level URLs and that you link to them in the footer.
