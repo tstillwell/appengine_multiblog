@@ -149,8 +149,8 @@ http://cloud.google.com/appengine/docs/standard/python/tools/using-local-server
 **WARNING** -
 
 The app behaves functionally the same on the local development server as it
-does in production on app engine, but unfortunately there are differences
-between the two environments that might cause different behavior.
+does in production on app engine, but there are differences
+between these environments that might cause different behavior.
 
 If you change the code, be aware that there are differences between testing
 and production for app engine and just because something works on the
