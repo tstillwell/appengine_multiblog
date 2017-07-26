@@ -103,7 +103,7 @@ on the requirements.txt file included with this project.
 `pip install -r requirements.txt`
 
 
-Finally, execute dev_appserver.py included with the Google Cloud SDK like so
+Finally, execute dev_appserver.py included with the Google Cloud SDK:
 
 `
 python /Google/Cloud SDK/google-cloud-sdk/bin/dev_appserver.py /this_project
