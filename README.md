@@ -291,9 +291,8 @@ class FrontPage(Handler):
 for each class, seperate GET and POST handlers are defined
 so the app can respond to the requests appropriately.
 
-Using this paradigm, it is simple to add a new part to create
-new routes and build new classes to
-handle different app functions.
+Using this paradigm, new routes and new classes to
+handle different app functions can be built.
 
 ##### User validation
 
