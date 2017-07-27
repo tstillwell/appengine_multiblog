@@ -348,7 +348,7 @@ the admin interface to test them.
 For more info on creating cron jobs see
 http://cloud.google.com/appengine/docs/standard/python/config/cron
 
-##### Datastore Indexes
+##### Indexes
 
 Normally, app engine applications that use the datastore require indexes
 to be built. The indexes are used to make datastore queries more efficient.
