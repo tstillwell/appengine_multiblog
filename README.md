@@ -294,6 +294,19 @@ so the app can respond to the requests appropriately.
 Using this paradigm, new routes and new classes to
 handle different app functions can be built.
 
+##### Datastore
+App Engine's default data storage option
+is Google Cloud Datastore.
+
+Access to the Datastore is facilitated using the
+Python NDB client library.
+
+Data queries for the app are made using
+GQL, a SQL like language used for Cloud Datastore.
+
+For more info on Datastore see
+http://cloud.google.com/appengine/docs/standard/python/datastore/
+
 ##### User validation
 
 Each request handler class that inherits from `Handler`
