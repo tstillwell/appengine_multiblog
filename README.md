@@ -167,7 +167,7 @@ environment (tyically any code that uses C extensions).
 
 
 
-#### Deployment
+## Deployment
 Once you are satisfied with any changes and testing,
 it's time to deploy the app to gcloud.
 
