@@ -1,6 +1,7 @@
 # Multi-User Blog for Google App Engine
 
 #### A responsive blogging engine designed for multiple users
+___
 
 Allow different users to sign up and easily blog.
 It is not walled or gated so **anyone** can sign up
@@ -13,7 +14,7 @@ Navigate to where the project lives on your system in your terminal and run:
 
 `gcloud app deploy app.yaml index.yaml cron.yaml`
 
-
+***
 
 ## Features
 
