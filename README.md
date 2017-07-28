@@ -14,7 +14,7 @@ Navigate to where the project lives on your system in your terminal and run:
 
 `gcloud app deploy app.yaml index.yaml cron.yaml`
 
-***
+___
 
 ## Features
 
@@ -54,6 +54,7 @@ Navigate to where the project lives on your system in your terminal and run:
 
 * User Password resets via email
 
+___
 
 ## Environment Info
 If you are unfamiliar with google app engine,
