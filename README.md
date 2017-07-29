@@ -300,11 +300,14 @@ handle different app functions can be built.
 App Engine's default data storage option
 is Google Cloud Datastore.
 
+Cloud datastore is a managed NoSQL database
+it **is not a relational database**.
+
 Access to the Datastore is facilitated using the
 Python NDB client library.
 
 Data queries for the app are made using
-GQL, a SQL like language used for Cloud Datastore.
+GQL, a SQL-like language used for Cloud Datastore.
 
 For more info on Datastore see
 http://cloud.google.com/appengine/docs/standard/python/datastore/
