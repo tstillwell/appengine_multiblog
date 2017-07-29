@@ -319,6 +319,12 @@ can use `self.user` to get the current account from the datastore
 and validate that the user is logged in. If the user is not logged
 in or has an expired session, then self.user will return `None`.
 
+User verification is achieved with HTTP cookies after
+a user logs in to their account.
+The cookies use a session variable that is stored
+in the datastore and linked to the account.
+
+
 User actions can also be validated by using
 anti cross-site request forgery (CSRF) tokens.
 
