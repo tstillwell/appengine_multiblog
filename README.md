@@ -563,6 +563,9 @@ http://cloud.google.com/appengine/docs/standard/python/mail/sendgrid
 Be aware that emails are not actually sent when using
 the local development server by default, although this can be configured.
 
+For more info on email with App Engine see
+http://cloud.google.com/appengine/docs/standard/python/mail/
+
 #### Logging
 
 The app logs events using the python logging library.
