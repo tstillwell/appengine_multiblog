@@ -95,7 +95,7 @@ To get the SDK follow the guide here:
 http://cloud.google.com/appengine/docs/standard/python/download
 
 
-Once you have the SDK setup, you will need the required
+Once you have the SDK set up, you will need the required
 dependencies (python imports) to test the app locally or
 you will get errors when you try to start the app.
 
@@ -105,7 +105,8 @@ on the requirements.txt file included with this project.
 `pip install -r requirements.txt`
 
 
-Finally, execute dev_appserver.py included with the Google Cloud SDK:
+Finally, execute dev_appserver.py included with the Google Cloud SDK
+on the root project folder:
 
 `
 python /Google/Cloud SDK/google-cloud-sdk/bin/dev_appserver.py /this_project
@@ -130,7 +131,9 @@ And you should see the FrontPage.
 
 From here, make any changes you want to the code and
 then save and preview them in the browser until you are satisfied.
-When a file is saved or updated, the SDK restarts the dev server.
+
+When a file is saved or updated, the dev server hot loads
+them so you don't have to restart it manually.
 
 The initial console message when you start the
 local development server also shows
