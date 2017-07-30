@@ -309,6 +309,16 @@ Python NDB client library.
 Data queries for the app are made using
 GQL, a SQL-like language used for Cloud Datastore.
 
+Datastore queries do not typically have strong consistency,
+so data can sometimes be stale if it was recently modified.
+Since this is not a major concern for a blogging app,
+you probably don't need to worry about consistency.
+
+If you attempt to add new features that depend
+on strong consistency you may see issues.
+Strong consistency is possible with
+the right data and query structure.
+
 For more info on Datastore see
 http://cloud.google.com/appengine/docs/standard/python/datastore/
 
