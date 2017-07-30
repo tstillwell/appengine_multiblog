@@ -40,7 +40,7 @@ ___
 
 * Automatic caching with memcache
 
-* Bultin logging
+* Builtin logging
 
 * CSRF protection
 
@@ -144,7 +144,7 @@ If you run into errors or the page does not load,
 check the SDK console window first to see if there is a stack trace
 or other error message being logged there.
 
-The documentaiton for the Local Development Server can be found here
+The documentation for the Local Development Server can be found here
 
 http://cloud.google.com/appengine/docs/standard/python/tools/using-local-server
 
@@ -163,7 +163,7 @@ changing features to confirm they work before going live.
 The major differences to watch out for here are missing indexes
 causing GQL/datastore queries to fail in production
 and attempting to use Python code not supported by the standard
-environment (tyically any code that uses C extensions).
+environment (typically any code that uses C extensions).
 
 
 
@@ -219,7 +219,7 @@ See the `app.yaml` reference here:
 http://cloud.google.com/appengine/docs/standard/python/config/appref
 
 Once the deploy command finishes, the app is
-serving requets and is up and running!
+serving requests and is up and running!
 
 
 You should now be able to visit your site and see the front page.
@@ -260,7 +260,7 @@ This map is visible in main.py as the 'app' variable and looks like this:
 
 ```
 
-There are two seperate parts of each value in this map.
+There are two separate parts of each value in this map.
  `('/blog/?', FrontPage)`
 
 The values to the left are the URL paths
@@ -290,7 +290,7 @@ class FrontPage(Handler):
 
 ```
 
-for each class, seperate GET and POST handlers are defined
+for each class, separate GET and POST handlers are defined
 so the app can respond to the requests appropriately.
 
 Using this paradigm, new routes and new classes to
@@ -367,7 +367,7 @@ The file contains a URL, schedule, and description for each task.
 The URLs are normal requests handlers defined just like
 other request handlers. Because of this, urls have to be protected
 so users can't just run the cron jobs by visiting the URL.
-This can be achieved by requring authorization for those URLs.
+This can be achieved by requiring authorization for those URLs.
 
 For this app,
 any urls that are in `/tasks/` are automatically protected by
@@ -389,7 +389,7 @@ to be built. The indexes are used to make datastore queries more efficient.
 
 Since this app does not make very complicated queries,
 you don't have to wait for indexes to be built before it
-starts serving requets, simplifying deployment.
+starts serving requests, simplifying deployment.
 
 Be mindful, however, when adding new datastore interactions-
 they will automatically create indexes and work without hiccups on
@@ -397,7 +397,7 @@ the local development server, but queries may fail when deployed
 if indexes have not been built yet on Google Cloud Platform.
 
 Indexes are created automatically in `index.yaml` by the local
-development server so as long as you excercise the development datastore by
+development server so as long as you exercise the development datastore by
 performing new query types before deployment then the indexes will be updated.
 
 For more info regarding index configuration, see
@@ -446,7 +446,7 @@ in the `<head>` section of `base.html` and writing your own css.
 
 Keep in mind that if you remove bootstrap then any modals
 will have to be replaced/redesigned
- as they will not work without bootstrap.
+as they will not work without bootstrap.
 The same goes for glyphicons that are used throughout the design.
 
 The default CSS is stored in /static/main.css and can be changed or overwritten.
@@ -496,7 +496,7 @@ and libraries, consider using the Flexible Environment as it iess restrictive.
 3rd party python libraries are supported, as long as
 they are pure python and do not use C extensions.
 
-Fore more info about using third-party libraries see:
+For more info about using third-party libraries see:
 
 http://cloud.google.com/appengine/docs/standard/python/tools/using-libraries-python-27
 
@@ -625,7 +625,7 @@ to protect yourself or your organization, and notify users
 what you are doing with their data.
 
 It is advised that you have these pages created as
-seperate top level URLs and that you link to them in the footer.
+separate top level URLs and that you link to them in the footer.
 
 There are no terms of service or privacy policy templates
 provided with this app.
@@ -637,7 +637,7 @@ Consult a legal professional for more info.
 #### New Code / Features
 If you feel new features should be added and you know how to implement them:
 
-Ensure any python code is PEP8 compliant,and any HTML is valid HTML5.
+Ensure any python code is PEP8 compliant, and any HTML is valid HTML5.
 
 Then simply create a Pull Request with a brief summary of your changes and
 the update will be reviewed
@@ -658,7 +658,7 @@ If you find any bugs please open an issue on github
 with any details about the bug.
 
 If possible, please list the steps to reproduce
-the bug or what happened when the bug occured.
+the bug or what happened when the bug occurred.
 
 
 ## Built with help from
