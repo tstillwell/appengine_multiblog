@@ -515,17 +515,6 @@ class Signup(Handler):
                 self.render('welcome.html', user=account.username)
 
 
-class Welcome(Handler):
-    """ Redirect new users here after registering """
-    def get(self):
-        """ Check cookie and if it's valid show the page """
-        user = self.user
-        if user:
-            self.render('welcome.html', user=user)
-        else:
-            self.redirect('/login')
-
-
 class Login(Handler):
     """ Login page """
     def get(self):
@@ -955,7 +944,6 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/newpost', NewPost),
                                ('/blog/([0-9]+)', PermaLink),
                                ('/signup', Signup),
-                               ('/welcome', Welcome),
                                ('/login', Login),
                                ('/forgot-password', ForgotPassword),
                                (r'/resetpassword/([a-f\d\-]+)', ResetPassword),
