@@ -338,7 +338,7 @@ The cookies use a session variable that is stored
 in the datastore and linked to the account.
 
 
-User actions can also be validated by using
+User form submissions can be validated by using
 anti cross-site request forgery (CSRF) tokens.
 
 To use anti-CSRF tokens, pass
