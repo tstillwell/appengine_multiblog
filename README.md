@@ -337,6 +337,14 @@ a user logs in to their account.
 The cookies use a session variable that is stored
 in the datastore and linked to the account.
 
+Every time a user performs an HTTP interaction
+with the server their session is validated
+by checking that their cookie data is correctly
+associated with the account in the datastore.
+
+The cookies also have anti-tamper functionality
+by signing them with a secret key which is
+stored in the datastore.
 
 User form submissions can be validated by using
 anti cross-site request forgery (CSRF) tokens.
