@@ -325,7 +325,8 @@ def valid_user(cookie_str):
     cookie_parts = cookie_str.split("|")
     if len(cookie_parts) != 2:
         return None
-    if cookie_parts[1] == cookie_hash(cookie_parts[0]):
+    if hmac.compare_digest(str(cookie_parts[1]),
+                           str(cookie_hash(cookie_parts[0]))):
         user_query = ndb.gql("""SELECT * FROM User
                              WHERE current_session ='%s'"""
                              % cookie_parts[0])
