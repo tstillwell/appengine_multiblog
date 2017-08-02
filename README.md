@@ -196,19 +196,25 @@ Login to Google Cloud Platform console
 
 http://console.cloud.google.com
 
-and go to the projects page and create a new project
+Then, go to the projects page and create a new project.
 
-if you're using appspot domain specify the domain here.
+If you're using a free appspot domain specify the domain here.
 
 The Project ID is the name of your site and cannot be changed
 once you choose it, so be sure it's the one you want.
+
+Your domain will look something like this:
+`project-name.appspot.com`
+If project-name is already taken, some letters/numbers
+are added to the name to make it unique
+but the page will tell you if this is the case.
 
 
 The second step involves uploading the code to the project
 so the app can start handling requests.
 
-There are 3 YAML files that need to be deployed with the
-command to ensure the app works properly.
+There are 3 YAML files that need to be supplied with the
+deploy command to ensure the app works properly.
 
 From the project directory you can run
 
