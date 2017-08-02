@@ -198,16 +198,16 @@ http://console.cloud.google.com
 
 Then, go to the projects page and create a new project.
 
-If you're using a free appspot domain specify the domain here.
 
-The Project ID is the name of your site and cannot be changed
-once you choose it, so be sure it's the one you want.
+> **If you're using a free appspot domain: **
+> The Project ID is the name of your site and cannot be changed
+> once you choose it, so be sure it's the one you want.
 
-Your domain will look something like this:
-`project-name.appspot.com`
-If project-name is already taken, some letters/numbers
-are added to the name to make it unique
-but the page will tell you if this is the case.
+> Your domain will look something like this:
+> `project-name.appspot.com`
+> If project-name is already taken, some letters/numbers
+> are added to the name to make it unique
+> but the page will tell you if this is the case.
 
 
 The second step involves uploading the code to the project
