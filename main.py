@@ -706,7 +706,7 @@ class UserPage(Handler):
                         pagecount=pagecount, page_id=1)
         else:
             self.render("useractivity.html", view_user=profile_user,
-                        post_roll=post_roll,  pagecount=pagecount, page_id=1)
+                        post_roll=post_roll, pagecount=pagecount, page_id=1)
 
 
 class UserPageMorePosts(Handler):
@@ -728,7 +728,7 @@ class UserPageMorePosts(Handler):
                         pagecount=pagecount, page_id=int(page_id))
         else:
             self.render("useractivity.html", view_user=profile_user,
-                        post_roll=post_roll,  pagecount=pagecount,
+                        post_roll=post_roll, pagecount=pagecount,
                         page_id=int(page_id))
 
 
