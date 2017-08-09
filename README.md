@@ -321,6 +321,9 @@ it **is not a relational database**.
 Access to the Datastore is facilitated using the
 Python NDB client library.
 
+This app sets up the datastore using `models.py`
+The data's structure is configured there.
+
 Data queries for the app are made using
 GQL, a SQL-like language used for Cloud Datastore.
 
