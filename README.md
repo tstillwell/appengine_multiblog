@@ -3,7 +3,7 @@
 #### A responsive blogging engine designed for multiple users
 ___
 
-Allow different users to sign up and easily blog.
+Easily allows multiple users to sign up and blog.
 It is not walled or gated so **anyone** can sign up
 and post directly to the front page out of the box.
 
@@ -57,7 +57,7 @@ ___
 ___
 
 ## Environment Info
-If you are unfamiliar with google app engine,
+If you are unfamiliar with Google App Engine,
 it is a Platform as a Service (PaaS)
 that runs on Google's cloud infrastructure.
 
