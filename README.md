@@ -86,7 +86,19 @@ can simulate App Engine on your system.
 
 #### Local Development Server
 To customize the app and test it locally
-you first need to have Python 2.7.9 installed.
+you need to set up the SDK.
+You can either do so using a vagrant box or
+by installing the SDK onyour system.
+
+
+###### Vagrant Box
+Use a preconfigured vagrant box for Python/App Engine:
+https://github.com/rehabstudio/vagrant-python-appengine
+
+
+###### Installing on your system
+
+You need to have Python 2.7.9 installed.
 
 Then, install the Google Cloud SDK and the App Engine extension for python
 
@@ -94,6 +106,9 @@ To get the SDK follow the guide here:
 
 http://cloud.google.com/appengine/docs/standard/python/download
 
+___
+
+##### Python Dependencies
 
 Once you have the SDK set up, you will need the required
 dependencies (python imports) to test the app locally or
@@ -104,7 +119,7 @@ on the requirements.txt file included with this project.
 
 `pip install -r requirements.txt`
 
-
+##### Running the server
 Finally, execute dev_appserver.py included with the Google Cloud SDK
 on the root project folder:
 
