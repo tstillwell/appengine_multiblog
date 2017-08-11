@@ -544,6 +544,11 @@ If these quotas are exceeded and you do not have billing
 enabled on your account, certain parts of the app
 will become unusable until the next 24 hour cycle.
 
+There are also Safety limits in place (DOS proteciton)
+on Google App Engine. These are short-term quotas
+that apply for free and billing-enabled accounts.
+
+
 If you do have billing enabled understand
 that you will be billed by google for usage
 that exceeds the free quota.
