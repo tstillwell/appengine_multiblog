@@ -18,8 +18,7 @@ import jinja2
 import webapp2
 from pbkdf2 import PBKDF2
 from google.appengine.ext import ndb
-from google.appengine.api import app_identity
-from google.appengine.api import mail
+from google.appengine.api import app_identity, mail
 from models import (
     Post,
     Comment,
