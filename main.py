@@ -28,11 +28,10 @@ from models import (
     AntiCsrfToken,
     ResetToken,
     LoginAttempt,
+    TEMPLATE_DIR,
+    JINJA_ENV
 )
 
-TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
-JINJA_ENV = jinja2.Environment(loader=jinja2.FileSystemLoader(TEMPLATE_DIR),
-                               autoescape=True)  # always autoescape
 HOST_NAME = os.environ['HTTP_HOST']  # The current host name of the app
 
 
