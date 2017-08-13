@@ -76,10 +76,6 @@ http://cloud.google.com/appengine/docs/standard/python/runtime
 
 For more info about environment limitations, see the _Limitations_ section
 
-While deploying the application to app engine works with only
-the gcloud command line tool and the code in this repo -
-you will probably want to customize it first.
-
 If you want to customize / test the app before deploying, you will
 need to use the App Engine SDK which includes a local development server so you
 can simulate App Engine on your system.
