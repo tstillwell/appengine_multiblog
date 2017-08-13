@@ -136,15 +136,14 @@ Then just go to
 `http://localhost:8080`
 (or wherever the above console message says the module is started)
 
-in your browser
+in your browser to see the front page.
 
-And you should see the FrontPage.
 
-From here, make any changes you want to the code and
-then save and preview them in the browser until you are satisfied.
+From here, make any changes you want to the code in the project folder and
+then save and preview in the browser until you are satisfied.
 
 When a file is saved or updated, the dev server hot loads
-them so you don't have to restart it manually.
+it so you don't have to restart the server manually.
 
 The initial console message when you start the
 local development server also shows
