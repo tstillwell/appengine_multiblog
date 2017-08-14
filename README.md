@@ -4,10 +4,10 @@
 ___
 
 Easily allows multiple users to sign up and blog.
-Sign up not walled or gated so **anyone** can sign up
+Sign up is not walled or gated so **anyone** can sign up
 and post directly to the front page out of the box.
 
-It uses Google's App Engine platform and runs on the standard (free)
+Uses Google App Engine and runs on the standard (free)
 environment and can be deployed to app engine in less than a mintue.
 
 Navigate to where the project lives on your system in your terminal and run:
