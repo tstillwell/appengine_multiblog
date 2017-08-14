@@ -1,10 +1,10 @@
 # Multi-User Blog for Google App Engine
 
-#### A responsive blogging engine designed for multiple users
+#### A responsive blog built for multiple users
 ___
 
 Easily allows multiple users to sign up and blog.
-It is not walled or gated so **anyone** can sign up
+Sign up not walled or gated so **anyone** can sign up
 and post directly to the front page out of the box.
 
 It uses Google's App Engine platform and runs on the standard (free)
