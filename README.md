@@ -84,7 +84,7 @@ can simulate App Engine on your system.
 To customize the app and test it locally
 you need to set up the SDK.
 You can either do so using a vagrant box or
-by installing the SDK onyour system.
+by installing the SDK on your system.
 
 
 ###### Vagrant Box
