@@ -57,13 +57,12 @@ ___
 ___
 
 ## Environment Info
-If you are unfamiliar with Google App Engine,
-it is a Platform as a Service (PaaS)
+Google App Engine is a Platform as a Service (PaaS)
 that runs on Google's cloud infrastructure.
 
 http://cloud.google.com/appengine/
 
-App Engine supports multiple languages and build types-
+App Engine supports multiple languages and runtimes-
 this app uses the
 __Python Standard Environment__
 (as opposed to the flexible environment)
