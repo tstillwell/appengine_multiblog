@@ -960,4 +960,4 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/tasks/orphan-comments', CleanupComments),
                                ('/tasks/de-ratelimit', CleanupRateLimiter),
                                ('/tasks/old-reset-tokens', PurgeResetTokens),
-                               ], debug=True,)
+                               ])
