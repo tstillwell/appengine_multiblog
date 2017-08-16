@@ -935,7 +935,7 @@ class PurgeResetTokens(Handler):
         logging.info("Cron job finished: Remove old reset tokens")
 
 
-# Router - Bind these URLs to above Request Handler instances
+# Router - Binds URLs to above request handlers
 app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/?', FrontPage),
                                ('/blog/page/([1-9][0-9]*)', FrontPaginate),
