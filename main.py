@@ -776,11 +776,10 @@ class EditPost(Handler):
         if user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            if post.posting_user == user:
-                self.render("editpost.html", post=post,
-                            token=csrf_token_for(user), user=user)
-        else:
-            self.error(404)
+            if post and post.posting_user == user:
+                return self.render("editpost.html", post=post,
+                                   token=csrf_token_for(user), user=user)
+        return self.error(404)
 
     def post(self, post_id):
         """ If users match post owner change the post in db """
@@ -790,12 +789,11 @@ class EditPost(Handler):
         if user and csrf_token == csrf_token_for(user):
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            if post.posting_user == user:
+            if post and post.posting_user == user:
                 post.content = content
                 post.put()
-                self.redirect('/blog/%s' % str(post.key.id()))
-        else:
-            self.error(404)
+                return self.redirect('/blog/%s' % str(post.key.id()))
+        return self.error(404)
 
 
 class EditComment(Handler):
@@ -806,11 +804,10 @@ class EditComment(Handler):
         if user:
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
-            if comment.posting_user == user:
-                self.render("editcomment.html", comment=comment,
-                            token=csrf_token_for(user), user=user)
-        else:
-            self.error(404)
+            if comment and comment.posting_user == user:
+                return self.render("editcomment.html", comment=comment,
+                                   token=csrf_token_for(user), user=user)
+        return self.error(404)
 
     def post(self, comment_id):
         """ If user matches comment owner, update comment in the datastore """
@@ -820,13 +817,12 @@ class EditComment(Handler):
             csrf_token = self.request.get("csrf-token")
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
-            if (comment.posting_user == user and
+            if (comment and comment.posting_user == user and
                     csrf_token == csrf_token_for(user)):
                 comment.comment_text = content
                 comment.put()
-                self.redirect('/blog/%s' % str(comment.parent_post_id))
-        else:
-            self.error(404)
+                return self.redirect('/blog/%s' % str(comment.parent_post_id))
+        return self.error(404)
 
 
 class CommentAjax(Handler):
@@ -842,7 +838,7 @@ class CommentAjax(Handler):
         submitted_csrf_token = request_data['csrf_token']
         comment_to_update = Comment.get_by_id(target_comment,
                                               parent=comment_key())
-        if (comment_to_update.posting_user == user and
+        if (comment_to_update and comment_to_update.posting_user == user and
                 submitted_csrf_token == csrf_token_for(user)):
             new_comment_text = (request_data['new_text'])
             comment_to_update.comment_text = new_comment_text
@@ -859,11 +855,10 @@ class DeletePost(Handler):
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
             user = self.user
-            if post.posting_user == self.user:
-                self.render("delete.html", post=post,
-                            user=user, token=csrf_token_for(user))
-        else:
-            self.error(404)
+            if post and post.posting_user == self.user:
+                return self.render("delete.html", post=post,
+                                   user=user, token=csrf_token_for(user))
+        return self.error(404)
 
     def post(self, post_id):
         """ verify user match and csrf token and delete """
@@ -873,12 +868,12 @@ class DeletePost(Handler):
             user = self.user
             csrf_token = self.request.get("csrf-token")
             actual_csrf_token = csrf_token_for(user)
-            if post.posting_user == user and csrf_token == actual_csrf_token:
+            if (post and post.posting_user == user and
+               csrf_token == actual_csrf_token):
                 key.delete()
-                self.redirect('/manage')
                 logging.info("Post Deleted: %s", post_id)
-        else:
-            self.error(404)
+                return self.redirect('/manage')
+            return self.error(404)
 
 
 class Logout(Handler):
