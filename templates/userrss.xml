@@ -2,7 +2,9 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
   <link href="http://{{host}}/users/{{requested_user.username}}/rss" rel="self" type="application/atom+xml" />
   <link href="http://{{host}}/users/{{requested_user.username}}" rel="alternate" type="text/html" hreflang="en" />
+  {% if blog_roll.get() %}
   <updated>{{blog_roll.get().last_modified.strftime("%Y-%m-%dT%H:%M:%S+00:00")}}}}</updated>
+  {% endif %}
   <id>http://{{host}}/users/{{requested_user.username}}</id>
   <title>{{requested_user.username}} - Recent Posts</title>
   <subtitle>{{requested_user.username}}'s Blog</subtitle>
