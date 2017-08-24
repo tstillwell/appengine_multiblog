@@ -218,6 +218,12 @@ Then, go to the projects page and create a new project.
 > are added to the name to make it unique
 > but the page will tell you if this is the case.
 
+Once the project has been created you
+need to tell the gcloud tool which project to use
+for deployment. To do this run `gcloud init`
+and the tool will walk you through selecting the
+newly created project.
+
 
 The second step involves uploading the code to the project
 so the app can start handling requests.
