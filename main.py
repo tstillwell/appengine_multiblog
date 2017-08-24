@@ -414,24 +414,23 @@ def login_rate_limit(ip_address):
         attempt.put()
 
 
-USER_RE = re.compile(r"^[a-zA-Z0-9-]{3,20}$")
-PASS_RE = re.compile(r"^.{3,200}$")
-EMAIL_RE = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
-
-
+# validation functions for user signup form
 def valid_username(username):
-    """ Use USER_RE regex to ensure well-formed username """
-    return username and USER_RE.match(username)
+    """ ensure well formed username and return it """
+    user_re = re.compile(r"^[a-zA-Z0-9-]{3,20}$")
+    return username and user_re.match(username)
 
 
 def valid_password(password):
-    """ Use PASS_RE regex to ensure minimum pass length """
-    return password and PASS_RE.match(password)
+    """ ensure password is well formed and return it """
+    pass_re = re.compile(r"^.{3,200}$")
+    return password and pass_re.match(password)
 
 
 def valid_email(email):
-    """ Use EMAIL_RE regex to ensure email address is well-formed """
-    if EMAIL_RE.match(email):
+    """ ensure well formed email address and return it """
+    email_re = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
+    if email_re.match(email):
         return email
 
 
