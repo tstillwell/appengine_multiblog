@@ -562,7 +562,7 @@ class Login(Handler):
             return self.render('welcome.html', user=target_user.username)
 
         self.render("login.html", error="Invalid Login")
-        logging.info("Login falure: %s", input_username)
+        logging.info("Login failure: %s", input_username)
 
 
 class ForgotPassword(Handler):
