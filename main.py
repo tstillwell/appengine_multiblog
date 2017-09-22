@@ -694,16 +694,19 @@ class UserPage(Handler):
         if not profile_user:
             self.error(404)
             return
-        post_roll = ndb.gql("""SELECT * FROM Post WHERE posting_user = '%s'
-                                ORDER BY created DESC LIMIT 10""" % username)
+        user_posts = Post.query(ancestor=blog_key()).filter(
+            Post.posting_user == username)
+        posts = user_posts.fetch()
+        sorted_posts = sorted(posts,
+                              key=lambda post: post.created, reverse=True)[:10]
         pagecount = ((post_count_for_user(username) / 10) + 1)
         if self.user:
             self.render("useractivity.html", view_user=profile_user,
-                        user=self.user, post_roll=post_roll,
+                        user=self.user, post_roll=sorted_posts,
                         pagecount=pagecount, page_id=1)
         else:
             self.render("useractivity.html", view_user=profile_user,
-                        post_roll=post_roll, pagecount=pagecount, page_id=1)
+                        post_roll=sorted_posts, pagecount=pagecount, page_id=1)
 
 
 class UserPageMorePosts(Handler):
