@@ -152,10 +152,9 @@ class NewPost(Handler):
     """ Page for adding new blog posts """
     def get(self):
         """ Renders the newpost form with anti-forgery token into the page """
-        user = self.user
-        if user:
-            self.render("newpost.html", user=user,
-                        token=csrf_token_for(user))
+        if self.user:
+            self.render("newpost.html", user=self.user,
+                        token=csrf_token_for(self.user))
         else:
             error = "You must be logged in to post"
             self.render("newpost.html", error=error)
@@ -167,16 +166,15 @@ class NewPost(Handler):
         subject = self.request.get("subject")
         content = self.request.get("content")
         csrf_token = self.request.get("csrf-token")
-        user = self.user
         if subject and content:
             # If data fields present, make new Post and add it to the db
-            if not user:
+            if not self.user:
                 error = "You must be logged in to post"
                 self.render("newpost.html", subject=subject,
                             content=content, error=error)
-            if user and csrf_token == csrf_token_for(user):
+            if self.user and csrf_token == csrf_token_for(self.user):
                 blog_post = Post(parent=blog_key(), subject=subject,
-                                 content=content, posting_user=user)
+                                 content=content, posting_user=self.user)
                 blog_post.put()
                 self.redirect('/blog/%s' % str(blog_post.key.id()))
                 logging.info("New post created : %s", blog_post.key.id())
@@ -185,7 +183,8 @@ class NewPost(Handler):
             # report an error and ask for fields again
             error = "Subject and Content are both required"
             self.render("newpost.html", subject=subject, content=content,
-                        error=error, user=user, token=csrf_token_for(user))
+                        error=error, user=self.user,
+                        token=csrf_token_for(self.user))
 
 
 class PermaLink(Handler):
