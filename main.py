@@ -193,16 +193,16 @@ class PermaLink(Handler):
         """ Make sure the link is valid and show the post with comments """
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
-        user = self.user
         # gets the comments whose post_id matches the post_id of the page
         comment_roll = load_comments(post_id)
 
         if not post:
             self.error(404)
             return
-        if user:
-            self.render("permalink.html", post=post, user=user,
-                        comment_roll=comment_roll, token=csrf_token_for(user))
+        if self.user:
+            self.render("permalink.html", post=post, user=self.user,
+                        comment_roll=comment_roll,
+                        token=csrf_token_for(self.user))
         else:
             error = "You must be logged in to comment"
             self.render("permalink.html", post=post, error=error,
@@ -212,11 +212,10 @@ class PermaLink(Handler):
         """ For adding comments. Verify user is valid and add comment to db """
         key = ndb.Key('Post', int(post_id), parent=blog_key())
         post = key.get()
-        user = self.user
         comment_text = self.request.get("comment_text")
         csrf_token = self.request.get("csrf-token")
         parent_post_id = str(post.key.id())  # file the comment under this post
-        if user is None:  # If user is not logged in or invalid cookie
+        if self.user is None:  # If user is not logged in or invalid cookie
             error = "Sorry, you need to be logged in to comment"
             comment_roll = load_comments(post_id)
             self.render("permalink.html", post=post,
@@ -225,16 +224,18 @@ class PermaLink(Handler):
         if comment_text == '':
             error = "Your comment cannot be blank"
             comment_roll = load_comments(post_id)
-            self.render("permalink.html", post=post, user=user,
+            self.render("permalink.html", post=post, user=self.user,
                         comment_roll=comment_roll, error=error)
             return
-        if user and csrf_token == csrf_token_for(user):
+        if self.user and csrf_token == csrf_token_for(self.user):
             comment = Comment(parent=comment_key(), comment_text=comment_text,
-                              posting_user=user, parent_post_id=parent_post_id)
+                              posting_user=self.user,
+                              parent_post_id=parent_post_id)
             comment.put()
             comment_roll = load_comments(post_id)
-            self.render("permalink.html", post=post, user=user,
-                        comment_roll=comment_roll, token=csrf_token_for(user))
+            self.render("permalink.html", post=post, user=self.user,
+                        comment_roll=comment_roll,
+                        token=csrf_token_for(self.user))
             logging.info("New comment added to post [%s] by user: %s",
                          comment.parent_post_id, comment.posting_user)
 
