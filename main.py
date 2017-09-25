@@ -659,11 +659,10 @@ class UpdatePassword(Handler):
         if (self.user and valid_password(new_pass) and
                 verify_new == new_pass and
                 csrf_token == csrf_token_for(self.user)):
-            username = self.user
-            user = user_by_name(username)
+            user = user_by_name(self.user)
             if user.user_hash != hash_password(current_pass, user.salt):
                 wrong_pw = "You did not enter your correct current password"
-                self.render("updatepass.html", user=username, error=wrong_pw,
+                self.render("updatepass.html", user=self.user, error=wrong_pw,
                             token=new_token)
                 return
             new_hash(user, new_pass)  # update this users password
@@ -678,7 +677,7 @@ class UpdatePassword(Handler):
                 'Session',
                 ('%s|%s' % (str(new_session),
                             cookie_hash(new_session))), overwrite=True)
-            return self.render("updatepass.html", user=username, updated=True)
+            return self.render("updatepass.html", user=self.user, updated=True)
         if new_pass != verify_new:
             params['error_mismatch'] = "Passwords did not match."
         if not valid_password(new_pass):
