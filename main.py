@@ -648,19 +648,18 @@ class UpdatePassword(Handler):
 
     def post(self):
         """ Validate old password and new passwords and update """
-        user_id = self.user
         current_pass = self.request.get("currentpassword")
         new_pass = self.request.get("newpassword")
         verify_new = self.request.get("newpassword-confirm")
         csrf_token = self.request.get("csrf-token")
         new_token = csrf_token_for(self.user)  # new token in case bad inputs
         params = dict()
-        if user_id is None:
+        if self.user is None:
             return self.redirect("/login")
-        if (user_id and valid_password(new_pass) and
+        if (self.user and valid_password(new_pass) and
                 verify_new == new_pass and
-                csrf_token == csrf_token_for(user_id)):
-            username = user_id
+                csrf_token == csrf_token_for(self.user)):
+            username = self.user
             user = user_by_name(username)
             if user.user_hash != hash_password(current_pass, user.salt):
                 wrong_pw = "You did not enter your correct current password"
