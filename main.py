@@ -640,10 +640,9 @@ class UpdatePassword(Handler):
     """ Lets logged in users change their password """
     def get(self):
         """ Verify user has a valid session cookie and draw the form """
-        user = self.user
-        if user:
-            self.render("updatepass.html", user=user,
-                        token=csrf_token_for(user))
+        if self.user:
+            self.render("updatepass.html", user=self.user,
+                        token=csrf_token_for(self.user))
         else:
             self.redirect('/login')
 
@@ -654,6 +653,7 @@ class UpdatePassword(Handler):
         new_pass = self.request.get("newpassword")
         verify_new = self.request.get("newpassword-confirm")
         csrf_token = self.request.get("csrf-token")
+        new_token = csrf_token_for(self.user)  # new token in case bad inputs
         params = dict()
         if user_id is None:
             return self.redirect("/login")
@@ -664,7 +664,8 @@ class UpdatePassword(Handler):
             user = user_by_name(username)
             if user.user_hash != hash_password(current_pass, user.salt):
                 wrong_pw = "You did not enter your correct current password"
-                self.render("updatepass.html", user=username, error=wrong_pw)
+                self.render("updatepass.html", user=username, error=wrong_pw,
+                            token=new_token)
                 return
             new_hash(user, new_pass)  # update this users password
             new_session = session_uuid()
@@ -682,8 +683,9 @@ class UpdatePassword(Handler):
         if new_pass != verify_new:
             params['error_mismatch'] = "Passwords did not match."
         if not valid_password(new_pass):
-            params['error_invalid'] = "Password is not valid."
-        self.render("updatepass.html", user=user, **params)
+            params['error_invalid'] = "New Password is not valid."
+        self.render("updatepass.html", user=self.user, token=new_token,
+                    **params)
 
 
 class UserPage(Handler):
