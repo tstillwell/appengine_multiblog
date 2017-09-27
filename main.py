@@ -799,25 +799,24 @@ class EditComment(Handler):
     """ Page used to edit comments when user does not have javascript """
     def get(self, comment_id):
         """ If comment owner matches current user draw comment edit form """
-        user = self.user
-        if user:
+        if self.user:
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
-            if comment and comment.posting_user == user:
+            if comment and comment.posting_user == self.user:
                 return self.render("editcomment.html", comment=comment,
-                                   token=csrf_token_for(user), user=user)
+                                   token=csrf_token_for(self.user),
+                                   user=self.user)
         return self.error(404)
 
     def post(self, comment_id):
         """ If user matches comment owner, update comment in the datastore """
-        user = self.user
-        if user:
+        if self.user:
             content = self.request.get("content")
             csrf_token = self.request.get("csrf-token")
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
-            if (comment and comment.posting_user == user and
-                    csrf_token == csrf_token_for(user)):
+            if (comment and comment.posting_user == self.user and
+                    csrf_token == csrf_token_for(self.user)):
                 comment.comment_text = content
                 comment.put()
                 return self.redirect('/blog/%s' % str(comment.parent_post_id))
