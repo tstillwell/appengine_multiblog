@@ -773,24 +773,22 @@ class EditPost(Handler):
     """ Allows users to edit/update their existing posts """
     def get(self, post_id):
         """ Let user see edit form if they are owner """
-        user = self.user
-        if user:
+        if self.user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            if post and post.posting_user == user:
-                return self.render("editpost.html", post=post,
-                                   token=csrf_token_for(user), user=user)
+            if post and post.posting_user == self.user:
+                return self.render("editpost.html", post=post, user=self.user,
+                                   token=csrf_token_for(self.user))
         return self.error(404)
 
     def post(self, post_id):
         """ If users match post owner change the post in db """
         content = self.request.get("content")
-        user = self.user
         csrf_token = self.request.get("csrf-token")
-        if user and csrf_token == csrf_token_for(user):
+        if self.user and csrf_token == csrf_token_for(self.user):
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            if post and post.posting_user == user:
+            if post and post.posting_user == self.user:
                 post.content = content
                 post.put()
                 return self.redirect('/blog/%s' % str(post.key.id()))
