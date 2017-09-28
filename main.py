@@ -830,14 +830,13 @@ class CommentAjax(Handler):
             then send a response with the new comment
             text to load into the DOM
         """
-        user = self.user
         request_data = json.loads(self.request.body)
         target_comment = int(request_data['comment_id'])
         submitted_csrf_token = request_data['csrf_token']
         comment_to_update = Comment.get_by_id(target_comment,
                                               parent=comment_key())
-        if (comment_to_update and comment_to_update.posting_user == user and
-                submitted_csrf_token == csrf_token_for(user)):
+        if (comment_to_update and comment_to_update.posting_user == self.user
+           and submitted_csrf_token == csrf_token_for(self.user)):
             new_comment_text = (request_data['new_text'])
             comment_to_update.comment_text = new_comment_text
             comment_to_update.put()
