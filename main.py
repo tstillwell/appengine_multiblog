@@ -851,10 +851,9 @@ class DeletePost(Handler):
         if self.user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            user = self.user
             if post and post.posting_user == self.user:
-                return self.render("delete.html", post=post,
-                                   user=user, token=csrf_token_for(user))
+                return self.render("delete.html", post=post, user=self.user,
+                                   token=csrf_token_for(self.user))
         return self.error(404)
 
     def post(self, post_id):
@@ -862,10 +861,9 @@ class DeletePost(Handler):
         if self.user:
             key = ndb.Key('Post', int(post_id), parent=blog_key())
             post = key.get()
-            user = self.user
             csrf_token = self.request.get("csrf-token")
-            actual_csrf_token = csrf_token_for(user)
-            if (post and post.posting_user == user and
+            actual_csrf_token = csrf_token_for(self.user)
+            if (post and post.posting_user == self.user and
                csrf_token == actual_csrf_token):
                 key.delete()
                 logging.info("Post Deleted: %s", post_id)
