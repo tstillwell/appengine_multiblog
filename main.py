@@ -864,7 +864,7 @@ class DeletePost(Handler):
             csrf_token = self.request.get("csrf-token")
             actual_csrf_token = csrf_token_for(self.user)
             if (post and post.posting_user == self.user and
-               csrf_token == actual_csrf_token):
+                    csrf_token == actual_csrf_token):
                 key.delete()
                 logging.info("Post Deleted: %s", post_id)
                 return self.redirect('/manage')
