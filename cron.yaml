@@ -1,9 +1,9 @@
 cron:
-- description: Delete Orphaned Comments
+- description: Delete comments which no longer have a parent post.
   url: /tasks/orphan-comments
   schedule: every 72 hours
 
-- description: Cleanup login rate limiter
+- description: Remove rate limit for ips that have not offended recently
   url: /tasks/de-ratelimit
   schedule: every 12 hours
 
