@@ -1,4 +1,8 @@
-""" Data model module """
+""" Data model module for appengine_multiblog
+    Contains data model definitions
+    used by Google Cloud Datastore. These are imported
+    by main.py
+"""
 from google.appengine.ext import ndb
 import jinja2
 import os
