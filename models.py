@@ -18,7 +18,6 @@ def render_str(template, **params):
     return template_page.render(params)
 
 
-""" All datastore models defined here are imported in main.py """
 """ Take care when modifying these as doing so may cause consistency issues """
 
 
