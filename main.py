@@ -41,7 +41,7 @@ def render_str(template, **params):
 
 
 class Handler(webapp2.RequestHandler):
-    """ Base Handler. All application classes inheriet from Handler.
+    """ Base Handler. All request handlers inherit from this.
 
         Child classes are mapped with URLs into WSGIApplication router.
         Each handler has a "get" and "post" method used to handle different
