@@ -226,6 +226,12 @@ class PermaLink(Handler):
             self.render("permalink.html", post=post, user=self.user,
                         comment_roll=comment_roll, error=error)
             return
+        if len(comment_text) > 3000:
+            error = "Comment too long, must be less than 3000 characters"
+            comment_roll = load_comments(post_id)
+            self.render("permalink.html", post=post, user=self.user,
+                        comment_roll=comment_roll, error=error)
+            return
         if self.user and csrf_token == csrf_token_for(self.user):
             comment = Comment(parent=comment_key(), comment_text=comment_text,
                               posting_user=self.user,
