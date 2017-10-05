@@ -214,21 +214,19 @@ class PermaLink(Handler):
         comment_text = self.request.get("comment_text")
         csrf_token = self.request.get("csrf-token")
         parent_post_id = str(post.key.id())  # file the comment under this post
+        comment_roll = load_comments(post_id)
         if self.user is None:  # If user is not logged in or invalid cookie
             error = "Sorry, you need to be logged in to comment"
-            comment_roll = load_comments(post_id)
             self.render("permalink.html", post=post,
                         comment_roll=comment_roll, error=error)
             return
         if comment_text == '':
             error = "Your comment cannot be blank"
-            comment_roll = load_comments(post_id)
             self.render("permalink.html", post=post, user=self.user,
                         comment_roll=comment_roll, error=error)
             return
         if len(comment_text) > 3000:
             error = "Comment too long, must be less than 3000 characters"
-            comment_roll = load_comments(post_id)
             self.render("permalink.html", post=post, user=self.user,
                         comment_roll=comment_roll, error=error)
             return
@@ -237,7 +235,6 @@ class PermaLink(Handler):
                               posting_user=self.user,
                               parent_post_id=parent_post_id)
             comment.put()
-            comment_roll = load_comments(post_id)
             self.render("permalink.html", post=post, user=self.user,
                         comment_roll=comment_roll,
                         token=csrf_token_for(self.user))
