@@ -27,7 +27,6 @@ from models import (
     AntiCsrfToken,
     ResetToken,
     LoginAttempt,
-    TEMPLATE_DIR,
     JINJA_ENV
 )
 
