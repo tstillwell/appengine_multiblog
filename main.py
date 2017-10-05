@@ -817,6 +817,11 @@ class EditComment(Handler):
             csrf_token = self.request.get("csrf-token")
             key = ndb.Key('Comment', int(comment_id), parent=comment_key())
             comment = key.get()
+            if len(content) > 3000:
+                error = "Comment too long, must be less than 3000 characters"
+                return self.render("editcomment.html", comment=comment,
+                                   token=csrf_token_for(self.user),
+                                   error=error, user=self.user)
             if (comment and comment.posting_user == self.user and
                     csrf_token == csrf_token_for(self.user)):
                 comment.comment_text = content
