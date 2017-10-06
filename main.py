@@ -843,7 +843,8 @@ class CommentAjax(Handler):
         comment_to_update = Comment.get_by_id(target_comment,
                                               parent=comment_key())
         if (comment_to_update and comment_to_update.posting_user == self.user
-                and submitted_csrf_token == csrf_token_for(self.user)):
+                and submitted_csrf_token == csrf_token_for(self.user) and
+                len(request_data['new_text']) < 3000):
             new_comment_text = (request_data['new_text'])
             comment_to_update.comment_text = new_comment_text
             comment_to_update.put()
