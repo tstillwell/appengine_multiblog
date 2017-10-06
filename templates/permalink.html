@@ -32,7 +32,7 @@
   {% endfor %}
   {% if user %}
   <form class="form-group" name ="comment-form" method ="post">
-    <textarea class="form-control" name="comment_text" placeholder="Type a comment here"></textarea>
+    <textarea class="form-control" name="comment_text" placeholder="Type a comment here" maxlength="3000"></textarea>
     <br>
     <input type="hidden" name="csrf-token" value="{{token}}"></input>
     <button type="submit" class="btn btn-default">Add Comment<span class="glyphicon glyphicon-comment"></span></button>

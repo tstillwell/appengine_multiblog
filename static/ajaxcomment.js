@@ -3,7 +3,7 @@ function show_edit(comment_id, csrf_token){
   var old_comment = $('.comment-' + comment_id).html();
   $("." + comment_classname).replaceWith(
       '<div class="comment comment-' + comment_id + '">' + old_comment +
-      '<div class="edit_area"><textarea class="form-control" id="new_comment_field_' + comment_id + '">' +
+      '<div class="edit_area"><textarea class="form-control" maxlength="3000" id="new_comment_field_' + comment_id + '">' +
       '</textarea><br>' + '<button class="btn btn-primary update-confirm" onclick="edit_comment(' + comment_id +
       ', ' + '\'' + csrf_token + '\'' + ')">' +
       'Update Comment' + '</button><button class="btn btn-default update-cancel" onclick="cancel_edit(' + comment_id +

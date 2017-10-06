@@ -4,7 +4,7 @@
 <p>Editing comment</p>
   {{ error }}
   <form method="post" class="form-group" action="/edit/c/{{comment.key.id()}}">
-    <textarea class="form-control" name="content">{{comment.comment_text}}</textarea>
+    <textarea class="form-control" name="content" maxlength="3000">{{comment.comment_text}}</textarea>
       <br>
     <input type="hidden" name="csrf-token" value="{{token}}"></input>
     <button type="submit" class="btn btn-primary">Update This Comment</button>
