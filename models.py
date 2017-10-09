@@ -4,6 +4,7 @@
     by main.py
 """
 from google.appengine.ext import ndb
+import bleach
 import jinja2
 import os
 
@@ -31,13 +32,20 @@ class Post(ndb.Model):
 
     def render(self):
         """ escape all html tags from post, then convert newlines to <br> """
-        escaped_post = jinja2.escape(self.content)
-        self._render_text = escaped_post.replace('\n', jinja2.Markup('<br>'))
+        self._render_text = jinja2.Markup(
+          bleach.clean(self.content, tags=[u'a', u'img'],
+                       attributes={u'a': [u'href'], u'img': [u'src', u'alt']},
+                       strip=False))
+        self._render_text = self._render_text.replace(
+         '\n', jinja2.Markup('<br>'))
         return render_str("post.html", p=self)
 
     def peek(self):
         """ Show first part of long posts to not overload multi-post pages """
-        escaped_post = jinja2.escape(self.content)
+        escaped_post = jinja2.Markup(
+          bleach.clean(self.content, tags=[u'a', u'img'],
+                       attributes={u'a': [u'href'], u'img': [u'src', u'alt']},
+                       strip=False))
         marked_up_post = escaped_post.replace('\n', jinja2.Markup('<br>'))
         if len(marked_up_post) > 1000:
             self._render_text = marked_up_post[:1000]
