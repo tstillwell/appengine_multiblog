@@ -33,9 +33,10 @@ class Post(ndb.Model):
     def render(self):
         """ escape all html tags from post, then convert newlines to <br> """
         self._render_text = jinja2.Markup(
+         bleach.linkify(
           bleach.clean(self.content, tags=[u'a', u'img'],
                        attributes={u'a': [u'href'], u'img': [u'src', u'alt']},
-                       strip=False))
+                       strip=False)))
         self._render_text = self._render_text.replace(
          '\n', jinja2.Markup('<br>'))
         return render_str("post.html", p=self)
@@ -43,9 +44,10 @@ class Post(ndb.Model):
     def peek(self):
         """ Show first part of long posts to not overload multi-post pages """
         escaped_post = jinja2.Markup(
+         bleach.linkify(
           bleach.clean(self.content, tags=[u'a', u'img'],
                        attributes={u'a': [u'href'], u'img': [u'src', u'alt']},
-                       strip=False))
+                       strip=False)))
         marked_up_post = escaped_post.replace('\n', jinja2.Markup('<br>'))
         if len(marked_up_post) > 1000:
             self._render_text = marked_up_post[:1000]
@@ -65,9 +67,9 @@ class Comment(ndb.Model):
 
     def render(self):
         """ Draws comments """
-        escapedcomment = jinja2.escape(self.comment_text)
+        escapedcomment = bleach.clean(self.comment_text)
         marked_up_comment = escapedcomment.replace('\n', jinja2.Markup('<br>'))
-        self._render_text = marked_up_comment
+        self._render_text = jinja2.Markup(bleach.linkify(marked_up_comment))
         return render_str("comment.html", c=self)
 
 
