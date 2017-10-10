@@ -648,17 +648,7 @@ The fonts will use a local fallback so keep that in mind when testing offline.
 
 #### Post/Comment User Markup
 
-Users are not allowed to use HTML or javascript in their posts or
-comments because auto-escaping is enabled for user security.
-
-This prevents embedded content (such as video players and applets)
-from being added directly in user generated content.
-
-It is not recommended to disable autoescaping as this can open
-the app (and users) to potential threat vectors and tracking.
-
-For more info on jinja autoescaping see:
-http://jinja.pocoo.org/docs/2.9/api/#autoescaping
+Users are only allowed to use certain html inside their posts and comments. This is specified in the render functions in `models.py` in the `bleach.clean()` function as the `tags` and `attributes` keyword arguments. Any html not specified there is escaped and will not function as markup.
 
 
 #### Terms & Conditions and Privacy Policy
