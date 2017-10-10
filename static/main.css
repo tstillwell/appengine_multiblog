@@ -127,6 +127,7 @@ input[type=submit] {
     padding: 1vw;
     min-height: 15vh;
     font-size: 16px;
+    overflow: hidden;
 }
 
 input[name=username] {
