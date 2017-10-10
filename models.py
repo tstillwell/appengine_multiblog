@@ -30,8 +30,12 @@ class Post(ndb.Model):
     last_modified = ndb.DateTimeProperty(auto_now=True)
     posting_user = ndb.StringProperty(required=True)
 
-    allowed_tags = [u'a', u'img', u'iframe']
-    allowed_attributes = {
+    allowed_tags = [  # specifies which html tags are allowed in posts
+     u'a',
+     u'img',
+     u'iframe'
+    ]
+    allowed_attributes = {  # specifies which attributes are allowed for tags
      u'a': [u'href'],
      u'img': [u'src', u'alt'],
      u'iframe': [u'src', u'width', u'height', u'frameborder']
