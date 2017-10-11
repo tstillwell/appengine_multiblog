@@ -24,6 +24,8 @@ ___
 
 * Users gets their own page and RSS feed containing their posts
 
+* Users may embed images and videos into posts
+
 * Automatic pagination for front page and user pages
 
 * Users can edit or delete their posts at any time
@@ -493,6 +495,15 @@ the link in `base.html` to link directly to `main.css`
 
 Google Fonts are also used in the default setup and can also be changed
 if you would like to use different fonts, by replacing the link in `base.html`
+
+##### Changing markup allowed in posts or comments
+Users are allowed to use html in their posts so long as
+the tags are specified in the `render` functions for posts
+and comments in `models.py`. The attributes allowed for those
+tags are also specified in those functions. To disallow all html,
+just remove the tags and attributes keywords from the `render` and `peek` functions.
+To allow more html, add the tags and attributes you will allow
+users to use into the corresponding variables.
 
 ## Limitations
 
