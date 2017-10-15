@@ -301,7 +301,7 @@ http://jscroll.com/
  Copyright (C) 2007-2011 Dwayne C. Litzenberger <dlitz@dlitz.net>
 
 ## LICENSE Info
-Copyright 2017 T. Stillwell
+Copyright 2017 Tristan Stillwell
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
