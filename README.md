@@ -83,7 +83,7 @@ The standard environment uses Python 2.7.9 with a lightweight python runtime.
 For an overview of this environment see
 http://cloud.google.com/appengine/docs/standard/python/runtime
 
-For more info about environment limitations, see the _Limitations_ section
+For more info about environment limitations, see `docs/limitations.md`
 
 If you want to customize / test the app before deploying, you will
 need to use the App Engine SDK which includes a local development server so you
