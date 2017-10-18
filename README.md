@@ -14,7 +14,15 @@ Navigate to where the project lives on your system in your terminal and run:
 
 `gcloud app deploy app.yaml index.yaml cron.yaml`
 
+
 ___
+
+For a full deployment guide, read `docs/deployment.md`
+
+For testing the app locally see `docs/devserver.md`
+
+If you want to add features or get an overview
+of how the code works, read `docs/extending.md`
 
 ## Features
 
