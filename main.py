@@ -515,6 +515,30 @@ class Signup(Handler):
                 self.render('welcome.html', user=account.username)
 
 
+def attempt_login(username, password):
+    """ Compare hashed input password with hash in datastore """
+    if (valid_username(username) and valid_password(password)):
+        target_user = user_by_name(username)
+        if target_user is None:
+            return None
+        hash_input = hash_password(password, target_user.salt)
+        if hash_input != target_user.user_hash:  # password mismatch
+            return None
+        if (target_user.session_expires is None or
+                target_user.session_expires < datetime.datetime.now()):
+            target_user.current_session = session_uuid()
+            csrf_token_query = ndb.gql("""
+                           SELECT * FROM AntiCsrfToken WHERE
+                           associated_user = '%s'""" % target_user.username)
+            users_token = csrf_token_query.get()
+            users_token.csrf_sync_token = new_csrf_token()
+            users_token.put()  # new csrf token to replace expired one
+            target_user.session_expires = (datetime.datetime.now() +
+                                           datetime.timedelta(hours=1))
+            target_user.put()
+            return target_user
+
+
 class Login(Handler):
     """ Login page """
     def get(self):
@@ -533,28 +557,9 @@ class Login(Handler):
         # Takes login credentials that were input by user
         input_username = self.request.get("username")
         input_password = self.request.get("password")
-
-        while (valid_username(input_username) and
-               valid_password(input_password)):
-            target_user = user_by_name(input_username)
-            if target_user is None:
-                break
-            hash_input = hash_password(input_password, target_user.salt)
-            if hash_input != target_user.user_hash:  # password mismatch
-                break
-            # If user session expired create a new one, otherwise reuse
-            if (target_user.session_expires is None or
-                    target_user.session_expires < datetime.datetime.now()):
-                target_user.current_session = session_uuid()
-                csrf_token_query = ndb.gql("""
-                           SELECT * FROM AntiCsrfToken WHERE
-                           associated_user = '%s'""" % target_user.username)
-                users_token = csrf_token_query.get()
-                users_token.csrf_sync_token = new_csrf_token()
-                users_token.put()  # new csrf token to replace expired one
-            target_user.session_expires = (datetime.datetime.now() +
-                                           datetime.timedelta(hours=1))
-            target_user.put()
+        logged_in = attempt_login(input_username, input_password)
+        if logged_in:
+            target_user = logged_in
             self.response.headers.add_header(
                 'Set-Cookie',
                 'Session= %s|%s Path=/'
@@ -562,9 +567,9 @@ class Login(Handler):
                    (cookie_hash(target_user.current_session))))
             logging.info("Login successful: %s", input_username)
             return self.render('welcome.html', user=target_user.username)
-
-        self.render("login.html", error="Invalid Login")
-        logging.info("Login failure: %s", input_username)
+        else:
+            self.render("login.html", error="Invalid Login")
+            logging.info("Login failure: %s", input_username)
 
 
 class ForgotPassword(Handler):
