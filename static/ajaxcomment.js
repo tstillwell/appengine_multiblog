@@ -15,14 +15,14 @@ function show_edit(comment_id, csrf_token){
 function cancel_edit(comment_id){
   $(".edit_area").remove();
   $(".edit-button").show();
-  $('form[name=comment-form]').show();
+  $("form[name=comment-form]").show();
 }
 function new_comment_text(comment_id){
-  return document.getElementById('new_comment_field_' + comment_id).value;
+  return document.getElementById("new_comment_field_" + comment_id).value;
 }
 function edit_comment(comment_id, csrf_token){
   $.ajax({
-    dataType: 'json',
+    dataType: "json"
     url: "/commentajax/",
     type: "POST",
     data: JSON.stringify({"comment_id": comment_id,
@@ -30,7 +30,7 @@ function edit_comment(comment_id, csrf_token){
                           "new_text": new_comment_text(comment_id)})
   })
   .done(function( response ) {
-    var comment_class = 'comment-content-' + comment_id;
+    var comment_class = "comment-content-" + comment_id;
     var newdiv = '<div class=' + '"comment-body ' + comment_class + '"' + '>';
     $('.' + comment_class).replaceWith(newdiv + response['new_text'] + '</div>');
     $(".edit_area").remove();
