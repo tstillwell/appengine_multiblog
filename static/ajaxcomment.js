@@ -2,15 +2,15 @@ function show_edit(comment_id, csrf_token){
   var comment_classname = "comment-" + comment_id;
   var old_comment = $(".comment-" + comment_id).html();
   $("." + comment_classname).replaceWith(
-      '<div class="comment comment-' + comment_id + '">' + old_comment +
-      '<div class="edit_area"><textarea class="form-control" maxlength="3000" id="new_comment_field_' + comment_id + '">' +
-      '</textarea><br>' + '<button class="btn btn-primary update-confirm" onclick="edit_comment(' + comment_id +
-      ', ' + '\'' + csrf_token + '\'' + ')">' +
-      'Update Comment' + '</button><button class="btn btn-default update-cancel" onclick="cancel_edit(' + comment_id +
-    ')"> Cancel</button></div></div>'
+      "<div class=\"comment comment-" + comment_id + "\">" + old_comment +
+      "<div class=\"edit_area\"><textarea class=\"form-control\" maxlength=\"3000\" id=\"new_comment_field_" + comment_id + "\">" +
+      "</textarea><br>" + "<button class=\"btn btn-primary update-confirm\" onclick=\"edit_comment(" + comment_id +
+      ", " + "\"" + csrf_token + "\"" + ")\">" +
+      "Update Comment" + "</button><button class=\"btn btn-default update-cancel\" onclick=\"cancel_edit(" + comment_id +
+      ")\"> Cancel</button></div></div>"
   );
   $(".edit-button").hide();
-  $('form[name=comment-form]').hide();
+  $("form[name=comment-form]").hide();
 }
 function cancel_edit(comment_id){
   $(".edit_area").remove();
@@ -22,7 +22,7 @@ function new_comment_text(comment_id){
 }
 function edit_comment(comment_id, csrf_token){
   $.ajax({
-    dataType: "json"
+    dataType: "json",
     url: "/commentajax/",
     type: "POST",
     data: JSON.stringify({"comment_id": comment_id,
@@ -31,10 +31,10 @@ function edit_comment(comment_id, csrf_token){
   })
   .done(function( response ) {
     var comment_class = "comment-content-" + comment_id;
-    var newdiv = '<div class=' + '"comment-body ' + comment_class + '"' + '>';
-    $('.' + comment_class).replaceWith(newdiv + response['new_text'] + '</div>');
+    var newdiv = "<div class=" + "comment-body " + comment_class + "\"" + ">";
+    $("." + comment_class).replaceWith(newdiv + response.new_text + "</div>");
     $(".edit_area").remove();
-    $('form[name=comment-form]').show();
+    $("form[name=comment-form]").show();
     $(".edit-button").show();
   });
-};
+}
