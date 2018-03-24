@@ -1,6 +1,6 @@
 function show_edit(comment_id, csrf_token){
-  var comment_classname = 'comment-' + comment_id;
-  var old_comment = $('.comment-' + comment_id).html();
+  var comment_classname = "comment-" + comment_id;
+  var old_comment = $(".comment-" + comment_id).html();
   $("." + comment_classname).replaceWith(
       '<div class="comment comment-' + comment_id + '">' + old_comment +
       '<div class="edit_area"><textarea class="form-control" maxlength="3000" id="new_comment_field_' + comment_id + '">' +
