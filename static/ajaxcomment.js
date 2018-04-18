@@ -12,14 +12,17 @@ function show_edit(comment_id, csrf_token){
   $(".edit-button").hide();
   $("form[name=comment-form]").hide();
 }
+
 function cancel_edit(comment_id){
   $(".edit_area").remove();
   $(".edit-button").show();
   $("form[name=comment-form]").show();
 }
+
 function new_comment_text(comment_id){
   return document.getElementById("new_comment_field_" + comment_id).value;
 }
+
 function edit_comment(comment_id, csrf_token){
   $.ajax({
     dataType: "json",
